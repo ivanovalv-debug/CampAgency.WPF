@@ -1,0 +1,32 @@
+﻿<Application x:Class="CampAgency.WPF.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vmAuth="clr-namespace:CampAgency.WPF.ViewModels.Auth"
+             xmlns:vmAdmin="clr-namespace:CampAgency.WPF.ViewModels.Admin"
+             xmlns:vmParent="clr-namespace:CampAgency.WPF.ViewModels.Parent"
+             xmlns:vmOperator="clr-namespace:CampAgency.WPF.ViewModels.Operator"
+             xmlns:vAuth="clr-namespace:CampAgency.WPF.Views.Auth"
+             xmlns:vAdmin="clr-namespace:CampAgency.WPF.Views.Admin"
+             xmlns:vParent="clr-namespace:CampAgency.WPF.Views.Parent"
+             xmlns:vOperator="clr-namespace:CampAgency.WPF.Views.Operator">
+    <Application.Resources>
+        <DataTemplate DataType="{x:Type vmAuth:LoginViewModel}">
+            <vAuth:LoginView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vmAdmin:AdminDashboardViewModel}">
+            <vAdmin:AdminDashboardView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vmAdmin:CampsListViewModel}">
+            <vAdmin:CampsListView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vmAdmin:CampEditViewModel}">
+            <vAdmin:CampEditView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vmParent:ParentDashboardViewModel}">
+            <vParent:ParentDashboardView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vmOperator:OperatorDashboardViewModel}">
+            <vOperator:OperatorDashboardView />
+        </DataTemplate>
+    </Application.Resources>
+</Application>

@@ -1,0 +1,9 @@
+﻿<UserControl x:Class="CampAgency.WPF.Views.Parent.ParentDashboardView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Grid Margin="20">
+        <TextBlock Text="Личный кабинет родителя" 
+                   FontSize="24" FontWeight="Bold" 
+                   HorizontalAlignment="Center" VerticalAlignment="Center"/>
+    </Grid>
+</UserControl>
