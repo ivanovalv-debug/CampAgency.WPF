@@ -1,6 +1,8 @@
-﻿namespace CampAgency.WPF.Services
+﻿using System.ComponentModel;
+
+namespace CampAgency.WPF.Services
 {
-    public interface INavigationService
+    public interface INavigationService : INotifyPropertyChanged
     {
         object? CurrentViewModel { get; }
         void NavigateTo<TViewModel>(object? parameter = null) where TViewModel : class;
