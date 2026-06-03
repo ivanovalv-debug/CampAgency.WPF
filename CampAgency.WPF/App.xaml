@@ -31,5 +31,11 @@
         <DataTemplate DataType="{x:Type vmAuth:RegisterViewModel}">
             <vAuth:RegisterView />
         </DataTemplate>
+        <DataTemplate DataType="{x:Type vmParent:ChildListViewModel}">
+            <vParent:ChildListView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vmParent:ChildEditViewModel}">
+            <vParent:ChildEditView />
+        </DataTemplate>
     </Application.Resources>
 </Application>

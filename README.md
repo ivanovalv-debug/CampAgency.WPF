@@ -33,42 +33,46 @@
    15. [Shift.cs](#shift)
    16. [User.cs](#user)
    17. [UserRole.cs](#userrole)
-5. [CampAgency.WPF\Services](#services)
+5. [CampAgency.WPF\Services\AuthServices](#authservices)
    1. [AuthService.cs](#authservice)
    2. [IAuthService.cs](#iauthservice)
-   3. [INavigationService.cs](#inavigationservice)
-   4. [IRegistrationService.cs](#iregistrationservice)
-   5. [NavigationService.cs](#navigationservice)
-   6. [RegistrationService.cs](#registrationservice)
-6. [CampAgency.WPF\ViewModels](#viewmodels)
+   3. [IRegistrationService.cs](#iregistrationservice)
+   4. [RegistrationService.cs](#registrationservice)
+6. [CampAgency.WPF\Services\DialogServices](#dialogservices)
+   1. [DialogService.cs](#dialogservice)
+   2. [IDialogService.cs](#idialogservice)
+7. [CampAgency.WPF\Services\NavigationServices](#navigationservices)
+   1. [INavigationService.cs](#inavigationservice)
+   2. [NavigationService.cs](#navigationservice)
+8. [CampAgency.WPF\ViewModels](#viewmodels)
    1. [MainWindowViewModel.cs](#mainwindowviewmodel)
-7. [CampAgency.WPF\ViewModels\Admin](#admin)
+9. [CampAgency.WPF\ViewModels\Admin](#admin)
    1. [AdminDashboardViewModel.cs](#admindashboardviewmodel)
    2. [CampEditViewModel.cs](#campeditviewmodel)
    3. [CampsListViewModel.cs](#campslistviewmodel)
-8. [CampAgency.WPF\ViewModels\Auth](#auth)
+10. [CampAgency.WPF\ViewModels\Auth](#auth)
    1. [LoginViewModel.cs](#loginviewmodel)
    2. [RegisterViewModel.cs](#registerviewmodel)
-9. [CampAgency.WPF\ViewModels\Operator](#operator)
+11. [CampAgency.WPF\ViewModels\Operator](#operator)
    1. [OperatorDashboardViewModel.cs](#operatordashboardviewmodel)
-10. [CampAgency.WPF\ViewModels\Parent](#parent)
+12. [CampAgency.WPF\ViewModels\Parent](#parent)
    1. [ParentDashboardViewModel.cs](#parentdashboardviewmodel)
-11. [CampAgency.WPF\Views\Admin](#admin)
+13. [CampAgency.WPF\Views\Admin](#admin)
    1. [AdminDashboardView.xaml](#admindashboardview)
    2. [AdminDashboardView.xaml.cs](#admindashboardviewxaml)
    3. [CampEditView.xaml](#campeditview)
    4. [CampEditView.xaml.cs](#campeditviewxaml)
    5. [CampsListView.xaml](#campslistview)
    6. [CampsListView.xaml.cs](#campslistviewxaml)
-12. [CampAgency.WPF\Views\Auth](#auth)
+14. [CampAgency.WPF\Views\Auth](#auth)
    1. [LoginView.xaml](#loginview)
    2. [LoginView.xaml.cs](#loginviewxaml)
    3. [RegisterView.xaml](#registerview)
    4. [RegisterView.xaml.cs](#registerviewxaml)
-13. [CampAgency.WPF\Views\Operator](#operator)
+15. [CampAgency.WPF\Views\Operator](#operator)
    1. [OperatorDashboardView.xaml](#operatordashboardview)
    2. [OperatorDashboardView.xaml.cs](#operatordashboardviewxaml)
-14. [CampAgency.WPF\Views\Parent](#parent)
+16. [CampAgency.WPF\Views\Parent](#parent)
    1. [ParentDashboardView.xaml](#parentdashboardview)
    2. [ParentDashboardView.xaml.cs](#parentdashboardviewxaml)
 
@@ -127,16 +131,18 @@
 <a id='appxaml'></a>
 
 ```csharp
-using System.Windows;
 using CampAgency.WPF.Data;
-using CampAgency.WPF.Services;
+using CampAgency.WPF.Services.AuthServices;
+using CampAgency.WPF.Services.DialogServices;
+using CampAgency.WPF.Services.NavigationServices;
 using CampAgency.WPF.ViewModels;
-using CampAgency.WPF.ViewModels.Auth;
 using CampAgency.WPF.ViewModels.Admin;
-using CampAgency.WPF.ViewModels.Parent;
+using CampAgency.WPF.ViewModels.Auth;
 using CampAgency.WPF.ViewModels.Operator;
+using CampAgency.WPF.ViewModels.Parent;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using System.Windows;
 
 namespace CampAgency.WPF
 {
@@ -154,6 +160,7 @@ namespace CampAgency.WPF
             services.AddSingleton<INavigationService, NavigationService>();
             services.AddSingleton<IAuthService, AuthService>();
             services.AddSingleton<IRegistrationService, RegistrationService>();
+            services.AddSingleton<IDialogService, DialogService>();
 
             services.AddTransient<LoginViewModel>();
             services.AddTransient<AdminDashboardViewModel>();
@@ -2828,9 +2835,9 @@ namespace CampAgency.WPF.Models.Entities
 
 ---
 
-## CampAgency.WPF\Services
+## CampAgency.WPF\Services\AuthServices
 
-<a id='services'></a>
+<a id='authservices'></a>
 
 ## FILE 28: AuthService.cs
 
@@ -2841,7 +2848,7 @@ using CampAgency.WPF.Data;
 using CampAgency.WPF.Models.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace CampAgency.WPF.Services
+namespace CampAgency.WPF.Services.AuthServices
 {
     public class AuthService : IAuthService
     {
@@ -2887,7 +2894,7 @@ namespace CampAgency.WPF.Services
 ```csharp
 using CampAgency.WPF.Models.Entities;
 
-namespace CampAgency.WPF.Services
+namespace CampAgency.WPF.Services.AuthServices
 {
     public interface IAuthService
     {
@@ -2900,38 +2907,14 @@ namespace CampAgency.WPF.Services
 
 ---
 
-## FILE 30: INavigationService.cs
-
-<a id='inavigationservice'></a>
-
-```csharp
-using System.ComponentModel;
-
-namespace CampAgency.WPF.Services
-{
-    public interface INavigationService : INotifyPropertyChanged
-    {
-        object? CurrentViewModel { get; }
-        void NavigateTo<TViewModel>(object? parameter = null) where TViewModel : class;
-    }
-
-    public interface INavigationAware
-    {
-        void OnNavigatedTo(object? parameter);
-    }
-}
-```
-
----
-
-## FILE 31: IRegistrationService.cs
+## FILE 30: IRegistrationService.cs
 
 <a id='iregistrationservice'></a>
 
 ```csharp
 using CampAgency.WPF.Models.Entities;
 
-namespace CampAgency.WPF.Services
+namespace CampAgency.WPF.Services.AuthServices
 {
     public interface IRegistrationService
     {
@@ -2942,61 +2925,7 @@ namespace CampAgency.WPF.Services
 
 ---
 
-## FILE 32: NavigationService.cs
-
-<a id='navigationservice'></a>
-
-```csharp
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
-
-namespace CampAgency.WPF.Services
-{
-    public class NavigationService : INavigationService
-    {
-        private readonly IServiceProvider _serviceProvider;
-        private object? _currentViewModel;
-        public event PropertyChangedEventHandler? PropertyChanged;
-
-        public NavigationService(IServiceProvider serviceProvider)
-        {
-            _serviceProvider = serviceProvider;
-        }
-
-        public object? CurrentViewModel
-        {
-            get => _currentViewModel;
-            private set
-            {
-                _currentViewModel = value;
-                OnPropertyChanged(nameof(CurrentViewModel));
-            }
-        }
-
-        public void NavigateTo<TViewModel>(object? parameter = null) where TViewModel : class
-        {
-            var vm = _serviceProvider.GetRequiredService<TViewModel>();
-            if (vm is INavigationAware aware)
-            {
-                aware.OnNavigatedTo(parameter);
-            }
-            CurrentViewModel = vm;
-        }
-
-        protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-    }
-}
-```
-
----
-
-## FILE 33: RegistrationService.cs
+## FILE 31: RegistrationService.cs
 
 <a id='registrationservice'></a>
 
@@ -3006,7 +2935,7 @@ using CampAgency.WPF.Data;
 using CampAgency.WPF.Models.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace CampAgency.WPF.Services
+namespace CampAgency.WPF.Services.AuthServices
 {
     public class RegistrationService : IRegistrationService
     {
@@ -3055,16 +2984,153 @@ namespace CampAgency.WPF.Services
 
 ---
 
+## CampAgency.WPF\Services\DialogServices
+
+<a id='dialogservices'></a>
+
+## FILE 32: DialogService.cs
+
+<a id='dialogservice'></a>
+
+```csharp
+using System.Windows;
+
+namespace CampAgency.WPF.Services.DialogServices
+{
+    public class DialogService : IDialogService
+    {
+        public void ShowMessage(string message, string title = "Информация")
+        {
+            MessageBox.Show(message, title, MessageBoxButton.OK, MessageBoxImage.Information);
+        }
+
+        public void ShowError(string message, string title = "Ошибка")
+        {
+            MessageBox.Show(message, title, MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+
+        public bool ShowConfirmation(string message, string title = "Подтверждение")
+        {
+            var result = MessageBox.Show(message, title, MessageBoxButton.YesNo, MessageBoxImage.Question);
+            return result == MessageBoxResult.Yes;
+        }
+    }
+}
+```
+
+---
+
+## FILE 33: IDialogService.cs
+
+<a id='idialogservice'></a>
+
+```csharp
+namespace CampAgency.WPF.Services.DialogServices
+{
+    public interface IDialogService
+    {
+        void ShowMessage(string message, string title = "Информация");
+        void ShowError(string message, string title = "Ошибка");
+        bool ShowConfirmation(string message, string title = "Подтверждение");
+    }
+}
+```
+
+---
+
+## CampAgency.WPF\Services\NavigationServices
+
+<a id='navigationservices'></a>
+
+## FILE 34: INavigationService.cs
+
+<a id='inavigationservice'></a>
+
+```csharp
+using System.ComponentModel;
+
+namespace CampAgency.WPF.Services.NavigationServices
+{
+    public interface INavigationService : INotifyPropertyChanged
+    {
+        object? CurrentViewModel { get; }
+        void NavigateTo<TViewModel>(object? parameter = null) where TViewModel : class;
+    }
+
+    public interface INavigationAware
+    {
+        void OnNavigatedTo(object? parameter);
+    }
+}
+```
+
+---
+
+## FILE 35: NavigationService.cs
+
+<a id='navigationservice'></a>
+
+```csharp
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Microsoft.Extensions.DependencyInjection;
+using System;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
+
+namespace CampAgency.WPF.Services.NavigationServices
+{
+    public class NavigationService : INavigationService
+    {
+        private readonly IServiceProvider _serviceProvider;
+        private object? _currentViewModel;
+        public event PropertyChangedEventHandler? PropertyChanged;
+
+        public NavigationService(IServiceProvider serviceProvider)
+        {
+            _serviceProvider = serviceProvider;
+        }
+
+        public object? CurrentViewModel
+        {
+            get => _currentViewModel;
+            private set
+            {
+                _currentViewModel = value;
+                OnPropertyChanged(nameof(CurrentViewModel));
+            }
+        }
+
+        public void NavigateTo<TViewModel>(object? parameter = null) where TViewModel : class
+        {
+            var vm = _serviceProvider.GetRequiredService<TViewModel>();
+            if (vm is INavigationAware aware)
+            {
+                aware.OnNavigatedTo(parameter);
+            }
+            CurrentViewModel = vm;
+        }
+
+        protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+    }
+}
+```
+
+---
+
 ## CampAgency.WPF\ViewModels
 
 <a id='viewmodels'></a>
 
-## FILE 34: MainWindowViewModel.cs
+## FILE 36: MainWindowViewModel.cs
 
 <a id='mainwindowviewmodel'></a>
 
 ```csharp
-using CampAgency.WPF.Services;
+using CampAgency.WPF.Services.AuthServices;
+using CampAgency.WPF.Services.NavigationServices;
 using CampAgency.WPF.ViewModels.Auth;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -3110,12 +3176,12 @@ namespace CampAgency.WPF.ViewModels
 
 <a id='admin'></a>
 
-## FILE 35: AdminDashboardViewModel.cs
+## FILE 37: AdminDashboardViewModel.cs
 
 <a id='admindashboardviewmodel'></a>
 
 ```csharp
-using CampAgency.WPF.Services;
+using CampAgency.WPF.Services.NavigationServices;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 
@@ -3139,7 +3205,7 @@ namespace CampAgency.WPF.ViewModels.Admin
 
 ---
 
-## FILE 36: CampEditViewModel.cs
+## FILE 38: CampEditViewModel.cs
 
 <a id='campeditviewmodel'></a>
 
@@ -3148,7 +3214,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using CampAgency.WPF.Data;
 using CampAgency.WPF.Models.Entities;
-using CampAgency.WPF.Services;
+using CampAgency.WPF.Services.NavigationServices;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.EntityFrameworkCore;
@@ -3243,7 +3309,7 @@ namespace CampAgency.WPF.ViewModels.Admin
 
 ---
 
-## FILE 37: CampsListViewModel.cs
+## FILE 39: CampsListViewModel.cs
 
 <a id='campslistviewmodel'></a>
 
@@ -3252,7 +3318,8 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using CampAgency.WPF.Data;
 using CampAgency.WPF.Models.Entities;
-using CampAgency.WPF.Services;
+using CampAgency.WPF.Services.DialogServices;
+using CampAgency.WPF.Services.NavigationServices;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.EntityFrameworkCore;
@@ -3263,13 +3330,15 @@ namespace CampAgency.WPF.ViewModels.Admin
     {
         private readonly IDbContextFactory<AppDbContext> _contextFactory;
         private readonly INavigationService _navigation;
+        private readonly IDialogService _dialogService;
 
         [ObservableProperty] private ObservableCollection<Camp> _camps = new();
 
-        public CampsListViewModel(IDbContextFactory<AppDbContext> contextFactory, INavigationService navigation)
+        public CampsListViewModel(IDbContextFactory<AppDbContext> contextFactory, INavigationService navigation, IDialogService dialogService)
         {
             _contextFactory = contextFactory;
             _navigation = navigation;
+            _dialogService = dialogService;
             LoadCamps();
         }
 
@@ -3287,6 +3356,10 @@ namespace CampAgency.WPF.ViewModels.Admin
         private void DeleteCamp(Camp camp)
         {
             if (camp == null) return;
+
+            if (!_dialogService.ShowConfirmation($"Вы уверены, что хотите удалить лагерь \"{camp.CampName}\"?", "Удаление лагеря"))
+                return;
+
             using var context = _contextFactory.CreateDbContext();
             var existing = context.Camps.Find(camp.CampId);
             if (existing != null)
@@ -3294,6 +3367,7 @@ namespace CampAgency.WPF.ViewModels.Admin
                 context.Camps.Remove(existing);
                 context.SaveChanges();
                 LoadCamps();
+                _dialogService.ShowMessage("Лагерь успешно удалён", "Успех");
             }
         }
     }
@@ -3306,12 +3380,13 @@ namespace CampAgency.WPF.ViewModels.Admin
 
 <a id='auth'></a>
 
-## FILE 38: LoginViewModel.cs
+## FILE 40: LoginViewModel.cs
 
 <a id='loginviewmodel'></a>
 
 ```csharp
-using CampAgency.WPF.Services;
+using CampAgency.WPF.Services.AuthServices;
+using CampAgency.WPF.Services.NavigationServices;
 using CampAgency.WPF.ViewModels.Admin;
 using CampAgency.WPF.ViewModels.Operator;
 using CampAgency.WPF.ViewModels.Parent;
@@ -3367,13 +3442,15 @@ namespace CampAgency.WPF.ViewModels.Auth
 
 ---
 
-## FILE 39: RegisterViewModel.cs
+## FILE 41: RegisterViewModel.cs
 
 <a id='registerviewmodel'></a>
 
 ```csharp
-using System.Windows;
 using CampAgency.WPF.Services;
+using CampAgency.WPF.Services.AuthServices;
+using CampAgency.WPF.Services.DialogServices;
+using CampAgency.WPF.Services.NavigationServices;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 
@@ -3383,6 +3460,7 @@ namespace CampAgency.WPF.ViewModels.Auth
     {
         private readonly IRegistrationService _registrationService;
         private readonly INavigationService _navigationService;
+        private readonly IDialogService _dialogService;
 
         [ObservableProperty] private string _login = string.Empty;
         [ObservableProperty] private string _password = string.Empty;
@@ -3392,10 +3470,13 @@ namespace CampAgency.WPF.ViewModels.Auth
         [ObservableProperty] private string _email = string.Empty;
         [ObservableProperty] private string _errorMessage = string.Empty;
 
-        public RegisterViewModel(IRegistrationService registrationService, INavigationService navigationService)
+        public RegisterViewModel(IRegistrationService registrationService,
+                                 INavigationService navigationService,
+                                 IDialogService dialogService)
         {
             _registrationService = registrationService;
             _navigationService = navigationService;
+            _dialogService = dialogService;
         }
 
         [RelayCommand]
@@ -3410,8 +3491,7 @@ namespace CampAgency.WPF.ViewModels.Auth
             var (success, message, _) = _registrationService.Register(Login, Password, FullName, Phone, Email);
             if (success)
             {
-                MessageBox.Show(message, "Успех", MessageBoxButton.OK, MessageBoxImage.Information);
-                // Возвращаемся на экран входа
+                _dialogService.ShowMessage(message, "Успех");
                 _navigationService.NavigateTo<LoginViewModel>();
             }
             else
@@ -3432,7 +3512,7 @@ namespace CampAgency.WPF.ViewModels.Auth
 
 <a id='operator'></a>
 
-## FILE 40: OperatorDashboardViewModel.cs
+## FILE 42: OperatorDashboardViewModel.cs
 
 <a id='operatordashboardviewmodel'></a>
 
@@ -3458,7 +3538,7 @@ namespace CampAgency.WPF.ViewModels.Operator
 
 <a id='parent'></a>
 
-## FILE 41: ParentDashboardViewModel.cs
+## FILE 43: ParentDashboardViewModel.cs
 
 <a id='parentdashboardviewmodel'></a>
 
@@ -3484,7 +3564,7 @@ namespace CampAgency.WPF.ViewModels.Parent
 
 <a id='admin'></a>
 
-## FILE 42: AdminDashboardView.xaml
+## FILE 44: AdminDashboardView.xaml
 
 <a id='admindashboardview'></a>
 
@@ -3522,7 +3602,7 @@ namespace CampAgency.WPF.ViewModels.Parent
 
 ---
 
-## FILE 43: AdminDashboardView.xaml.cs
+## FILE 45: AdminDashboardView.xaml.cs
 
 <a id='admindashboardviewxaml'></a>
 
@@ -3543,7 +3623,7 @@ namespace CampAgency.WPF.Views.Admin
 
 ---
 
-## FILE 44: CampEditView.xaml
+## FILE 46: CampEditView.xaml
 
 <a id='campeditview'></a>
 
@@ -3576,7 +3656,7 @@ namespace CampAgency.WPF.Views.Admin
 
 ---
 
-## FILE 45: CampEditView.xaml.cs
+## FILE 47: CampEditView.xaml.cs
 
 <a id='campeditviewxaml'></a>
 
@@ -3597,7 +3677,7 @@ namespace CampAgency.WPF.Views.Admin
 
 ---
 
-## FILE 46: CampsListView.xaml
+## FILE 48: CampsListView.xaml
 
 <a id='campslistview'></a>
 
@@ -3646,7 +3726,7 @@ namespace CampAgency.WPF.Views.Admin
 
 ---
 
-## FILE 47: CampsListView.xaml.cs
+## FILE 49: CampsListView.xaml.cs
 
 <a id='campslistviewxaml'></a>
 
@@ -3671,7 +3751,7 @@ namespace CampAgency.WPF.Views.Admin
 
 <a id='auth'></a>
 
-## FILE 48: LoginView.xaml
+## FILE 50: LoginView.xaml
 
 <a id='loginview'></a>
 
@@ -3697,7 +3777,7 @@ namespace CampAgency.WPF.Views.Admin
 
 ---
 
-## FILE 49: LoginView.xaml.cs
+## FILE 51: LoginView.xaml.cs
 
 <a id='loginviewxaml'></a>
 
@@ -3718,7 +3798,7 @@ namespace CampAgency.WPF.Views.Auth
 
 ---
 
-## FILE 50: RegisterView.xaml
+## FILE 52: RegisterView.xaml
 
 <a id='registerview'></a>
 
@@ -3726,7 +3806,7 @@ namespace CampAgency.WPF.Views.Auth
 <UserControl x:Class="CampAgency.WPF.Views.Auth.RegisterView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Width="350">
+    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
         <TextBlock Text="Регистрация нового пользователя" FontSize="24" Margin="0,0,0,20" HorizontalAlignment="Center"/>
 
         <TextBlock Text="Логин*:" Margin="0,5"/>
@@ -3760,7 +3840,7 @@ namespace CampAgency.WPF.Views.Auth
 
 ---
 
-## FILE 51: RegisterView.xaml.cs
+## FILE 53: RegisterView.xaml.cs
 
 <a id='registerviewxaml'></a>
 
@@ -3797,7 +3877,7 @@ namespace CampAgency.WPF.Views.Auth
 
 <a id='operator'></a>
 
-## FILE 52: OperatorDashboardView.xaml
+## FILE 54: OperatorDashboardView.xaml
 
 <a id='operatordashboardview'></a>
 
@@ -3815,7 +3895,7 @@ namespace CampAgency.WPF.Views.Auth
 
 ---
 
-## FILE 53: OperatorDashboardView.xaml.cs
+## FILE 55: OperatorDashboardView.xaml.cs
 
 <a id='operatordashboardviewxaml'></a>
 
@@ -3840,7 +3920,7 @@ namespace CampAgency.WPF.Views.Operator
 
 <a id='parent'></a>
 
-## FILE 54: ParentDashboardView.xaml
+## FILE 56: ParentDashboardView.xaml
 
 <a id='parentdashboardview'></a>
 
@@ -3858,7 +3938,7 @@ namespace CampAgency.WPF.Views.Operator
 
 ---
 
-## FILE 55: ParentDashboardView.xaml.cs
+## FILE 57: ParentDashboardView.xaml.cs
 
 <a id='parentdashboardviewxaml'></a>
 

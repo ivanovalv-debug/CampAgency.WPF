@@ -1,0 +1,36 @@
+﻿<UserControl x:Class="CampAgency.WPF.Views.Parent.ChildListView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+            <TextBlock Text="Мои дети" FontSize="24" FontWeight="Bold" VerticalAlignment="Center"/>
+            <Button Content="+ Добавить ребёнка" Command="{Binding AddChildCommand}" Width="150" Height="30" Margin="20,0,0,0" HorizontalAlignment="Right"/>
+        </StackPanel>
+
+        <DataGrid Grid.Row="1" ItemsSource="{Binding Children}" AutoGenerateColumns="False" IsReadOnly="True">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="ФИО" Binding="{Binding FullName}" Width="*"/>
+                <DataGridTextColumn Header="Пол" Binding="{Binding Gender.GenderName}" Width="100"/>
+                <DataGridTextColumn Header="Дата рождения" Binding="{Binding BirthDate, StringFormat=dd.MM.yyyy}" Width="120"/>
+                <DataGridTextColumn Header="Мед. заметки" Binding="{Binding ChildMedicalNotes.Count}" Width="100"/>
+                <DataGridTemplateColumn Header="Действия" Width="120">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <Button Content="✏️" Width="30" Margin="2" Command="{Binding DataContext.EditChildCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" CommandParameter="{Binding}"/>
+                                <Button Content="🗑️" Width="30" Margin="2" Command="{Binding DataContext.DeleteChildCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" CommandParameter="{Binding}"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+        <Button Grid.Row="2" Content="Назад" Width="150" Height="30" HorizontalAlignment="Right" Margin="20,0,0,0" Command="{Binding BackToDashboardCommand}"/>
+    </Grid>
+</UserControl>

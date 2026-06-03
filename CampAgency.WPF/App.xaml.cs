@@ -1,14 +1,16 @@
-﻿using System.Windows;
-using CampAgency.WPF.Data;
+﻿using CampAgency.WPF.Data;
+using CampAgency.WPF.Services.AuthServices;
+using CampAgency.WPF.Services.ChildServices;
+using CampAgency.WPF.Services.DialogServices;
+using CampAgency.WPF.Services.NavigationServices;
 using CampAgency.WPF.ViewModels;
-using CampAgency.WPF.ViewModels.Auth;
 using CampAgency.WPF.ViewModels.Admin;
-using CampAgency.WPF.ViewModels.Parent;
+using CampAgency.WPF.ViewModels.Auth;
 using CampAgency.WPF.ViewModels.Operator;
+using CampAgency.WPF.ViewModels.Parent;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using CampAgency.WPF.Services.AuthServices;
-using CampAgency.WPF.Services.NavigationServices;
+using System.Windows;
 
 namespace CampAgency.WPF
 {
@@ -26,6 +28,8 @@ namespace CampAgency.WPF
             services.AddSingleton<INavigationService, NavigationService>();
             services.AddSingleton<IAuthService, AuthService>();
             services.AddSingleton<IRegistrationService, RegistrationService>();
+            services.AddSingleton<IDialogService, DialogService>();
+            services.AddSingleton<IChildService, ChildService>();
 
             services.AddTransient<LoginViewModel>();
             services.AddTransient<AdminDashboardViewModel>();
@@ -34,6 +38,8 @@ namespace CampAgency.WPF
             services.AddTransient<ParentDashboardViewModel>();
             services.AddTransient<OperatorDashboardViewModel>();
             services.AddTransient<RegisterViewModel>();
+            services.AddTransient<ChildListViewModel>();
+            services.AddTransient<ChildEditViewModel>();
 
             services.AddSingleton<MainWindowViewModel>();
             services.AddSingleton<MainWindow>(sp =>

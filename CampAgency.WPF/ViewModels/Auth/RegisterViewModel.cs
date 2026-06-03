@@ -1,5 +1,6 @@
-﻿using System.Windows;
+﻿using CampAgency.WPF.Services;
 using CampAgency.WPF.Services.AuthServices;
+using CampAgency.WPF.Services.DialogServices;
 using CampAgency.WPF.Services.NavigationServices;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -10,6 +11,7 @@ namespace CampAgency.WPF.ViewModels.Auth
     {
         private readonly IRegistrationService _registrationService;
         private readonly INavigationService _navigationService;
+        private readonly IDialogService _dialogService;
 
         [ObservableProperty] private string _login = string.Empty;
         [ObservableProperty] private string _password = string.Empty;
@@ -19,10 +21,13 @@ namespace CampAgency.WPF.ViewModels.Auth
         [ObservableProperty] private string _email = string.Empty;
         [ObservableProperty] private string _errorMessage = string.Empty;
 
-        public RegisterViewModel(IRegistrationService registrationService, INavigationService navigationService)
+        public RegisterViewModel(IRegistrationService registrationService,
+                                 INavigationService navigationService,
+                                 IDialogService dialogService)
         {
             _registrationService = registrationService;
             _navigationService = navigationService;
+            _dialogService = dialogService;
         }
 
         [RelayCommand]
@@ -37,8 +42,7 @@ namespace CampAgency.WPF.ViewModels.Auth
             var (success, message, _) = _registrationService.Register(Login, Password, FullName, Phone, Email);
             if (success)
             {
-                MessageBox.Show(message, "Успех", MessageBoxButton.OK, MessageBoxImage.Information);
-                // Возвращаемся на экран входа
+                _dialogService.ShowMessage(message, "Успех");
                 _navigationService.NavigateTo<LoginViewModel>();
             }
             else
