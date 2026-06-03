@@ -4,7 +4,7 @@ using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
-namespace CampAgency.WPF.Services
+namespace CampAgency.WPF.Services.NavigationServices
 {
     public class NavigationService : INavigationService
     {

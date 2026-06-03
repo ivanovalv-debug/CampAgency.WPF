@@ -1,4 +1,5 @@
-﻿using CampAgency.WPF.Services;
+﻿using CampAgency.WPF.Services.AuthServices;
+using CampAgency.WPF.Services.NavigationServices;
 using CampAgency.WPF.ViewModels.Auth;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -7,9 +8,7 @@ namespace CampAgency.WPF.ViewModels
 {
     public partial class MainWindowViewModel : ObservableObject
     {
-        [ObservableProperty]
-        private string _userInfo = "Не авторизован";
-
+        [ObservableProperty] private string _userInfo = "Не авторизован";
         public INavigationService NavigationService { get; }
         public IAuthService AuthService { get; }
 
@@ -17,23 +16,16 @@ namespace CampAgency.WPF.ViewModels
         {
             NavigationService = navigation;
             AuthService = auth;
-
-            // При запуске всегда показываем экран входа
             NavigationService.NavigateTo<LoginViewModel>();
-
             UpdateUserInfo();
         }
 
         private void UpdateUserInfo()
         {
             if (AuthService.CurrentUser != null)
-            {
-                UserInfo = $"{AuthService.CurrentUser.FullName} ({AuthService.CurrentUser.Role})";
-            }
+                UserInfo = $"{AuthService.CurrentUser.FullName} ({AuthService.CurrentUser.UserRole?.RoleName ?? "нет роли"})";
             else
-            {
                 UserInfo = "Не авторизован";
-            }
         }
 
         [RelayCommand]

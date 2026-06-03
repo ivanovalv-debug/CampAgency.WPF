@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 
-namespace CampAgency.WPF.Services
+namespace CampAgency.WPF.Services.NavigationServices
 {
     public interface INavigationService : INotifyPropertyChanged
     {

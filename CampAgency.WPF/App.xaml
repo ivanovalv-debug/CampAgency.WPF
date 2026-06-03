@@ -28,5 +28,8 @@
         <DataTemplate DataType="{x:Type vmOperator:OperatorDashboardViewModel}">
             <vOperator:OperatorDashboardView />
         </DataTemplate>
+        <DataTemplate DataType="{x:Type vmAuth:RegisterViewModel}">
+            <vAuth:RegisterView />
+        </DataTemplate>
     </Application.Resources>
 </Application>

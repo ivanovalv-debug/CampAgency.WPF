@@ -1,6 +1,5 @@
 ﻿using System.Windows;
 using CampAgency.WPF.Data;
-using CampAgency.WPF.Services;
 using CampAgency.WPF.ViewModels;
 using CampAgency.WPF.ViewModels.Auth;
 using CampAgency.WPF.ViewModels.Admin;
@@ -8,6 +7,8 @@ using CampAgency.WPF.ViewModels.Parent;
 using CampAgency.WPF.ViewModels.Operator;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using CampAgency.WPF.Services.AuthServices;
+using CampAgency.WPF.Services.NavigationServices;
 
 namespace CampAgency.WPF
 {
@@ -24,6 +25,7 @@ namespace CampAgency.WPF
 
             services.AddSingleton<INavigationService, NavigationService>();
             services.AddSingleton<IAuthService, AuthService>();
+            services.AddSingleton<IRegistrationService, RegistrationService>();
 
             services.AddTransient<LoginViewModel>();
             services.AddTransient<AdminDashboardViewModel>();
@@ -31,6 +33,7 @@ namespace CampAgency.WPF
             services.AddTransient<CampEditViewModel>();
             services.AddTransient<ParentDashboardViewModel>();
             services.AddTransient<OperatorDashboardViewModel>();
+            services.AddTransient<RegisterViewModel>();
 
             services.AddSingleton<MainWindowViewModel>();
             services.AddSingleton<MainWindow>(sp =>

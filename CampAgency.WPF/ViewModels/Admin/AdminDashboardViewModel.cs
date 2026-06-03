@@ -1,4 +1,4 @@
-﻿using CampAgency.WPF.Services;
+﻿using CampAgency.WPF.Services.NavigationServices;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 

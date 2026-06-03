@@ -1,21 +1,19 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Xml.Linq;
 
-namespace CampAgency.WPF.Models.Entities;
-
-public partial class Document
+namespace CampAgency.WPF.Models.Entities
 {
-    public int Id { get; set; }
+    public partial class Document
+    {
+        public int DocumentId { get; set; }
+        public int ChildId { get; set; }
+        public int DocumentTypeId { get; set; }
+        public int DocumentStatusId { get; set; }
+        public string? FilePath { get; set; }
+        public DateTime TimeStamp { get; set; }
 
-    public int BookingId { get; set; }
-
-    public int Type { get; set; }
-
-    public string? FilePath { get; set; }
-
-    public int Status { get; set; }
-
-    public string? Comment { get; set; }
-
-    public virtual Booking Booking { get; set; } = null!;
+        public virtual Child Child { get; set; } = null!;
+        public virtual DocumentType DocumentType { get; set; } = null!;
+        public virtual DocumentStatus DocumentStatus { get; set; } = null!;
+    }
 }

@@ -1,6 +1,6 @@
 ﻿using CampAgency.WPF.Models.Entities;
 
-namespace CampAgency.WPF.Services
+namespace CampAgency.WPF.Services.AuthServices
 {
     public interface IAuthService
     {

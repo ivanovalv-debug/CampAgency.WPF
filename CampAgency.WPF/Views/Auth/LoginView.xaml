@@ -11,6 +11,7 @@
         <TextBox Text="{Binding Password, UpdateSourceTrigger=PropertyChanged}" Margin="0,5" Height="30"/>
 
         <Button Content="Войти" Command="{Binding ExecuteLoginCommand}" Margin="0,20" Height="30"/>
+        <Button Content="Зарегистрироваться" Command="{Binding GoToRegisterCommand}" Margin="0,5" Height="30" Background="LightGray"/>
         <TextBlock Text="{Binding ErrorMessage}" Foreground="Red" Margin="0,5"/>
     </StackPanel>
 </UserControl>

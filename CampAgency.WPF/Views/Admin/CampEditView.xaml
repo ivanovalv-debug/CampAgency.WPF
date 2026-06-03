@@ -2,35 +2,23 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <StackPanel Margin="20" Width="400">
-        <TextBlock Text="Редактирование лагеря" 
-                   FontSize="20" FontWeight="Bold" Margin="0,0,0,20"/>
+        <TextBlock Text="Редактирование лагеря" FontSize="20" FontWeight="Bold" Margin="0,0,0,20"/>
 
         <TextBlock Text="Название:" Margin="0,5"/>
-        <TextBox Margin="0,5" Height="30"/>
+        <TextBox Text="{Binding CampName}" Margin="0,5" Height="30"/>
 
         <TextBlock Text="Тип учреждения:" Margin="0,10,0,5"/>
-        <ComboBox Margin="0,5" Height="30">
-            <ComboBoxItem Content="Загородный лагерь"/>
-            <ComboBoxItem Content="Санаторий"/>
-        </ComboBox>
+        <ComboBox ItemsSource="{Binding CampTypes}" SelectedItem="{Binding SelectedCampType}" DisplayMemberPath="CampTypeName" Margin="0,5" Height="30"/>
 
         <TextBlock Text="Регион:" Margin="0,10,0,5"/>
-        <TextBox Margin="0,5" Height="30"/>
-
-        <TextBlock Text="Адрес:" Margin="0,10,0,5"/>
-        <TextBox Margin="0,5" Height="30"/>
+        <TextBox Text="{Binding Region}" Margin="0,5" Height="30"/>
 
         <TextBlock Text="Описание:" Margin="0,10,0,5"/>
-        <TextBox Margin="0,5" Height="80" TextWrapping="Wrap" 
-                 AcceptsReturn="True" VerticalScrollBarVisibility="Auto"/>
+        <TextBox Text="{Binding Description}" Margin="0,5" Height="80" TextWrapping="Wrap" AcceptsReturn="True" VerticalScrollBarVisibility="Auto"/>
 
-        <TextBlock Text="Рейтинг (0-5):" Margin="0,10,0,5"/>
-        <TextBox Margin="0,5" Height="30"/>
-
-        <!-- Кнопки -->
         <StackPanel Orientation="Horizontal" Margin="0,20,0,0" HorizontalAlignment="Right">
-            <Button Content="Сохранить" Width="100" Height="35" Margin="0,0,10,0"/>
-            <Button Content="Отмена" Width="100" Height="35"/>
+            <Button Content="Сохранить" Command="{Binding SaveCommand}" Width="100" Height="35" Margin="0,0,10,0"/>
+            <Button Content="Отмена" Command="{Binding CancelCommand}" Width="100" Height="35"/>
         </StackPanel>
     </StackPanel>
 </UserControl>
