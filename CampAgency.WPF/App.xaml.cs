@@ -3,6 +3,8 @@ using CampAgency.WPF.Services.AuthServices;
 using CampAgency.WPF.Services.ChildServices;
 using CampAgency.WPF.Services.DialogServices;
 using CampAgency.WPF.Services.NavigationServices;
+using CampAgency.WPF.Services.ShiftServices;
+using CampAgency.WPF.Services.UserServices;
 using CampAgency.WPF.ViewModels;
 using CampAgency.WPF.ViewModels.Admin;
 using CampAgency.WPF.ViewModels.Auth;
@@ -30,6 +32,8 @@ namespace CampAgency.WPF
             services.AddSingleton<IRegistrationService, RegistrationService>();
             services.AddSingleton<IDialogService, DialogService>();
             services.AddSingleton<IChildService, ChildService>();
+            services.AddSingleton<IShiftService, ShiftService>();
+            services.AddSingleton<IUserService, UserService>();
 
             services.AddTransient<LoginViewModel>();
             services.AddTransient<AdminDashboardViewModel>();
@@ -42,6 +46,10 @@ namespace CampAgency.WPF
             services.AddTransient<ChildEditViewModel>();
             services.AddTransient<ShiftsListViewModel>();
             services.AddTransient<UsersListViewModel>();
+            services.AddTransient<ShiftsListViewModel>();
+            services.AddTransient<ShiftEditViewModel>();
+            services.AddTransient<UsersListViewModel>();
+            services.AddTransient<UserEditViewModel>();
 
             services.AddSingleton<MainWindowViewModel>();
             services.AddSingleton<MainWindow>(sp =>
