@@ -13,7 +13,8 @@
                       DisplayMemberPath="CampTypeName" Margin="0,5" Height="30"/>
 
             <TextBlock Text="Регион:" Margin="0,10,0,5"/>
-            <TextBox Text="{Binding Region}" Margin="0,5" Height="30"/>
+            <ComboBox ItemsSource="{Binding Regions}" SelectedItem="{Binding SelectedRegion}" 
+                      DisplayMemberPath="RegionName" Margin="0,5" Height="30"/>
 
             <TextBlock Text="Адрес:" Margin="0,10,0,5"/>
             <TextBox Text="{Binding Address}" Margin="0,5" Height="30"/>

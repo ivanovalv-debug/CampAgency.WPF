@@ -23,7 +23,7 @@
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
                     <TextBlock Text="Регион:" Grid.Column="0" VerticalAlignment="Center" Margin="5"/>
-                    <ComboBox Grid.Column="1" ItemsSource="{Binding Regions}" SelectedItem="{Binding SelectedRegion}" Margin="5" Height="30"/>
+                    <ComboBox ItemsSource="{Binding Regions}" SelectedItem="{Binding SelectedRegion}" DisplayMemberPath="RegionName" Margin="5" Height="30"/>
                     <TextBlock Text="Тип лагеря:" Grid.Column="2" VerticalAlignment="Center" Margin="5"/>
                     <ComboBox Grid.Column="3" ItemsSource="{Binding CampTypes}" SelectedItem="{Binding SelectedCampType}" DisplayMemberPath="CampTypeName" Margin="5" Height="30"/>
                 </Grid>

@@ -25,6 +25,7 @@ namespace CampAgency.WPF.Data
         public virtual DbSet<PaymentType> PaymentTypes { get; set; }
         public virtual DbSet<PaymentStatus> PaymentStatuses { get; set; }
         public virtual DbSet<Payment> Payments { get; set; }
+        public virtual DbSet<Region> Regions { get; set; }
         public virtual DbSet<Booking> Bookings { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -100,11 +101,11 @@ namespace CampAgency.WPF.Data
             {
                 entity.HasKey(e => e.CampId);
                 entity.Property(e => e.CampName).HasMaxLength(100).IsRequired();
-                entity.Property(e => e.Region).HasMaxLength(100);
-                entity.Property(e => e.Address).HasMaxLength(200);
                 entity.Property(e => e.ContactPhone).HasMaxLength(20);
                 entity.Property(e => e.Rating).HasColumnType("decimal(3,2)");
+                entity.Property(e => e.Address).HasMaxLength(200);
                 entity.HasOne(d => d.CampType).WithMany(p => p.Camps).HasForeignKey(d => d.CampTypeId).OnDelete(DeleteBehavior.Restrict);
+                entity.HasOne(d => d.Region).WithMany(p => p.Camps).HasForeignKey(d => d.RegionId).OnDelete(DeleteBehavior.Restrict);
             });
 
             // Shift
@@ -182,6 +183,14 @@ namespace CampAgency.WPF.Data
                 entity.HasOne(d => d.Shift).WithMany(p => p.Bookings).HasForeignKey(d => d.ShiftId).OnDelete(DeleteBehavior.Restrict);
                 entity.HasOne(d => d.BookingStatus).WithMany(p => p.Bookings).HasForeignKey(d => d.BookingStatusId).OnDelete(DeleteBehavior.Restrict);
             });
+
+            // Region
+            modelBuilder.Entity<Region>(entity =>
+            {
+                entity.HasKey(e => e.RegionId);
+                entity.Property(e => e.RegionName).HasMaxLength(100).IsRequired();
+            });
+
 
             OnModelCreatingPartial(modelBuilder);
         }

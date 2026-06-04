@@ -24,7 +24,7 @@
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Название" Binding="{Binding CampName}" Width="*"/>
                 <DataGridTextColumn Header="Тип" Binding="{Binding CampType.CampTypeName}" Width="120"/>
-                <DataGridTextColumn Header="Регион" Binding="{Binding Region}" Width="100"/>
+                <DataGridTextColumn Header="Регион" Binding="{Binding Region.RegionName}" Width="100"/>
                 <DataGridTextColumn Header="Телефон" Binding="{Binding ContactPhone}" Width="120"/>
                 <DataGridTextColumn Header="Рейтинг" Binding="{Binding Rating}" Width="70"/>
                 <DataGridTemplateColumn Header="Действия" Width="120">

@@ -7,8 +7,6 @@ using CommunityToolkit.Mvvm.Input;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Net;
-using System.Windows.Media;
 
 namespace CampAgency.WPF.ViewModels.Admin
 {
@@ -19,13 +17,14 @@ namespace CampAgency.WPF.ViewModels.Admin
         private readonly IDialogService _dialogService;
 
         [ObservableProperty] private string _campName = string.Empty;
-        [ObservableProperty] private string _region = string.Empty;
         [ObservableProperty] private string _address = string.Empty;
         [ObservableProperty] private string _contactPhone = string.Empty;
         [ObservableProperty] private string _description = string.Empty;
         [ObservableProperty] private double? _rating;
         [ObservableProperty] private ObservableCollection<CampType> _campTypes = new();
         [ObservableProperty] private CampType? _selectedCampType;
+        [ObservableProperty] private ObservableCollection<Region> _regions = new();
+        [ObservableProperty] private Region? _selectedRegion;
 
         private Camp? _currentCamp;
         private bool _isNew;
@@ -39,37 +38,38 @@ namespace CampAgency.WPF.ViewModels.Admin
 
         public void OnNavigatedTo(object? parameter)
         {
-            LoadCampTypes();
+            LoadLookups();
             if (parameter is Camp camp)
             {
                 _currentCamp = camp;
                 _isNew = false;
                 CampName = camp.CampName;
-                Region = camp.Region ?? string.Empty;
                 Address = camp.Address ?? string.Empty;
                 ContactPhone = camp.ContactPhone ?? string.Empty;
                 Description = camp.Description ?? string.Empty;
                 Rating = (double?)camp.Rating;
                 SelectedCampType = camp.CampType;
+                SelectedRegion = camp.Region;
             }
             else
             {
                 _currentCamp = null;
                 _isNew = true;
                 CampName = string.Empty;
-                Region = string.Empty;
                 Address = string.Empty;
                 ContactPhone = string.Empty;
                 Description = string.Empty;
                 Rating = null;
                 SelectedCampType = null;
+                SelectedRegion = null;
             }
         }
 
-        private void LoadCampTypes()
+        private void LoadLookups()
         {
             using var context = _contextFactory.CreateDbContext();
             CampTypes = new ObservableCollection<CampType>(context.CampTypes.ToList());
+            Regions = new ObservableCollection<Region>(context.Regions.OrderBy(r => r.RegionName).ToList());
         }
 
         [RelayCommand]
@@ -98,12 +98,12 @@ namespace CampAgency.WPF.ViewModels.Admin
                 var newCamp = new Camp
                 {
                     CampName = CampName,
-                    Region = string.IsNullOrWhiteSpace(Region) ? null : Region,
                     Address = string.IsNullOrWhiteSpace(Address) ? null : Address,
                     ContactPhone = string.IsNullOrWhiteSpace(ContactPhone) ? null : ContactPhone,
                     Description = string.IsNullOrWhiteSpace(Description) ? null : Description,
                     Rating = Rating.HasValue ? (decimal?)Rating.Value : null,
-                    CampTypeId = SelectedCampType.CampTypeId
+                    CampTypeId = SelectedCampType.CampTypeId,
+                    RegionId = SelectedRegion?.RegionId
                 };
                 context.Camps.Add(newCamp);
             }
@@ -113,12 +113,12 @@ namespace CampAgency.WPF.ViewModels.Admin
                 if (campToUpdate != null)
                 {
                     campToUpdate.CampName = CampName;
-                    campToUpdate.Region = string.IsNullOrWhiteSpace(Region) ? null : Region;
                     campToUpdate.Address = string.IsNullOrWhiteSpace(Address) ? null : Address;
                     campToUpdate.ContactPhone = string.IsNullOrWhiteSpace(ContactPhone) ? null : ContactPhone;
                     campToUpdate.Description = string.IsNullOrWhiteSpace(Description) ? null : Description;
                     campToUpdate.Rating = Rating.HasValue ? (decimal?)Rating.Value : null;
                     campToUpdate.CampTypeId = SelectedCampType.CampTypeId;
+                    campToUpdate.RegionId = SelectedRegion?.RegionId;
                 }
             }
 

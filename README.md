@@ -34,9 +34,10 @@
    12. [Payment.cs](#payment)
    13. [PaymentStatus.cs](#paymentstatus)
    14. [PaymentType.cs](#paymenttype)
-   15. [Shift.cs](#shift)
-   16. [User.cs](#user)
-   17. [UserRole.cs](#userrole)
+   15. [Region.cs](#region)
+   16. [Shift.cs](#shift)
+   17. [User.cs](#user)
+   18. [UserRole.cs](#userrole)
 6. [CampAgency.WPF\Services\AuthServices](#authservices)
    1. [AuthService.cs](#authservice)
    2. [IAuthService.cs](#iauthservice)
@@ -473,6 +474,7 @@ namespace CampAgency.WPF.Data
         public virtual DbSet<PaymentType> PaymentTypes { get; set; }
         public virtual DbSet<PaymentStatus> PaymentStatuses { get; set; }
         public virtual DbSet<Payment> Payments { get; set; }
+        public virtual DbSet<Region> Regions { get; set; }
         public virtual DbSet<Booking> Bookings { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -548,11 +550,11 @@ namespace CampAgency.WPF.Data
             {
                 entity.HasKey(e => e.CampId);
                 entity.Property(e => e.CampName).HasMaxLength(100).IsRequired();
-                entity.Property(e => e.Region).HasMaxLength(100);
-                entity.Property(e => e.Address).HasMaxLength(200);
                 entity.Property(e => e.ContactPhone).HasMaxLength(20);
                 entity.Property(e => e.Rating).HasColumnType("decimal(3,2)");
+                entity.Property(e => e.Address).HasMaxLength(200);
                 entity.HasOne(d => d.CampType).WithMany(p => p.Camps).HasForeignKey(d => d.CampTypeId).OnDelete(DeleteBehavior.Restrict);
+                entity.HasOne(d => d.Region).WithMany(p => p.Camps).HasForeignKey(d => d.RegionId).OnDelete(DeleteBehavior.Restrict);
             });
 
             // Shift
@@ -630,6 +632,14 @@ namespace CampAgency.WPF.Data
                 entity.HasOne(d => d.Shift).WithMany(p => p.Bookings).HasForeignKey(d => d.ShiftId).OnDelete(DeleteBehavior.Restrict);
                 entity.HasOne(d => d.BookingStatus).WithMany(p => p.Bookings).HasForeignKey(d => d.BookingStatusId).OnDelete(DeleteBehavior.Restrict);
             });
+
+            // Region
+            modelBuilder.Entity<Region>(entity =>
+            {
+                entity.HasKey(e => e.RegionId);
+                entity.Property(e => e.RegionName).HasMaxLength(100).IsRequired();
+            });
+
 
             OnModelCreatingPartial(modelBuilder);
         }
@@ -3378,10 +3388,11 @@ namespace CampAgency.WPF.Models.Entities
         public string? Description { get; set; }
         public string? ContactPhone { get; set; }
         public decimal? Rating { get; set; }
-        public string? Region { get; set; }
+        public int? RegionId { get; set; }
         public string? Address { get; set; }
 
         public virtual CampType CampType { get; set; } = null!;
+        public virtual Region? Region { get; set; }
         public virtual ICollection<Shift> Shifts { get; set; } = new List<Shift>();
     }
 }
@@ -3634,7 +3645,28 @@ namespace CampAgency.WPF.Models.Entities
 
 ---
 
-## FILE 28: Shift.cs
+## FILE 28: Region.cs
+
+<a id='region'></a>
+
+```csharp
+using System.Collections.Generic;
+
+namespace CampAgency.WPF.Models.Entities
+{
+    public partial class Region
+    {
+        public int RegionId { get; set; }
+        public string RegionName { get; set; } = null!;
+
+        public virtual ICollection<Camp> Camps { get; set; } = new List<Camp>();
+    }
+}
+```
+
+---
+
+## FILE 29: Shift.cs
 
 <a id='shift'></a>
 
@@ -3662,7 +3694,7 @@ namespace CampAgency.WPF.Models.Entities
 
 ---
 
-## FILE 29: User.cs
+## FILE 30: User.cs
 
 <a id='user'></a>
 
@@ -3689,7 +3721,7 @@ namespace CampAgency.WPF.Models.Entities
 
 ---
 
-## FILE 30: UserRole.cs
+## FILE 31: UserRole.cs
 
 <a id='userrole'></a>
 
@@ -3713,7 +3745,7 @@ namespace CampAgency.WPF.Models.Entities
 
 <a id='authservices'></a>
 
-## FILE 31: AuthService.cs
+## FILE 32: AuthService.cs
 
 <a id='authservice'></a>
 
@@ -3761,7 +3793,7 @@ namespace CampAgency.WPF.Services.AuthServices
 
 ---
 
-## FILE 32: IAuthService.cs
+## FILE 33: IAuthService.cs
 
 <a id='iauthservice'></a>
 
@@ -3781,7 +3813,7 @@ namespace CampAgency.WPF.Services.AuthServices
 
 ---
 
-## FILE 33: IRegistrationService.cs
+## FILE 34: IRegistrationService.cs
 
 <a id='iregistrationservice'></a>
 
@@ -3799,7 +3831,7 @@ namespace CampAgency.WPF.Services.AuthServices
 
 ---
 
-## FILE 34: RegistrationService.cs
+## FILE 35: RegistrationService.cs
 
 <a id='registrationservice'></a>
 
@@ -3862,7 +3894,7 @@ namespace CampAgency.WPF.Services.AuthServices
 
 <a id='childservices'></a>
 
-## FILE 35: ChildService.cs
+## FILE 36: ChildService.cs
 
 <a id='childservice'></a>
 
@@ -3978,7 +4010,7 @@ namespace CampAgency.WPF.Services.ChildServices
 
 ---
 
-## FILE 36: IChildService.cs
+## FILE 37: IChildService.cs
 
 <a id='ichildservice'></a>
 
@@ -4006,7 +4038,7 @@ namespace CampAgency.WPF.Services.ChildServices
 
 <a id='dialogservices'></a>
 
-## FILE 37: DialogService.cs
+## FILE 38: DialogService.cs
 
 <a id='dialogservice'></a>
 
@@ -4038,7 +4070,7 @@ namespace CampAgency.WPF.Services.DialogServices
 
 ---
 
-## FILE 38: IDialogService.cs
+## FILE 39: IDialogService.cs
 
 <a id='idialogservice'></a>
 
@@ -4060,7 +4092,7 @@ namespace CampAgency.WPF.Services.DialogServices
 
 <a id='navigationservices'></a>
 
-## FILE 39: INavigationService.cs
+## FILE 40: INavigationService.cs
 
 <a id='inavigationservice'></a>
 
@@ -4084,7 +4116,7 @@ namespace CampAgency.WPF.Services.NavigationServices
 
 ---
 
-## FILE 40: NavigationService.cs
+## FILE 41: NavigationService.cs
 
 <a id='navigationservice'></a>
 
@@ -4142,7 +4174,7 @@ namespace CampAgency.WPF.Services.NavigationServices
 
 <a id='shiftservices'></a>
 
-## FILE 41: IShiftCatalogService.cs
+## FILE 42: IShiftCatalogService.cs
 
 <a id='ishiftcatalogservice'></a>
 
@@ -4154,10 +4186,11 @@ namespace CampAgency.WPF.Services.ShiftServices
 {
     public interface IShiftCatalogService
     {
-        List<Shift> GetShiftsWithFilters(string? region, int? campTypeId, DateOnly? startDateFrom, DateOnly? startDateTo, decimal? minPrice, decimal? maxPrice);
+        List<Shift> GetShiftsWithFilters(int? regionId, int? campTypeId, DateOnly? startDateFrom, DateOnly? startDateTo, decimal? minPrice, decimal? maxPrice);
+        List<Region> GetAllRegions();
         Shift? GetShiftById(int shiftId);
         List<CampType> GetCampTypes();
-        List<string> GetRegions();
+        //List<string> GetRegions();
         bool CreateBooking(int childId, int shiftId);
         List<Booking> GetBookingsByUserId(int userId);
     }
@@ -4166,7 +4199,7 @@ namespace CampAgency.WPF.Services.ShiftServices
 
 ---
 
-## FILE 42: IShiftService.cs
+## FILE 43: IShiftService.cs
 
 <a id='ishiftservice'></a>
 
@@ -4189,7 +4222,7 @@ namespace CampAgency.WPF.Services.ShiftServices
 
 ---
 
-## FILE 43: ShiftCatalogService.cs
+## FILE 44: ShiftCatalogService.cs
 
 <a id='shiftcatalogservice'></a>
 
@@ -4212,16 +4245,18 @@ namespace CampAgency.WPF.Services.ShiftServices
             _contextFactory = contextFactory;
         }
 
-        public List<Shift> GetShiftsWithFilters(string? region, int? campTypeId, DateOnly? startDateFrom, DateOnly? startDateTo, decimal? minPrice, decimal? maxPrice)
+        public List<Shift> GetShiftsWithFilters(int? regionId, int? campTypeId, DateOnly? startDateFrom, DateOnly? startDateTo, decimal? minPrice, decimal? maxPrice)
         {
             using var context = _contextFactory.CreateDbContext();
             var query = context.Shifts
                 .Include(s => s.Camp)
-                .ThenInclude(c => c.CampType)
+                    .ThenInclude(c => c.CampType)
+                .Include(s => s.Camp)
+                    .ThenInclude(c => c.Region)
                 .Where(s => s.StartDate >= DateOnly.FromDateTime(DateTime.Today) && s.AvailableSeats > 0);
 
-            if (!string.IsNullOrWhiteSpace(region))
-                query = query.Where(s => s.Camp.Region != null && s.Camp.Region.Contains(region));
+            if (regionId.HasValue && regionId.Value > 0)
+                query = query.Where(s => s.Camp.RegionId == regionId.Value);
             if (campTypeId.HasValue && campTypeId.Value > 0)
                 query = query.Where(s => s.Camp.CampTypeId == campTypeId.Value);
             if (startDateFrom.HasValue)
@@ -4234,6 +4269,12 @@ namespace CampAgency.WPF.Services.ShiftServices
                 query = query.Where(s => s.Price <= maxPrice.Value);
 
             return query.OrderBy(s => s.StartDate).ToList();
+        }
+
+        public List<Region> GetAllRegions()
+        {
+            using var context = _contextFactory.CreateDbContext();
+            return context.Regions.OrderBy(r => r.RegionName).ToList();
         }
 
         public Shift? GetShiftById(int shiftId)
@@ -4251,16 +4292,16 @@ namespace CampAgency.WPF.Services.ShiftServices
             return context.CampTypes.ToList();
         }
 
-        public List<string> GetRegions()
-        {
-            using var context = _contextFactory.CreateDbContext();
-            return context.Camps
-                .Where(c => c.Region != null)
-                .Select(c => c.Region!)
-                .Distinct()
-                .OrderBy(r => r)
-                .ToList();
-        }
+        //public List<string> GetRegions()
+        //{
+        //    using var context = _contextFactory.CreateDbContext();
+        //    return context.Camps
+        //        .Where(c => c.Region != null)
+        //        .Select(c => c.Region!)
+        //        .Distinct()
+        //        .OrderBy(r => r)
+        //        .ToList();
+        //}
 
         public bool CreateBooking(int childId, int shiftId)
         {
@@ -4316,7 +4357,7 @@ namespace CampAgency.WPF.Services.ShiftServices
 
 ---
 
-## FILE 44: ShiftService.cs
+## FILE 45: ShiftService.cs
 
 <a id='shiftservice'></a>
 
@@ -4409,7 +4450,7 @@ namespace CampAgency.WPF.Services.ShiftServices
 
 <a id='userservices'></a>
 
-## FILE 45: IUserService.cs
+## FILE 46: IUserService.cs
 
 <a id='iuserservice'></a>
 
@@ -4436,7 +4477,7 @@ namespace CampAgency.WPF.Services.UserServices
 
 ---
 
-## FILE 46: UserService.cs
+## FILE 47: UserService.cs
 
 <a id='userservice'></a>
 
@@ -4558,7 +4599,7 @@ namespace CampAgency.WPF.Services.UserServices
 
 <a id='viewmodels'></a>
 
-## FILE 47: MainWindowViewModel.cs
+## FILE 48: MainWindowViewModel.cs
 
 <a id='mainwindowviewmodel'></a>
 
@@ -4610,7 +4651,7 @@ namespace CampAgency.WPF.ViewModels
 
 <a id='admin'></a>
 
-## FILE 48: AdminDashboardViewModel.cs
+## FILE 49: AdminDashboardViewModel.cs
 
 <a id='admindashboardviewmodel'></a>
 
@@ -4658,7 +4699,7 @@ namespace CampAgency.WPF.ViewModels.Admin
 
 ---
 
-## FILE 49: CampEditViewModel.cs
+## FILE 50: CampEditViewModel.cs
 
 <a id='campeditviewmodel'></a>
 
@@ -4691,6 +4732,8 @@ namespace CampAgency.WPF.ViewModels.Admin
         [ObservableProperty] private double? _rating;
         [ObservableProperty] private ObservableCollection<CampType> _campTypes = new();
         [ObservableProperty] private CampType? _selectedCampType;
+        [ObservableProperty] private ObservableCollection<Region> _regions = new();
+        [ObservableProperty] private Region? _selectedRegion;
 
         private Camp? _currentCamp;
         private bool _isNew;
@@ -4735,6 +4778,7 @@ namespace CampAgency.WPF.ViewModels.Admin
         {
             using var context = _contextFactory.CreateDbContext();
             CampTypes = new ObservableCollection<CampType>(context.CampTypes.ToList());
+            Regions = new ObservableCollection<Region>(context.Regions.OrderBy(r => r.RegionName).ToList());
         }
 
         [RelayCommand]
@@ -4800,7 +4844,7 @@ namespace CampAgency.WPF.ViewModels.Admin
 
 ---
 
-## FILE 50: CampsListViewModel.cs
+## FILE 51: CampsListViewModel.cs
 
 <a id='campslistviewmodel'></a>
 
@@ -4870,7 +4914,7 @@ namespace CampAgency.WPF.ViewModels.Admin
 
 ---
 
-## FILE 51: ShiftEditViewModel.cs
+## FILE 52: ShiftEditViewModel.cs
 
 <a id='shifteditviewmodel'></a>
 
@@ -5016,7 +5060,7 @@ namespace CampAgency.WPF.ViewModels.Admin
 
 ---
 
-## FILE 52: ShiftsListViewModel.cs
+## FILE 53: ShiftsListViewModel.cs
 
 <a id='shiftslistviewmodel'></a>
 
@@ -5118,7 +5162,7 @@ namespace CampAgency.WPF.ViewModels.Admin
 
 ---
 
-## FILE 53: UserEditViewModel.cs
+## FILE 54: UserEditViewModel.cs
 
 <a id='usereditviewmodel'></a>
 
@@ -5265,7 +5309,7 @@ namespace CampAgency.WPF.ViewModels.Admin
 
 ---
 
-## FILE 54: UsersListViewModel.cs
+## FILE 55: UsersListViewModel.cs
 
 <a id='userslistviewmodel'></a>
 
@@ -5387,7 +5431,7 @@ namespace CampAgency.WPF.ViewModels.Admin
 
 <a id='auth'></a>
 
-## FILE 55: LoginViewModel.cs
+## FILE 56: LoginViewModel.cs
 
 <a id='loginviewmodel'></a>
 
@@ -5449,7 +5493,7 @@ namespace CampAgency.WPF.ViewModels.Auth
 
 ---
 
-## FILE 56: RegisterViewModel.cs
+## FILE 57: RegisterViewModel.cs
 
 <a id='registerviewmodel'></a>
 
@@ -5519,7 +5563,7 @@ namespace CampAgency.WPF.ViewModels.Auth
 
 <a id='operator'></a>
 
-## FILE 57: OperatorDashboardViewModel.cs
+## FILE 58: OperatorDashboardViewModel.cs
 
 <a id='operatordashboardviewmodel'></a>
 
@@ -5545,7 +5589,7 @@ namespace CampAgency.WPF.ViewModels.Operator
 
 <a id='parent'></a>
 
-## FILE 58: ChildEditViewModel.cs
+## FILE 59: ChildEditViewModel.cs
 
 <a id='childeditviewmodel'></a>
 
@@ -5667,7 +5711,7 @@ namespace CampAgency.WPF.ViewModels.Parent
 
 ---
 
-## FILE 59: ChildListViewModel.cs
+## FILE 60: ChildListViewModel.cs
 
 <a id='childlistviewmodel'></a>
 
@@ -5742,7 +5786,7 @@ namespace CampAgency.WPF.ViewModels.Parent
 
 ---
 
-## FILE 60: MedicalNoteWrapper.cs
+## FILE 61: MedicalNoteWrapper.cs
 
 <a id='medicalnotewrapper'></a>
 
@@ -5768,7 +5812,7 @@ namespace CampAgency.WPF.ViewModels.Parent
 
 ---
 
-## FILE 61: MyBookingsViewModel.cs
+## FILE 62: MyBookingsViewModel.cs
 
 <a id='mybookingsviewmodel'></a>
 
@@ -5821,7 +5865,7 @@ namespace CampAgency.WPF.ViewModels.Parent
 
 ---
 
-## FILE 62: ParentDashboardViewModel.cs
+## FILE 63: ParentDashboardViewModel.cs
 
 <a id='parentdashboardviewmodel'></a>
 
@@ -5851,7 +5895,7 @@ namespace CampAgency.WPF.ViewModels.Parent
 
 ---
 
-## FILE 63: ShiftDetailsViewModel.cs
+## FILE 64: ShiftDetailsViewModel.cs
 
 <a id='shiftdetailsviewmodel'></a>
 
@@ -5950,7 +5994,7 @@ namespace CampAgency.WPF.ViewModels.Parent
 
 ---
 
-## FILE 64: ShiftsCatalogViewModel.cs
+## FILE 65: ShiftsCatalogViewModel.cs
 
 <a id='shiftscatalogviewmodel'></a>
 
@@ -5975,10 +6019,11 @@ namespace CampAgency.WPF.ViewModels.Parent
 
         [ObservableProperty] private ObservableCollection<Shift> _shifts = new();
         [ObservableProperty] private ObservableCollection<CampType> _campTypes = new();
-        [ObservableProperty] private ObservableCollection<string> _regions = new();
+        [ObservableProperty] private ObservableCollection<Region> _regions = new();
+
 
         // Фильтры
-        [ObservableProperty] private string? _selectedRegion;
+        [ObservableProperty] private Region? _selectedRegion;
         [ObservableProperty] private CampType? _selectedCampType;
         [ObservableProperty] private DateTime? _startDateFrom;
         [ObservableProperty] private DateTime? _startDateTo;
@@ -5996,10 +6041,9 @@ namespace CampAgency.WPF.ViewModels.Parent
 
         private void LoadFilters()
         {
-            var types = _shiftService.GetCampTypes();
-            CampTypes = new ObservableCollection<CampType>(types);
-            var regions = _shiftService.GetRegions();
-            Regions = new ObservableCollection<string>(regions);
+            CampTypes = new ObservableCollection<CampType>(_shiftService.GetCampTypes());
+            var regionList = _shiftService.GetAllRegions();
+            Regions = new ObservableCollection<Region>(regionList);
         }
 
         private void LoadShifts()
@@ -6058,7 +6102,7 @@ namespace CampAgency.WPF.ViewModels.Parent
 
 <a id='admin'></a>
 
-## FILE 65: AdminDashboardView.xaml
+## FILE 66: AdminDashboardView.xaml
 
 <a id='admindashboardview'></a>
 
@@ -6093,7 +6137,7 @@ namespace CampAgency.WPF.ViewModels.Parent
 
 ---
 
-## FILE 66: AdminDashboardView.xaml.cs
+## FILE 67: AdminDashboardView.xaml.cs
 
 <a id='admindashboardviewxaml'></a>
 
@@ -6114,7 +6158,7 @@ namespace CampAgency.WPF.Views.Admin
 
 ---
 
-## FILE 67: CampEditView.xaml
+## FILE 68: CampEditView.xaml
 
 <a id='campeditview'></a>
 
@@ -6134,7 +6178,7 @@ namespace CampAgency.WPF.Views.Admin
                       DisplayMemberPath="CampTypeName" Margin="0,5" Height="30"/>
 
             <TextBlock Text="Регион:" Margin="0,10,0,5"/>
-            <TextBox Text="{Binding Region}" Margin="0,5" Height="30"/>
+            <ComboBox ItemsSource="{Binding Regions}" SelectedItem="{Binding SelectedRegion}" DisplayMemberPath="RegionName" Margin="0,5" Height="30"/>
 
             <TextBlock Text="Адрес:" Margin="0,10,0,5"/>
             <TextBox Text="{Binding Address}" Margin="0,5" Height="30"/>
@@ -6160,7 +6204,7 @@ namespace CampAgency.WPF.Views.Admin
 
 ---
 
-## FILE 68: CampEditView.xaml.cs
+## FILE 69: CampEditView.xaml.cs
 
 <a id='campeditviewxaml'></a>
 
@@ -6181,7 +6225,7 @@ namespace CampAgency.WPF.Views.Admin
 
 ---
 
-## FILE 69: CampsListView.xaml
+## FILE 70: CampsListView.xaml
 
 <a id='campslistview'></a>
 
@@ -6241,7 +6285,7 @@ namespace CampAgency.WPF.Views.Admin
 
 ---
 
-## FILE 70: CampsListView.xaml.cs
+## FILE 71: CampsListView.xaml.cs
 
 <a id='campslistviewxaml'></a>
 
@@ -6262,7 +6306,7 @@ namespace CampAgency.WPF.Views.Admin
 
 ---
 
-## FILE 71: ShiftEditView.xaml
+## FILE 72: ShiftEditView.xaml
 
 <a id='shifteditview'></a>
 
@@ -6299,7 +6343,7 @@ namespace CampAgency.WPF.Views.Admin
 
 ---
 
-## FILE 72: ShiftEditView.xaml.cs
+## FILE 73: ShiftEditView.xaml.cs
 
 <a id='shifteditviewxaml'></a>
 
@@ -6337,7 +6381,7 @@ namespace CampAgency.WPF.Views.Admin
 
 ---
 
-## FILE 73: ShiftsListView.xaml
+## FILE 74: ShiftsListView.xaml
 
 <a id='shiftslistview'></a>
 
@@ -6394,7 +6438,7 @@ namespace CampAgency.WPF.Views.Admin
 
 ---
 
-## FILE 74: ShiftsListView.xaml.cs
+## FILE 75: ShiftsListView.xaml.cs
 
 <a id='shiftslistviewxaml'></a>
 
@@ -6432,7 +6476,7 @@ namespace CampAgency.WPF.Views.Admin
 
 ---
 
-## FILE 75: UserEditView.xaml
+## FILE 76: UserEditView.xaml
 
 <a id='usereditview'></a>
 
@@ -6479,7 +6523,7 @@ namespace CampAgency.WPF.Views.Admin
 
 ---
 
-## FILE 76: UserEditView.xaml.cs
+## FILE 77: UserEditView.xaml.cs
 
 <a id='usereditviewxaml'></a>
 
@@ -6511,7 +6555,7 @@ namespace CampAgency.WPF.Views.Admin
 
 ---
 
-## FILE 77: UsersListView.xaml
+## FILE 78: UsersListView.xaml
 
 <a id='userslistview'></a>
 
@@ -6577,7 +6621,7 @@ namespace CampAgency.WPF.Views.Admin
 
 ---
 
-## FILE 78: UsersListView.xaml.cs
+## FILE 79: UsersListView.xaml.cs
 
 <a id='userslistviewxaml'></a>
 
@@ -6619,7 +6663,7 @@ namespace CampAgency.WPF.Views.Admin
 
 <a id='auth'></a>
 
-## FILE 79: LoginView.xaml
+## FILE 80: LoginView.xaml
 
 <a id='loginview'></a>
 
@@ -6645,7 +6689,7 @@ namespace CampAgency.WPF.Views.Admin
 
 ---
 
-## FILE 80: LoginView.xaml.cs
+## FILE 81: LoginView.xaml.cs
 
 <a id='loginviewxaml'></a>
 
@@ -6666,7 +6710,7 @@ namespace CampAgency.WPF.Views.Auth
 
 ---
 
-## FILE 81: RegisterView.xaml
+## FILE 82: RegisterView.xaml
 
 <a id='registerview'></a>
 
@@ -6708,7 +6752,7 @@ namespace CampAgency.WPF.Views.Auth
 
 ---
 
-## FILE 82: RegisterView.xaml.cs
+## FILE 83: RegisterView.xaml.cs
 
 <a id='registerviewxaml'></a>
 
@@ -6745,7 +6789,7 @@ namespace CampAgency.WPF.Views.Auth
 
 <a id='operator'></a>
 
-## FILE 83: OperatorDashboardView.xaml
+## FILE 84: OperatorDashboardView.xaml
 
 <a id='operatordashboardview'></a>
 
@@ -6763,7 +6807,7 @@ namespace CampAgency.WPF.Views.Auth
 
 ---
 
-## FILE 84: OperatorDashboardView.xaml.cs
+## FILE 85: OperatorDashboardView.xaml.cs
 
 <a id='operatordashboardviewxaml'></a>
 
@@ -6788,7 +6832,7 @@ namespace CampAgency.WPF.Views.Operator
 
 <a id='parent'></a>
 
-## FILE 85: ChildEditView.xaml
+## FILE 86: ChildEditView.xaml
 
 <a id='childeditview'></a>
 
@@ -6827,7 +6871,7 @@ namespace CampAgency.WPF.Views.Operator
 
 ---
 
-## FILE 86: ChildEditView.xaml.cs
+## FILE 87: ChildEditView.xaml.cs
 
 <a id='childeditviewxaml'></a>
 
@@ -6865,7 +6909,7 @@ namespace CampAgency.WPF.Views.Parent
 
 ---
 
-## FILE 87: ChildListView.xaml
+## FILE 88: ChildListView.xaml
 
 <a id='childlistview'></a>
 
@@ -6910,7 +6954,7 @@ namespace CampAgency.WPF.Views.Parent
 
 ---
 
-## FILE 88: ChildListView.xaml.cs
+## FILE 89: ChildListView.xaml.cs
 
 <a id='childlistviewxaml'></a>
 
@@ -6948,7 +6992,7 @@ namespace CampAgency.WPF.Views.Parent
 
 ---
 
-## FILE 89: MyBookingsView.xaml
+## FILE 90: MyBookingsView.xaml
 
 <a id='mybookingsview'></a>
 
@@ -6982,7 +7026,7 @@ namespace CampAgency.WPF.Views.Parent
 
 ---
 
-## FILE 90: MyBookingsView.xaml.cs
+## FILE 91: MyBookingsView.xaml.cs
 
 <a id='mybookingsviewxaml'></a>
 
@@ -7020,7 +7064,7 @@ namespace CampAgency.WPF.Views.Parent
 
 ---
 
-## FILE 91: ParentDashboardView.xaml
+## FILE 92: ParentDashboardView.xaml
 
 <a id='parentdashboardview'></a>
 
@@ -7049,7 +7093,7 @@ namespace CampAgency.WPF.Views.Parent
 
 ---
 
-## FILE 92: ParentDashboardView.xaml.cs
+## FILE 93: ParentDashboardView.xaml.cs
 
 <a id='parentdashboardviewxaml'></a>
 
@@ -7070,7 +7114,7 @@ namespace CampAgency.WPF.Views.Parent
 
 ---
 
-## FILE 93: ShiftDetailsView.xaml
+## FILE 94: ShiftDetailsView.xaml
 
 <a id='shiftdetailsview'></a>
 
@@ -7114,7 +7158,7 @@ namespace CampAgency.WPF.Views.Parent
 
 ---
 
-## FILE 94: ShiftDetailsView.xaml.cs
+## FILE 95: ShiftDetailsView.xaml.cs
 
 <a id='shiftdetailsviewxaml'></a>
 
@@ -7152,7 +7196,7 @@ namespace CampAgency.WPF.Views.Parent
 
 ---
 
-## FILE 95: ShiftsCatalogView.xaml
+## FILE 96: ShiftsCatalogView.xaml
 
 <a id='shiftscatalogview'></a>
 
@@ -7182,7 +7226,7 @@ namespace CampAgency.WPF.Views.Parent
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
                     <TextBlock Text="Регион:" Grid.Column="0" VerticalAlignment="Center" Margin="5"/>
-                    <ComboBox Grid.Column="1" ItemsSource="{Binding Regions}" SelectedItem="{Binding SelectedRegion}" Margin="5" Height="30"/>
+                    <ComboBox ItemsSource="{Binding Regions}" SelectedItem="{Binding SelectedRegion}" DisplayMemberPath="RegionName" Margin="5" Height="30"/>
                     <TextBlock Text="Тип лагеря:" Grid.Column="2" VerticalAlignment="Center" Margin="5"/>
                     <ComboBox Grid.Column="3" ItemsSource="{Binding CampTypes}" SelectedItem="{Binding SelectedCampType}" DisplayMemberPath="CampTypeName" Margin="5" Height="30"/>
                 </Grid>
@@ -7245,7 +7289,7 @@ namespace CampAgency.WPF.Views.Parent
 
 ---
 
-## FILE 96: ShiftsCatalogView.xaml.cs
+## FILE 97: ShiftsCatalogView.xaml.cs
 
 <a id='shiftscatalogviewxaml'></a>
 

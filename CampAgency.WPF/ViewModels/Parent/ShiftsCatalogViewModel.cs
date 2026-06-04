@@ -18,10 +18,11 @@ namespace CampAgency.WPF.ViewModels.Parent
 
         [ObservableProperty] private ObservableCollection<Shift> _shifts = new();
         [ObservableProperty] private ObservableCollection<CampType> _campTypes = new();
-        [ObservableProperty] private ObservableCollection<string> _regions = new();
+        [ObservableProperty] private ObservableCollection<Region> _regions = new();
+
 
         // Фильтры
-        [ObservableProperty] private string? _selectedRegion;
+        [ObservableProperty] private Region? _selectedRegion;
         [ObservableProperty] private CampType? _selectedCampType;
         [ObservableProperty] private DateTime? _startDateFrom;
         [ObservableProperty] private DateTime? _startDateTo;
@@ -39,10 +40,9 @@ namespace CampAgency.WPF.ViewModels.Parent
 
         private void LoadFilters()
         {
-            var types = _shiftService.GetCampTypes();
-            CampTypes = new ObservableCollection<CampType>(types);
-            var regions = _shiftService.GetRegions();
-            Regions = new ObservableCollection<string>(regions);
+            CampTypes = new ObservableCollection<CampType>(_shiftService.GetCampTypes());
+            var regionList = _shiftService.GetAllRegions();
+            Regions = new ObservableCollection<Region>(regionList);
         }
 
         private void LoadShifts()
@@ -57,7 +57,7 @@ namespace CampAgency.WPF.ViewModels.Parent
             DateOnly? toDate = StartDateTo.HasValue ? DateOnly.FromDateTime(StartDateTo.Value) : null;
 
             var list = _shiftService.GetShiftsWithFilters(
-                SelectedRegion,
+                SelectedRegion?.RegionId,   // ← передаём int? вместо Region?
                 SelectedCampType?.CampTypeId,
                 fromDate,
                 toDate,
