@@ -14,10 +14,10 @@
         <ComboBox ItemsSource="{Binding Genders}" SelectedItem="{Binding SelectedGender}" DisplayMemberPath="GenderName" Margin="0,5" Height="30"/>
 
         <TextBlock Text="Медицинские заметки:" Margin="0,10,0,5"/>
-        <ListBox ItemsSource="{Binding AllMedicalNotes}" SelectionMode="Multiple" Margin="0,5" Height="120">
+        <ListBox ItemsSource="{Binding MedicalNoteWrappers}" Margin="0,5" Height="150">
             <ListBox.ItemTemplate>
                 <DataTemplate>
-                    <CheckBox Content="{Binding MedicalNoteName}" IsChecked="{Binding IsSelected, Mode=TwoWay}"/>
+                    <CheckBox Content="{Binding MedicalNote.MedicalNoteName}" IsChecked="{Binding IsSelected}" Margin="2"/>
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>

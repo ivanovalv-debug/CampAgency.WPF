@@ -39,7 +39,7 @@ namespace CampAgency.WPF.Services.ChildServices
                     BirthDate = birthDate
                 };
                 context.Children.Add(child);
-                context.SaveChanges(); // сохраняем, чтобы получить ChildId
+                context.SaveChanges(); // получаем ChildId
 
                 foreach (var noteId in medicalNoteIds)
                 {
@@ -55,15 +55,29 @@ namespace CampAgency.WPF.Services.ChildServices
             catch { return false; }
         }
 
-        public bool UpdateChild(Child child)
+        public bool UpdateChild(Child child, List<int> medicalNoteIds)
         {
             using var context = _contextFactory.CreateDbContext();
-            var existing = context.Children.Find(child.ChildId);
+            var existing = context.Children
+                .Include(c => c.ChildMedicalNotes)
+                .FirstOrDefault(c => c.ChildId == child.ChildId);
             if (existing == null) return false;
+
             existing.FullName = child.FullName;
             existing.GenderId = child.GenderId;
             existing.BirthDate = child.BirthDate;
-            // Обновление медзаметок можно реализовать при необходимости
+
+            // Обновляем медицинские заметки: удаляем старые, добавляем новые
+            existing.ChildMedicalNotes.Clear();
+            foreach (var noteId in medicalNoteIds)
+            {
+                existing.ChildMedicalNotes.Add(new ChildMedicalNote
+                {
+                    ChildId = child.ChildId,
+                    MedicalNoteId = noteId
+                });
+            }
+
             context.SaveChanges();
             return true;
         }

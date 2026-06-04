@@ -1,24 +1,37 @@
 ﻿<UserControl x:Class="CampAgency.WPF.Views.Admin.CampEditView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-    <StackPanel Margin="20" Width="400">
-        <TextBlock Text="Редактирование лагеря" FontSize="20" FontWeight="Bold" Margin="0,0,0,20"/>
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <StackPanel Margin="20" Width="500">
+            <TextBlock Text="Редактирование лагеря" FontSize="20" FontWeight="Bold" Margin="0,0,0,20"/>
 
-        <TextBlock Text="Название:" Margin="0,5"/>
-        <TextBox Text="{Binding CampName}" Margin="0,5" Height="30"/>
+            <TextBlock Text="Название*:" Margin="0,5"/>
+            <TextBox Text="{Binding CampName}" Margin="0,5" Height="30"/>
 
-        <TextBlock Text="Тип учреждения:" Margin="0,10,0,5"/>
-        <ComboBox ItemsSource="{Binding CampTypes}" SelectedItem="{Binding SelectedCampType}" DisplayMemberPath="CampTypeName" Margin="0,5" Height="30"/>
+            <TextBlock Text="Тип учреждения*:" Margin="0,10,0,5"/>
+            <ComboBox ItemsSource="{Binding CampTypes}" SelectedItem="{Binding SelectedCampType}" 
+                      DisplayMemberPath="CampTypeName" Margin="0,5" Height="30"/>
 
-        <TextBlock Text="Регион:" Margin="0,10,0,5"/>
-        <TextBox Text="{Binding Region}" Margin="0,5" Height="30"/>
+            <TextBlock Text="Регион:" Margin="0,10,0,5"/>
+            <TextBox Text="{Binding Region}" Margin="0,5" Height="30"/>
 
-        <TextBlock Text="Описание:" Margin="0,10,0,5"/>
-        <TextBox Text="{Binding Description}" Margin="0,5" Height="80" TextWrapping="Wrap" AcceptsReturn="True" VerticalScrollBarVisibility="Auto"/>
+            <TextBlock Text="Адрес:" Margin="0,10,0,5"/>
+            <TextBox Text="{Binding Address}" Margin="0,5" Height="30"/>
 
-        <StackPanel Orientation="Horizontal" Margin="0,20,0,0" HorizontalAlignment="Right">
-            <Button Content="Сохранить" Command="{Binding SaveCommand}" Width="100" Height="35" Margin="0,0,10,0"/>
-            <Button Content="Отмена" Command="{Binding CancelCommand}" Width="100" Height="35"/>
+            <TextBlock Text="Контактный телефон:" Margin="0,10,0,5"/>
+            <TextBox Text="{Binding ContactPhone}" Margin="0,5" Height="30"/>
+
+            <TextBlock Text="Рейтинг (0-5):" Margin="0,10,0,5"/>
+            <TextBox Text="{Binding Rating, StringFormat=N1}" Margin="0,5" Height="30"/>
+
+            <TextBlock Text="Описание:" Margin="0,10,0,5"/>
+            <TextBox Text="{Binding Description}" Margin="0,5" Height="100" 
+                     TextWrapping="Wrap" AcceptsReturn="True" VerticalScrollBarVisibility="Auto"/>
+
+            <StackPanel Orientation="Horizontal" Margin="0,30,0,0" HorizontalAlignment="Right">
+                <Button Content="Сохранить" Command="{Binding SaveCommand}" Width="120" Height="35" Margin="0,0,10,0"/>
+                <Button Content="Отмена" Command="{Binding CancelCommand}" Width="120" Height="35"/>
+            </StackPanel>
         </StackPanel>
-    </StackPanel>
+    </ScrollViewer>
 </UserControl>

@@ -22,8 +22,7 @@ namespace CampAgency.WPF.ViewModels.Parent
         [ObservableProperty] private DateTime? _birthDate;
         [ObservableProperty] private ObservableCollection<Gender> _genders = new();
         [ObservableProperty] private Gender? _selectedGender;
-        [ObservableProperty] private ObservableCollection<MedicalNote> _allMedicalNotes = new();
-        [ObservableProperty] private ObservableCollection<MedicalNote> _selectedMedicalNotes = new();
+        [ObservableProperty] private ObservableCollection<MedicalNoteWrapper> _medicalNoteWrappers = new();
 
         private Child? _currentChild;
         private bool _isNew = true;
@@ -39,6 +38,7 @@ namespace CampAgency.WPF.ViewModels.Parent
         public void OnNavigatedTo(object? parameter)
         {
             LoadLookups();
+
             if (parameter is Child child)
             {
                 _currentChild = child;
@@ -46,7 +46,13 @@ namespace CampAgency.WPF.ViewModels.Parent
                 FullName = child.FullName;
                 BirthDate = child.BirthDate.ToDateTime(TimeOnly.MinValue);
                 SelectedGender = child.Gender;
-                // Здесь можно загрузить выбранные медзаметки для редактирования, но для упрощения оставим
+
+                // Отмечаем выбранные медицинские заметки
+                var existingMedicalNoteIds = child.ChildMedicalNotes.Select(cmn => cmn.MedicalNoteId).ToHashSet();
+                foreach (var wrapper in MedicalNoteWrappers)
+                {
+                    wrapper.IsSelected = existingMedicalNoteIds.Contains(wrapper.MedicalNote.MedicalNoteId);
+                }
             }
             else
             {
@@ -55,14 +61,17 @@ namespace CampAgency.WPF.ViewModels.Parent
                 FullName = string.Empty;
                 BirthDate = null;
                 SelectedGender = null;
-                SelectedMedicalNotes.Clear();
+                foreach (var wrapper in MedicalNoteWrappers)
+                    wrapper.IsSelected = false;
             }
         }
 
         private void LoadLookups()
         {
             Genders = new ObservableCollection<Gender>(_childService.GetGenders());
-            AllMedicalNotes = new ObservableCollection<MedicalNote>(_childService.GetMedicalNotes());
+            var notes = _childService.GetMedicalNotes();
+            MedicalNoteWrappers = new ObservableCollection<MedicalNoteWrapper>(
+                notes.Select(n => new MedicalNoteWrapper { MedicalNote = n, IsSelected = false }));
         }
 
         [RelayCommand]
@@ -75,12 +84,12 @@ namespace CampAgency.WPF.ViewModels.Parent
             }
 
             var birthDateOnly = DateOnly.FromDateTime(BirthDate.Value);
-            var medicalNoteIds = SelectedMedicalNotes.Select(n => n.MedicalNoteId).ToList();
+            var selectedNoteIds = MedicalNoteWrappers.Where(w => w.IsSelected).Select(w => w.MedicalNote.MedicalNoteId).ToList();
 
             bool success;
             if (_isNew)
             {
-                success = _childService.AddChild(_authService.CurrentUser!.UserId, FullName, SelectedGender.GenderId, birthDateOnly, medicalNoteIds);
+                success = _childService.AddChild(_authService.CurrentUser!.UserId, FullName, SelectedGender.GenderId, birthDateOnly, selectedNoteIds);
                 if (success) _dialogService.ShowMessage("Ребёнок успешно добавлен", "Успех");
             }
             else
@@ -88,7 +97,7 @@ namespace CampAgency.WPF.ViewModels.Parent
                 _currentChild!.FullName = FullName;
                 _currentChild.GenderId = SelectedGender.GenderId;
                 _currentChild.BirthDate = birthDateOnly;
-                success = _childService.UpdateChild(_currentChild);
+                success = _childService.UpdateChild(_currentChild, selectedNoteIds);
                 if (success) _dialogService.ShowMessage("Данные обновлены", "Успех");
             }
 

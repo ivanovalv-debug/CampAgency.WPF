@@ -6,6 +6,7 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
         <Grid Grid.Row="0" Margin="0,0,0,10">
@@ -22,19 +23,29 @@
                   CanUserAddRows="False" IsReadOnly="True">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Название" Binding="{Binding CampName}" Width="*"/>
-                <DataGridTextColumn Header="Регион" Binding="{Binding Region}" Width="150"/>
-                <DataGridTextColumn Header="Рейтинг" Binding="{Binding Rating}" Width="80"/>
-                <DataGridTemplateColumn Header="Действия" Width="150">
+                <DataGridTextColumn Header="Тип" Binding="{Binding CampType.CampTypeName}" Width="120"/>
+                <DataGridTextColumn Header="Регион" Binding="{Binding Region}" Width="100"/>
+                <DataGridTextColumn Header="Телефон" Binding="{Binding ContactPhone}" Width="120"/>
+                <DataGridTextColumn Header="Рейтинг" Binding="{Binding Rating}" Width="70"/>
+                <DataGridTemplateColumn Header="Действия" Width="120">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal">
-                                <Button Content="✏️" Width="30" Margin="2" Command="{Binding DataContext.EditCampCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" CommandParameter="{Binding}"/>
-                                <Button Content="🗑️" Width="30" Margin="2" Command="{Binding DataContext.DeleteCampCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" CommandParameter="{Binding}"/>
+                                <Button Content="✏️" Width="30" Margin="2" 
+                                        Command="{Binding DataContext.EditCampCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" 
+                                        CommandParameter="{Binding}"/>
+                                <Button Content="🗑️" Width="30" Margin="2" 
+                                        Command="{Binding DataContext.DeleteCampCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" 
+                                        CommandParameter="{Binding}"/>
                             </StackPanel>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
             </DataGrid.Columns>
         </DataGrid>
+
+        <!-- Кнопка назад -->
+        <Button Grid.Row="3" Content="← Назад" Command="{Binding BackToDashboardCommand}" 
+                Width="120" Height="30" HorizontalAlignment="Left" Margin="0,10,0,0"/>
     </Grid>
 </UserControl>

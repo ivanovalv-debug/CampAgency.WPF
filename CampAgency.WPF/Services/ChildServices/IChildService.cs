@@ -7,7 +7,7 @@ namespace CampAgency.WPF.Services.ChildServices
     {
         List<Child> GetChildrenByUserId(int userId);
         bool AddChild(int userId, string fullName, int genderId, DateOnly birthDate, List<int> medicalNoteIds);
-        bool UpdateChild(Child child);
+        bool UpdateChild(Child child, List<int> medicalNoteIds);
         bool DeleteChild(int childId);
         List<Gender> GetGenders();
         List<MedicalNote> GetMedicalNotes();

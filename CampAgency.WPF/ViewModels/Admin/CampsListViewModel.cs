@@ -54,5 +54,8 @@ namespace CampAgency.WPF.ViewModels.Admin
                 _dialogService.ShowMessage("Лагерь успешно удалён", "Успех");
             }
         }
+
+        [RelayCommand]
+        private void BackToDashboard() => _navigation.NavigateTo<AdminDashboardViewModel>();
     }
 }

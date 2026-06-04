@@ -7,23 +7,20 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <!-- Заголовок -->
         <TextBlock Grid.Row="0" Text="Панель администратора" 
                    FontSize="24" FontWeight="Bold" Margin="0,0,0,20"/>
 
-        <!-- Кнопки меню -->
+        <!-- Кнопки меню с привязкой команд -->
         <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Right">
-            <Button Content="Управление лагерями" Width="150" Margin="5" Height="40"/>
-            <Button Content="Управление сменами" Width="150" Margin="5" Height="40"/>
-            <Button Content="Пользователи" Width="150" Margin="5" Height="40"/>
+            <Button Content="Управление лагерями" Command="{Binding ShowCampsCommand}" 
+                    Width="150" Margin="5" Height="40"/>
+            <Button Content="Управление сменами" Command="{Binding ShowShiftsCommand}" 
+                    Width="150" Margin="5" Height="40"/>
+            <Button Content="Пользователи" Command="{Binding ShowUsersCommand}" 
+                    Width="150" Margin="5" Height="40"/>
         </StackPanel>
 
-        <!-- Область контента (пока заглушка) -->
-        <Border Grid.Row="1" BorderBrush="Gray" BorderThickness="1" 
-                Background="#F5F5F5" CornerRadius="5">
-            <TextBlock Text="Выберите раздел из меню выше" 
-                       HorizontalAlignment="Center" VerticalAlignment="Center" 
-                       FontSize="16" Foreground="Gray"/>
-        </Border>
+        <!-- Контент будет меняться через NavigationService -->
+        <ContentControl Grid.Row="1" Content="{Binding _navigation.CurrentViewModel}" />
     </Grid>
 </UserControl>

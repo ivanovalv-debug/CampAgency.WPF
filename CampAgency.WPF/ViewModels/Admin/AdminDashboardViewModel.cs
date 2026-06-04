@@ -15,6 +15,24 @@ namespace CampAgency.WPF.ViewModels.Admin
             _navigation.NavigateTo<CampsListViewModel>();
         }
 
-        // Можно добавить кнопки для других разделов админки здесь
+        [RelayCommand]
+        private void ShowCamps()
+        {
+            _navigation.NavigateTo<CampsListViewModel>();
+        }
+
+        [RelayCommand]
+        private void ShowShifts()
+        {
+            // TODO: создать ShiftsListViewModel и зарегистрировать
+            _navigation.NavigateTo<ShiftsListViewModel>();
+        }
+
+        [RelayCommand]
+        private void ShowUsers()
+        {
+            // TODO: создать UsersListViewModel и зарегистрировать
+            _navigation.NavigateTo<UsersListViewModel>();
+        }
     }
 }

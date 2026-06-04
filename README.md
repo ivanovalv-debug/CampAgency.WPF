@@ -38,43 +38,53 @@
    2. [IAuthService.cs](#iauthservice)
    3. [IRegistrationService.cs](#iregistrationservice)
    4. [RegistrationService.cs](#registrationservice)
-6. [CampAgency.WPF\Services\DialogServices](#dialogservices)
+6. [CampAgency.WPF\Services\ChildServices](#childservices)
+   1. [ChildService.cs](#childservice)
+   2. [IChildService.cs](#ichildservice)
+7. [CampAgency.WPF\Services\DialogServices](#dialogservices)
    1. [DialogService.cs](#dialogservice)
    2. [IDialogService.cs](#idialogservice)
-7. [CampAgency.WPF\Services\NavigationServices](#navigationservices)
+8. [CampAgency.WPF\Services\NavigationServices](#navigationservices)
    1. [INavigationService.cs](#inavigationservice)
    2. [NavigationService.cs](#navigationservice)
-8. [CampAgency.WPF\ViewModels](#viewmodels)
+9. [CampAgency.WPF\ViewModels](#viewmodels)
    1. [MainWindowViewModel.cs](#mainwindowviewmodel)
-9. [CampAgency.WPF\ViewModels\Admin](#admin)
+10. [CampAgency.WPF\ViewModels\Admin](#admin)
    1. [AdminDashboardViewModel.cs](#admindashboardviewmodel)
    2. [CampEditViewModel.cs](#campeditviewmodel)
    3. [CampsListViewModel.cs](#campslistviewmodel)
-10. [CampAgency.WPF\ViewModels\Auth](#auth)
+11. [CampAgency.WPF\ViewModels\Auth](#auth)
    1. [LoginViewModel.cs](#loginviewmodel)
    2. [RegisterViewModel.cs](#registerviewmodel)
-11. [CampAgency.WPF\ViewModels\Operator](#operator)
+12. [CampAgency.WPF\ViewModels\Operator](#operator)
    1. [OperatorDashboardViewModel.cs](#operatordashboardviewmodel)
-12. [CampAgency.WPF\ViewModels\Parent](#parent)
-   1. [ParentDashboardViewModel.cs](#parentdashboardviewmodel)
-13. [CampAgency.WPF\Views\Admin](#admin)
+13. [CampAgency.WPF\ViewModels\Parent](#parent)
+   1. [ChildEditViewModel.cs](#childeditviewmodel)
+   2. [ChildListViewModel.cs](#childlistviewmodel)
+   3. [MedicalNoteWrapper.cs](#medicalnotewrapper)
+   4. [ParentDashboardViewModel.cs](#parentdashboardviewmodel)
+14. [CampAgency.WPF\Views\Admin](#admin)
    1. [AdminDashboardView.xaml](#admindashboardview)
    2. [AdminDashboardView.xaml.cs](#admindashboardviewxaml)
    3. [CampEditView.xaml](#campeditview)
    4. [CampEditView.xaml.cs](#campeditviewxaml)
    5. [CampsListView.xaml](#campslistview)
    6. [CampsListView.xaml.cs](#campslistviewxaml)
-14. [CampAgency.WPF\Views\Auth](#auth)
+15. [CampAgency.WPF\Views\Auth](#auth)
    1. [LoginView.xaml](#loginview)
    2. [LoginView.xaml.cs](#loginviewxaml)
    3. [RegisterView.xaml](#registerview)
    4. [RegisterView.xaml.cs](#registerviewxaml)
-15. [CampAgency.WPF\Views\Operator](#operator)
+16. [CampAgency.WPF\Views\Operator](#operator)
    1. [OperatorDashboardView.xaml](#operatordashboardview)
    2. [OperatorDashboardView.xaml.cs](#operatordashboardviewxaml)
-16. [CampAgency.WPF\Views\Parent](#parent)
-   1. [ParentDashboardView.xaml](#parentdashboardview)
-   2. [ParentDashboardView.xaml.cs](#parentdashboardviewxaml)
+17. [CampAgency.WPF\Views\Parent](#parent)
+   1. [ChildEditView.xaml](#childeditview)
+   2. [ChildEditView.xaml.cs](#childeditviewxaml)
+   3. [ChildListView.xaml](#childlistview)
+   4. [ChildListView.xaml.cs](#childlistviewxaml)
+   5. [ParentDashboardView.xaml](#parentdashboardview)
+   6. [ParentDashboardView.xaml.cs](#parentdashboardviewxaml)
 
 ## FILE 1: Project Root
 
@@ -120,6 +130,12 @@
         <DataTemplate DataType="{x:Type vmAuth:RegisterViewModel}">
             <vAuth:RegisterView />
         </DataTemplate>
+        <DataTemplate DataType="{x:Type vmParent:ChildListViewModel}">
+            <vParent:ChildListView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vmParent:ChildEditViewModel}">
+            <vParent:ChildEditView />
+        </DataTemplate>
     </Application.Resources>
 </Application>
 ```
@@ -133,6 +149,7 @@
 ```csharp
 using CampAgency.WPF.Data;
 using CampAgency.WPF.Services.AuthServices;
+using CampAgency.WPF.Services.ChildServices;
 using CampAgency.WPF.Services.DialogServices;
 using CampAgency.WPF.Services.NavigationServices;
 using CampAgency.WPF.ViewModels;
@@ -161,6 +178,7 @@ namespace CampAgency.WPF
             services.AddSingleton<IAuthService, AuthService>();
             services.AddSingleton<IRegistrationService, RegistrationService>();
             services.AddSingleton<IDialogService, DialogService>();
+            services.AddSingleton<IChildService, ChildService>();
 
             services.AddTransient<LoginViewModel>();
             services.AddTransient<AdminDashboardViewModel>();
@@ -169,6 +187,8 @@ namespace CampAgency.WPF
             services.AddTransient<ParentDashboardViewModel>();
             services.AddTransient<OperatorDashboardViewModel>();
             services.AddTransient<RegisterViewModel>();
+            services.AddTransient<ChildListViewModel>();
+            services.AddTransient<ChildEditViewModel>();
 
             services.AddSingleton<MainWindowViewModel>();
             services.AddSingleton<MainWindow>(sp =>
@@ -2984,11 +3004,155 @@ namespace CampAgency.WPF.Services.AuthServices
 
 ---
 
+## CampAgency.WPF\Services\ChildServices
+
+<a id='childservices'></a>
+
+## FILE 32: ChildService.cs
+
+<a id='childservice'></a>
+
+```csharp
+using CampAgency.WPF.Data;
+using CampAgency.WPF.Models.Entities;
+using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace CampAgency.WPF.Services.ChildServices
+{
+    public class ChildService : IChildService
+    {
+        private readonly IDbContextFactory<AppDbContext> _contextFactory;
+
+        public ChildService(IDbContextFactory<AppDbContext> contextFactory)
+        {
+            _contextFactory = contextFactory;
+        }
+
+        public List<Child> GetChildrenByUserId(int userId)
+        {
+            using var context = _contextFactory.CreateDbContext();
+            return context.Children
+                .Include(c => c.Gender)
+                .Include(c => c.ChildMedicalNotes).ThenInclude(cmn => cmn.MedicalNote)
+                .Where(c => c.UserId == userId)
+                .ToList();
+        }
+
+        public bool AddChild(int userId, string fullName, int genderId, DateOnly birthDate, List<int> medicalNoteIds)
+        {
+            try
+            {
+                using var context = _contextFactory.CreateDbContext();
+                var child = new Child
+                {
+                    UserId = userId,
+                    FullName = fullName,
+                    GenderId = genderId,
+                    BirthDate = birthDate
+                };
+                context.Children.Add(child);
+                context.SaveChanges(); // получаем ChildId
+
+                foreach (var noteId in medicalNoteIds)
+                {
+                    context.ChildMedicalNotes.Add(new ChildMedicalNote
+                    {
+                        ChildId = child.ChildId,
+                        MedicalNoteId = noteId
+                    });
+                }
+                context.SaveChanges();
+                return true;
+            }
+            catch { return false; }
+        }
+
+        public bool UpdateChild(Child child, List<int> medicalNoteIds)
+        {
+            using var context = _contextFactory.CreateDbContext();
+            var existing = context.Children
+                .Include(c => c.ChildMedicalNotes)
+                .FirstOrDefault(c => c.ChildId == child.ChildId);
+            if (existing == null) return false;
+
+            existing.FullName = child.FullName;
+            existing.GenderId = child.GenderId;
+            existing.BirthDate = child.BirthDate;
+
+            // Обновляем медицинские заметки: удаляем старые, добавляем новые
+            existing.ChildMedicalNotes.Clear();
+            foreach (var noteId in medicalNoteIds)
+            {
+                existing.ChildMedicalNotes.Add(new ChildMedicalNote
+                {
+                    ChildId = child.ChildId,
+                    MedicalNoteId = noteId
+                });
+            }
+
+            context.SaveChanges();
+            return true;
+        }
+
+        public bool DeleteChild(int childId)
+        {
+            using var context = _contextFactory.CreateDbContext();
+            var child = context.Children.Find(childId);
+            if (child == null) return false;
+            context.Children.Remove(child);
+            context.SaveChanges();
+            return true;
+        }
+
+        public List<Gender> GetGenders()
+        {
+            using var context = _contextFactory.CreateDbContext();
+            return context.Genders.ToList();
+        }
+
+        public List<MedicalNote> GetMedicalNotes()
+        {
+            using var context = _contextFactory.CreateDbContext();
+            return context.MedicalNotes.ToList();
+        }
+    }
+}
+```
+
+---
+
+## FILE 33: IChildService.cs
+
+<a id='ichildservice'></a>
+
+```csharp
+using CampAgency.WPF.Models.Entities;
+using System.Collections.Generic;
+
+namespace CampAgency.WPF.Services.ChildServices
+{
+    public interface IChildService
+    {
+        List<Child> GetChildrenByUserId(int userId);
+        bool AddChild(int userId, string fullName, int genderId, DateOnly birthDate, List<int> medicalNoteIds);
+        bool UpdateChild(Child child, List<int> medicalNoteIds);
+        bool DeleteChild(int childId);
+        List<Gender> GetGenders();
+        List<MedicalNote> GetMedicalNotes();
+    }
+}
+```
+
+---
+
 ## CampAgency.WPF\Services\DialogServices
 
 <a id='dialogservices'></a>
 
-## FILE 32: DialogService.cs
+## FILE 34: DialogService.cs
 
 <a id='dialogservice'></a>
 
@@ -3020,7 +3184,7 @@ namespace CampAgency.WPF.Services.DialogServices
 
 ---
 
-## FILE 33: IDialogService.cs
+## FILE 35: IDialogService.cs
 
 <a id='idialogservice'></a>
 
@@ -3042,7 +3206,7 @@ namespace CampAgency.WPF.Services.DialogServices
 
 <a id='navigationservices'></a>
 
-## FILE 34: INavigationService.cs
+## FILE 36: INavigationService.cs
 
 <a id='inavigationservice'></a>
 
@@ -3066,7 +3230,7 @@ namespace CampAgency.WPF.Services.NavigationServices
 
 ---
 
-## FILE 35: NavigationService.cs
+## FILE 37: NavigationService.cs
 
 <a id='navigationservice'></a>
 
@@ -3124,7 +3288,7 @@ namespace CampAgency.WPF.Services.NavigationServices
 
 <a id='viewmodels'></a>
 
-## FILE 36: MainWindowViewModel.cs
+## FILE 38: MainWindowViewModel.cs
 
 <a id='mainwindowviewmodel'></a>
 
@@ -3176,7 +3340,7 @@ namespace CampAgency.WPF.ViewModels
 
 <a id='admin'></a>
 
-## FILE 37: AdminDashboardViewModel.cs
+## FILE 39: AdminDashboardViewModel.cs
 
 <a id='admindashboardviewmodel'></a>
 
@@ -3205,7 +3369,7 @@ namespace CampAgency.WPF.ViewModels.Admin
 
 ---
 
-## FILE 38: CampEditViewModel.cs
+## FILE 40: CampEditViewModel.cs
 
 <a id='campeditviewmodel'></a>
 
@@ -3309,7 +3473,7 @@ namespace CampAgency.WPF.ViewModels.Admin
 
 ---
 
-## FILE 39: CampsListViewModel.cs
+## FILE 41: CampsListViewModel.cs
 
 <a id='campslistviewmodel'></a>
 
@@ -3380,7 +3544,7 @@ namespace CampAgency.WPF.ViewModels.Admin
 
 <a id='auth'></a>
 
-## FILE 40: LoginViewModel.cs
+## FILE 42: LoginViewModel.cs
 
 <a id='loginviewmodel'></a>
 
@@ -3442,7 +3606,7 @@ namespace CampAgency.WPF.ViewModels.Auth
 
 ---
 
-## FILE 41: RegisterViewModel.cs
+## FILE 43: RegisterViewModel.cs
 
 <a id='registerviewmodel'></a>
 
@@ -3512,7 +3676,7 @@ namespace CampAgency.WPF.ViewModels.Auth
 
 <a id='operator'></a>
 
-## FILE 42: OperatorDashboardViewModel.cs
+## FILE 44: OperatorDashboardViewModel.cs
 
 <a id='operatordashboardviewmodel'></a>
 
@@ -3538,24 +3702,257 @@ namespace CampAgency.WPF.ViewModels.Operator
 
 <a id='parent'></a>
 
-## FILE 43: ParentDashboardViewModel.cs
+## FILE 45: ChildEditViewModel.cs
+
+<a id='childeditviewmodel'></a>
+
+```csharp
+using CampAgency.WPF.Models.Entities;
+using CampAgency.WPF.Services.AuthServices;
+using CampAgency.WPF.Services.ChildServices;
+using CampAgency.WPF.Services.DialogServices;
+using CampAgency.WPF.Services.NavigationServices;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using System;
+using System.Collections.ObjectModel;
+using System.Linq;
+
+namespace CampAgency.WPF.ViewModels.Parent
+{
+    public partial class ChildEditViewModel : ObservableObject, INavigationAware
+    {
+        private readonly IChildService _childService;
+        private readonly IAuthService _authService;
+        private readonly IDialogService _dialogService;
+        private readonly INavigationService _navigationService;
+
+        [ObservableProperty] private string _fullName = string.Empty;
+        [ObservableProperty] private DateTime? _birthDate;
+        [ObservableProperty] private ObservableCollection<Gender> _genders = new();
+        [ObservableProperty] private Gender? _selectedGender;
+        [ObservableProperty] private ObservableCollection<MedicalNoteWrapper> _medicalNoteWrappers = new();
+
+        private Child? _currentChild;
+        private bool _isNew = true;
+
+        public ChildEditViewModel(IChildService childService, IAuthService authService, IDialogService dialogService, INavigationService navigationService)
+        {
+            _childService = childService;
+            _authService = authService;
+            _dialogService = dialogService;
+            _navigationService = navigationService;
+        }
+
+        public void OnNavigatedTo(object? parameter)
+        {
+            LoadLookups();
+
+            if (parameter is Child child)
+            {
+                _currentChild = child;
+                _isNew = false;
+                FullName = child.FullName;
+                BirthDate = child.BirthDate.ToDateTime(TimeOnly.MinValue);
+                SelectedGender = child.Gender;
+
+                // Отмечаем выбранные медицинские заметки
+                var existingMedicalNoteIds = child.ChildMedicalNotes.Select(cmn => cmn.MedicalNoteId).ToHashSet();
+                foreach (var wrapper in MedicalNoteWrappers)
+                {
+                    wrapper.IsSelected = existingMedicalNoteIds.Contains(wrapper.MedicalNote.MedicalNoteId);
+                }
+            }
+            else
+            {
+                _currentChild = null;
+                _isNew = true;
+                FullName = string.Empty;
+                BirthDate = null;
+                SelectedGender = null;
+                foreach (var wrapper in MedicalNoteWrappers)
+                    wrapper.IsSelected = false;
+            }
+        }
+
+        private void LoadLookups()
+        {
+            Genders = new ObservableCollection<Gender>(_childService.GetGenders());
+            var notes = _childService.GetMedicalNotes();
+            MedicalNoteWrappers = new ObservableCollection<MedicalNoteWrapper>(
+                notes.Select(n => new MedicalNoteWrapper { MedicalNote = n, IsSelected = false }));
+        }
+
+        [RelayCommand]
+        private void Save()
+        {
+            if (string.IsNullOrWhiteSpace(FullName) || SelectedGender == null || BirthDate == null)
+            {
+                _dialogService.ShowError("Заполните ФИО, пол и дату рождения", "Ошибка");
+                return;
+            }
+
+            var birthDateOnly = DateOnly.FromDateTime(BirthDate.Value);
+            var selectedNoteIds = MedicalNoteWrappers.Where(w => w.IsSelected).Select(w => w.MedicalNote.MedicalNoteId).ToList();
+
+            bool success;
+            if (_isNew)
+            {
+                success = _childService.AddChild(_authService.CurrentUser!.UserId, FullName, SelectedGender.GenderId, birthDateOnly, selectedNoteIds);
+                if (success) _dialogService.ShowMessage("Ребёнок успешно добавлен", "Успех");
+            }
+            else
+            {
+                _currentChild!.FullName = FullName;
+                _currentChild.GenderId = SelectedGender.GenderId;
+                _currentChild.BirthDate = birthDateOnly;
+                success = _childService.UpdateChild(_currentChild, selectedNoteIds);
+                if (success) _dialogService.ShowMessage("Данные обновлены", "Успех");
+            }
+
+            if (success)
+                _navigationService.NavigateTo<ChildListViewModel>();
+            else
+                _dialogService.ShowError("Ошибка сохранения", "Ошибка");
+        }
+
+        [RelayCommand]
+        private void Cancel() => _navigationService.NavigateTo<ChildListViewModel>();
+    }
+}
+```
+
+---
+
+## FILE 46: ChildListViewModel.cs
+
+<a id='childlistviewmodel'></a>
+
+```csharp
+using CampAgency.WPF.Models.Entities;
+using CampAgency.WPF.Services.AuthServices;
+using CampAgency.WPF.Services.ChildServices;
+using CampAgency.WPF.Services.DialogServices;
+using CampAgency.WPF.Services.NavigationServices;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using System.Collections.ObjectModel;
+using System.Linq;
+
+namespace CampAgency.WPF.ViewModels.Parent
+{
+    public partial class ChildListViewModel : ObservableObject
+    {
+        private readonly IChildService _childService;
+        private readonly IAuthService _authService;
+        private readonly IDialogService _dialogService;
+        private readonly INavigationService _navigationService;
+
+        [ObservableProperty] private ObservableCollection<Child> _children = new();
+
+        public ChildListViewModel(IChildService childService, IAuthService authService, IDialogService dialogService, INavigationService navigationService)
+        {
+            _childService = childService;
+            _authService = authService;
+            _dialogService = dialogService;
+            _navigationService = navigationService;
+            LoadChildren();
+        }
+
+        private void LoadChildren()
+        {
+            if (_authService.CurrentUser == null) return;
+            var list = _childService.GetChildrenByUserId(_authService.CurrentUser.UserId);
+            Children = new ObservableCollection<Child>(list);
+        }
+
+        [RelayCommand]
+        private void AddChild() => _navigationService.NavigateTo<ChildEditViewModel>(null);
+
+        [RelayCommand]
+        private void EditChild(Child child) => _navigationService.NavigateTo<ChildEditViewModel>(child);
+
+        [RelayCommand]
+        private void BackToDashboard() => _navigationService.NavigateTo<ParentDashboardViewModel>();
+
+        [RelayCommand]
+        private async Task DeleteChild(Child child)
+        {
+            if (child == null) return;
+            if (!_dialogService.ShowConfirmation($"Удалить данные о ребёнке \"{child.FullName}\"?", "Удаление"))
+                return;
+
+            var success = _childService.DeleteChild(child.ChildId);
+            if (success)
+            {
+                _dialogService.ShowMessage("Ребёнок удалён", "Успех");
+                LoadChildren();
+            }
+            else
+            {
+                _dialogService.ShowError("Не удалось удалить ребёнка", "Ошибка");
+            }
+        }
+    }
+}
+```
+
+---
+
+## FILE 47: MedicalNoteWrapper.cs
+
+<a id='medicalnotewrapper'></a>
+
+```csharp
+using CampAgency.WPF.Models.Entities;
+using CommunityToolkit.Mvvm.ComponentModel;
+
+namespace CampAgency.WPF.ViewModels.Parent
+{
+    public class MedicalNoteWrapper : ObservableObject
+    {
+        public MedicalNote MedicalNote { get; set; } = null!;
+
+        private bool _isSelected;
+        public bool IsSelected
+        {
+            get => _isSelected;
+            set => SetProperty(ref _isSelected, value);
+        }
+    }
+}
+```
+
+---
+
+## FILE 48: ParentDashboardViewModel.cs
 
 <a id='parentdashboardviewmodel'></a>
 
 ```csharp
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using CampAgency.WPF.Services.NavigationServices;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 
 namespace CampAgency.WPF.ViewModels.Parent
 {
-    class ParentDashboardViewModel
+    public partial class ParentDashboardViewModel : ObservableObject
     {
+        private readonly INavigationService _navigationService;
+
+        public ParentDashboardViewModel(INavigationService navigationService)
+        {
+            _navigationService = navigationService;
+            // По умолчанию показываем список детей
+            _navigationService.NavigateTo<ChildListViewModel>();
+        }
+
+        [RelayCommand]
+        private void ShowChildren() => _navigationService.NavigateTo<ChildListViewModel>();
+
+        // Здесь будут другие команды: смены, бронирования и т.д.
     }
 }
-
 ```
 
 ---
@@ -3564,7 +3961,7 @@ namespace CampAgency.WPF.ViewModels.Parent
 
 <a id='admin'></a>
 
-## FILE 44: AdminDashboardView.xaml
+## FILE 49: AdminDashboardView.xaml
 
 <a id='admindashboardview'></a>
 
@@ -3602,7 +3999,7 @@ namespace CampAgency.WPF.ViewModels.Parent
 
 ---
 
-## FILE 45: AdminDashboardView.xaml.cs
+## FILE 50: AdminDashboardView.xaml.cs
 
 <a id='admindashboardviewxaml'></a>
 
@@ -3623,7 +4020,7 @@ namespace CampAgency.WPF.Views.Admin
 
 ---
 
-## FILE 46: CampEditView.xaml
+## FILE 51: CampEditView.xaml
 
 <a id='campeditview'></a>
 
@@ -3656,7 +4053,7 @@ namespace CampAgency.WPF.Views.Admin
 
 ---
 
-## FILE 47: CampEditView.xaml.cs
+## FILE 52: CampEditView.xaml.cs
 
 <a id='campeditviewxaml'></a>
 
@@ -3677,7 +4074,7 @@ namespace CampAgency.WPF.Views.Admin
 
 ---
 
-## FILE 48: CampsListView.xaml
+## FILE 53: CampsListView.xaml
 
 <a id='campslistview'></a>
 
@@ -3726,7 +4123,7 @@ namespace CampAgency.WPF.Views.Admin
 
 ---
 
-## FILE 49: CampsListView.xaml.cs
+## FILE 54: CampsListView.xaml.cs
 
 <a id='campslistviewxaml'></a>
 
@@ -3751,7 +4148,7 @@ namespace CampAgency.WPF.Views.Admin
 
 <a id='auth'></a>
 
-## FILE 50: LoginView.xaml
+## FILE 55: LoginView.xaml
 
 <a id='loginview'></a>
 
@@ -3777,7 +4174,7 @@ namespace CampAgency.WPF.Views.Admin
 
 ---
 
-## FILE 51: LoginView.xaml.cs
+## FILE 56: LoginView.xaml.cs
 
 <a id='loginviewxaml'></a>
 
@@ -3798,7 +4195,7 @@ namespace CampAgency.WPF.Views.Auth
 
 ---
 
-## FILE 52: RegisterView.xaml
+## FILE 57: RegisterView.xaml
 
 <a id='registerview'></a>
 
@@ -3840,7 +4237,7 @@ namespace CampAgency.WPF.Views.Auth
 
 ---
 
-## FILE 53: RegisterView.xaml.cs
+## FILE 58: RegisterView.xaml.cs
 
 <a id='registerviewxaml'></a>
 
@@ -3877,7 +4274,7 @@ namespace CampAgency.WPF.Views.Auth
 
 <a id='operator'></a>
 
-## FILE 54: OperatorDashboardView.xaml
+## FILE 59: OperatorDashboardView.xaml
 
 <a id='operatordashboardview'></a>
 
@@ -3895,7 +4292,7 @@ namespace CampAgency.WPF.Views.Auth
 
 ---
 
-## FILE 55: OperatorDashboardView.xaml.cs
+## FILE 60: OperatorDashboardView.xaml.cs
 
 <a id='operatordashboardviewxaml'></a>
 
@@ -3920,7 +4317,167 @@ namespace CampAgency.WPF.Views.Operator
 
 <a id='parent'></a>
 
-## FILE 56: ParentDashboardView.xaml
+## FILE 61: ChildEditView.xaml
+
+<a id='childeditview'></a>
+
+```xml
+<UserControl x:Class="CampAgency.WPF.Views.Parent.ChildEditView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <StackPanel Margin="20" Width="450">
+        <TextBlock Text="Добавление / редактирование ребёнка" FontSize="20" FontWeight="Bold" Margin="0,0,0,20"/>
+
+        <TextBlock Text="ФИО ребёнка*:" Margin="0,5"/>
+        <TextBox Text="{Binding FullName}" Margin="0,5" Height="30"/>
+
+        <TextBlock Text="Дата рождения*:" Margin="0,5"/>
+        <DatePicker SelectedDate="{Binding BirthDate}" Margin="0,5" Height="30"/>
+
+        <TextBlock Text="Пол*:" Margin="0,5"/>
+        <ComboBox ItemsSource="{Binding Genders}" SelectedItem="{Binding SelectedGender}" DisplayMemberPath="GenderName" Margin="0,5" Height="30"/>
+
+        <TextBlock Text="Медицинские заметки:" Margin="0,10,0,5"/>
+        <ListBox ItemsSource="{Binding MedicalNoteWrappers}" Margin="0,5" Height="150">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <CheckBox Content="{Binding MedicalNote.MedicalNoteName}" IsChecked="{Binding IsSelected}" Margin="2"/>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,20">
+            <Button Content="Сохранить" Command="{Binding SaveCommand}" Width="100" Height="35" Margin="5"/>
+            <Button Content="Отмена" Command="{Binding CancelCommand}" Width="100" Height="35" Margin="5"/>
+        </StackPanel>
+    </StackPanel>
+</UserControl>
+```
+
+---
+
+## FILE 62: ChildEditView.xaml.cs
+
+<a id='childeditviewxaml'></a>
+
+```csharp
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
+using System.Windows.Shapes;
+
+namespace CampAgency.WPF.Views.Parent
+{
+    /// <summary>
+    /// Логика взаимодействия для ChildEditView.xaml
+    /// </summary>
+    public partial class ChildEditView : UserControl
+    {
+        public ChildEditView()
+        {
+            InitializeComponent();
+        }
+    }
+}
+
+```
+
+---
+
+## FILE 63: ChildListView.xaml
+
+<a id='childlistview'></a>
+
+```xml
+<UserControl x:Class="CampAgency.WPF.Views.Parent.ChildListView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+            <TextBlock Text="Мои дети" FontSize="24" FontWeight="Bold" VerticalAlignment="Center"/>
+            <Button Content="+ Добавить ребёнка" Command="{Binding AddChildCommand}" Width="150" Height="30" Margin="20,0,0,0" HorizontalAlignment="Right"/>
+        </StackPanel>
+
+        <DataGrid Grid.Row="1" ItemsSource="{Binding Children}" AutoGenerateColumns="False" IsReadOnly="True">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="ФИО" Binding="{Binding FullName}" Width="*"/>
+                <DataGridTextColumn Header="Пол" Binding="{Binding Gender.GenderName}" Width="100"/>
+                <DataGridTextColumn Header="Дата рождения" Binding="{Binding BirthDate, StringFormat=dd.MM.yyyy}" Width="120"/>
+                <DataGridTextColumn Header="Мед. заметки" Binding="{Binding ChildMedicalNotes.Count}" Width="100"/>
+                <DataGridTemplateColumn Header="Действия" Width="120">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <Button Content="✏️" Width="30" Margin="2" Command="{Binding DataContext.EditChildCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" CommandParameter="{Binding}"/>
+                                <Button Content="🗑️" Width="30" Margin="2" Command="{Binding DataContext.DeleteChildCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" CommandParameter="{Binding}"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+        <Button Grid.Row="2" Content="Назад" Width="150" Height="30" HorizontalAlignment="Right" Margin="20,0,0,0" Command="{Binding BackToDashboardCommand}"/>
+    </Grid>
+</UserControl>
+```
+
+---
+
+## FILE 64: ChildListView.xaml.cs
+
+<a id='childlistviewxaml'></a>
+
+```csharp
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
+using System.Windows.Shapes;
+
+namespace CampAgency.WPF.Views.Parent
+{
+    /// <summary>
+    /// Логика взаимодействия для ChildListView.xaml
+    /// </summary>
+    public partial class ChildListView : UserControl
+    {
+        public ChildListView()
+        {
+            InitializeComponent();
+        }
+    }
+}
+
+```
+
+---
+
+## FILE 65: ParentDashboardView.xaml
 
 <a id='parentdashboardview'></a>
 
@@ -3929,16 +4486,27 @@ namespace CampAgency.WPF.Views.Operator
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <Grid Margin="20">
-        <TextBlock Text="Личный кабинет родителя" 
-                   FontSize="24" FontWeight="Bold" 
-                   HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock Text="Личный кабинет родителя" FontSize="24" FontWeight="Bold" Margin="0,0,0,20"/>
+
+        <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Right">
+            <Button Content="Мои дети" Command="{Binding ShowChildrenCommand}" Width="120" Margin="5" Height="30"/>
+            <Button Content="Поиск смен" Width="120" Margin="5" Height="30"/>
+            <Button Content="Мои бронирования" Width="150" Margin="5" Height="30"/>
+        </StackPanel>
+
+        <ContentControl Grid.Row="1" Content="{Binding NavigationService.CurrentViewModel}" Margin="0,10,0,0"/>
     </Grid>
 </UserControl>
 ```
 
 ---
 
-## FILE 57: ParentDashboardView.xaml.cs
+## FILE 66: ParentDashboardView.xaml.cs
 
 <a id='parentdashboardviewxaml'></a>
 

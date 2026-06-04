@@ -37,5 +37,11 @@
         <DataTemplate DataType="{x:Type vmParent:ChildEditViewModel}">
             <vParent:ChildEditView />
         </DataTemplate>
+        <DataTemplate DataType="{x:Type vmAdmin:ShiftsListViewModel}">
+            <vAdmin:ShiftsListView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vmAdmin:UsersListViewModel}">
+            <vAdmin:UsersListView />
+        </DataTemplate>
     </Application.Resources>
 </Application>

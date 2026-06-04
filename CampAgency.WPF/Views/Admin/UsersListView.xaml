@@ -1,0 +1,14 @@
+﻿<UserControl x:Class="CampAgency.WPF.Views.Admin.UsersListView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <TextBlock Grid.Row="0" Text="Управление пользователями (в разработке)" FontSize="20" 
+                   HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        <Button Grid.Row="1" Content="← Назад" Command="{Binding BackToDashboardCommand}" 
+                Width="120" Height="30" HorizontalAlignment="Left" Margin="10"/>
+    </Grid>
+</UserControl>

@@ -40,6 +40,8 @@ namespace CampAgency.WPF
             services.AddTransient<RegisterViewModel>();
             services.AddTransient<ChildListViewModel>();
             services.AddTransient<ChildEditViewModel>();
+            services.AddTransient<ShiftsListViewModel>();
+            services.AddTransient<UsersListViewModel>();
 
             services.AddSingleton<MainWindowViewModel>();
             services.AddSingleton<MainWindow>(sp =>
