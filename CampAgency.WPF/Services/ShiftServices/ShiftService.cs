@@ -43,6 +43,7 @@ namespace CampAgency.WPF.Services.ShiftServices
                     StartDate = startDate,
                     EndDate = endDate,
                     TotalSeats = totalSeats,
+                    AvailableSeats = totalSeats,
                     Price = price
                 };
                 context.Shifts.Add(shift);

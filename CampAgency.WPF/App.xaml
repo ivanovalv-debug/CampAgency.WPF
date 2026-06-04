@@ -8,8 +8,11 @@
              xmlns:vAuth="clr-namespace:CampAgency.WPF.Views.Auth"
              xmlns:vAdmin="clr-namespace:CampAgency.WPF.Views.Admin"
              xmlns:vParent="clr-namespace:CampAgency.WPF.Views.Parent"
-             xmlns:vOperator="clr-namespace:CampAgency.WPF.Views.Operator">
+             xmlns:vOperator="clr-namespace:CampAgency.WPF.Views.Operator"
+             xmlns:converters="clr-namespace:CampAgency.WPF.Converters">
     <Application.Resources>
+        <converters:InverseBooleanConverter x:Key="InverseBooleanConverter"/>
+
         <DataTemplate DataType="{x:Type vmAuth:LoginViewModel}">
             <vAuth:LoginView />
         </DataTemplate>
@@ -48,6 +51,15 @@
         </DataTemplate>
         <DataTemplate DataType="{x:Type vmAdmin:UserEditViewModel}">
             <vAdmin:UserEditView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vmParent:ShiftsCatalogViewModel}">
+            <vParent:ShiftsCatalogView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vmParent:ShiftDetailsViewModel}">
+            <vParent:ShiftDetailsView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vmParent:MyBookingsViewModel}">
+            <vParent:MyBookingsView />
         </DataTemplate>
     </Application.Resources>
 </Application>

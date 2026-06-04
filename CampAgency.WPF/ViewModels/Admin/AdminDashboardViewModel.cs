@@ -7,6 +7,7 @@ namespace CampAgency.WPF.ViewModels.Admin
     public partial class AdminDashboardViewModel : ObservableObject
     {
         private readonly INavigationService _navigation;
+        public INavigationService NavigationService { get => _navigation; }
 
         public AdminDashboardViewModel(INavigationService navigation)
         {

@@ -11,13 +11,11 @@ namespace CampAgency.WPF.ViewModels.Parent
         public ParentDashboardViewModel(INavigationService navigationService)
         {
             _navigationService = navigationService;
-            // По умолчанию показываем список детей
-            _navigationService.NavigateTo<ChildListViewModel>();
+            _navigationService.NavigateTo<ChildListViewModel>(); // по умолчанию дети
         }
 
-        [RelayCommand]
-        private void ShowChildren() => _navigationService.NavigateTo<ChildListViewModel>();
-
-        // Здесь будут другие команды: смены, бронирования и т.д.
+        [RelayCommand] private void ShowChildren() => _navigationService.NavigateTo<ChildListViewModel>();
+        [RelayCommand] private void ShowShiftsCatalog() => _navigationService.NavigateTo<ShiftsCatalogViewModel>();
+        [RelayCommand] private void ShowMyBookings() => _navigationService.NavigateTo<MyBookingsViewModel>();
     }
 }

@@ -112,6 +112,7 @@ namespace CampAgency.WPF.Data
             {
                 entity.HasKey(e => e.ShiftId);
                 entity.Property(e => e.Price).HasColumnType("decimal(18,2)");
+                entity.Property(e => e.AvailableSeats).IsRequired();
                 entity.HasOne(d => d.Camp).WithMany(p => p.Shifts).HasForeignKey(d => d.CampId).OnDelete(DeleteBehavior.Cascade);
             });
 

@@ -34,6 +34,7 @@ namespace CampAgency.WPF
             services.AddSingleton<IChildService, ChildService>();
             services.AddSingleton<IShiftService, ShiftService>();
             services.AddSingleton<IUserService, UserService>();
+            services.AddSingleton<IShiftCatalogService, ShiftCatalogService>();
 
             services.AddTransient<LoginViewModel>();
             services.AddTransient<AdminDashboardViewModel>();
@@ -50,6 +51,9 @@ namespace CampAgency.WPF
             services.AddTransient<ShiftEditViewModel>();
             services.AddTransient<UsersListViewModel>();
             services.AddTransient<UserEditViewModel>();
+            services.AddTransient<ShiftsCatalogViewModel>();
+            services.AddTransient<ShiftDetailsViewModel>();
+            services.AddTransient<MyBookingsViewModel>();
 
             services.AddSingleton<MainWindowViewModel>();
             services.AddSingleton<MainWindow>(sp =>

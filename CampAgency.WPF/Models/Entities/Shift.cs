@@ -10,6 +10,7 @@ namespace CampAgency.WPF.Models.Entities
         public DateOnly StartDate { get; set; }
         public DateOnly EndDate { get; set; }
         public int TotalSeats { get; set; }
+        public int AvailableSeats { get; set; }
         public decimal Price { get; set; }
 
         public virtual Camp Camp { get; set; } = null!;

@@ -1,0 +1,84 @@
+﻿<UserControl x:Class="CampAgency.WPF.Views.Parent.ShiftsCatalogView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock Text="Каталог смен" FontSize="20" FontWeight="Bold" Margin="0,0,0,10"/>
+
+        <!-- Панель фильтров -->
+        <Border Grid.Row="1" BorderBrush="LightGray" BorderThickness="1" Padding="10" Margin="0,0,0,10">
+            <StackPanel>
+                <TextBlock Text="Фильтры" FontWeight="Bold"/>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="Регион:" Grid.Column="0" VerticalAlignment="Center" Margin="5"/>
+                    <ComboBox Grid.Column="1" ItemsSource="{Binding Regions}" SelectedItem="{Binding SelectedRegion}" Margin="5" Height="30"/>
+                    <TextBlock Text="Тип лагеря:" Grid.Column="2" VerticalAlignment="Center" Margin="5"/>
+                    <ComboBox Grid.Column="3" ItemsSource="{Binding CampTypes}" SelectedItem="{Binding SelectedCampType}" DisplayMemberPath="CampTypeName" Margin="5" Height="30"/>
+                </Grid>
+                <Grid Margin="0,5,0,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="Дата от:" Grid.Column="0" VerticalAlignment="Center" Margin="5"/>
+                    <DatePicker Grid.Column="1" SelectedDate="{Binding StartDateFrom}" Margin="5" Height="30"/>
+                    <TextBlock Text="до:" Grid.Column="2" VerticalAlignment="Center" Margin="5"/>
+                    <DatePicker Grid.Column="3" SelectedDate="{Binding StartDateTo}" Margin="5" Height="30"/>
+                    <TextBlock Text="Цена от:" Grid.Column="4" VerticalAlignment="Center" Margin="5"/>
+                    <TextBox Grid.Column="5" Text="{Binding MinPriceStr}" Margin="5" Height="30"/>
+                </Grid>
+                <Grid Margin="0,5,0,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="до:" Grid.Column="0" VerticalAlignment="Center" Margin="5"/>
+                    <TextBox Grid.Column="1" Text="{Binding MaxPriceStr}" Margin="5" Height="30"/>
+                    <Button Grid.Column="2" Content="Применить" Command="{Binding ApplyFiltersCommand}" Width="100" Height="30" Margin="5"/>
+                    <Button Grid.Column="3" Content="Сбросить" Command="{Binding ResetFiltersCommand}" Width="100" Height="30" Margin="5"/>
+                </Grid>
+            </StackPanel>
+        </Border>
+
+        <!-- Список смен -->
+        <DataGrid Grid.Row="2" ItemsSource="{Binding Shifts}" AutoGenerateColumns="False" 
+                  CanUserAddRows="False" IsReadOnly="True">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Лагерь" Binding="{Binding Camp.CampName}" Width="*"/>
+                <DataGridTextColumn Header="Тип" Binding="{Binding Camp.CampType.CampTypeName}" Width="100"/>
+                <DataGridTextColumn Header="Регион" Binding="{Binding Camp.Region}" Width="120"/>
+                <DataGridTextColumn Header="Дата начала" Binding="{Binding StartDate, StringFormat=dd.MM.yyyy}" Width="100"/>
+                <DataGridTextColumn Header="Дата окончания" Binding="{Binding EndDate, StringFormat=dd.MM.yyyy}" Width="100"/>
+                <DataGridTextColumn Header="Свободно мест" Binding="{Binding AvailableSeats}" Width="100"/>
+                <DataGridTextColumn Header="Цена" Binding="{Binding Price, StringFormat=C}" Width="100"/>
+                <DataGridTemplateColumn Header="Действие" Width="100">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button Content="Подробнее" Command="{Binding DataContext.ViewShiftDetailsCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" CommandParameter="{Binding}"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <Button Grid.Row="3" Content="← Назад" Command="{Binding BackToDashboardCommand}" Width="120" Height="30" HorizontalAlignment="Left" Margin="0,10,0,0"/>
+    </Grid>
+</UserControl>
