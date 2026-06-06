@@ -9,7 +9,6 @@ namespace CampAgency.WPF.Models.Entities
         public string CampName { get; set; } = null!;
         public string? Description { get; set; }
         public string? ContactPhone { get; set; }
-        public decimal? Rating { get; set; }
         public int? RegionId { get; set; }
         public string? Address { get; set; }
 

@@ -17,5 +17,6 @@ namespace CampAgency.WPF.ViewModels.Parent
         [RelayCommand] private void ShowChildren() => _navigationService.NavigateTo<ChildListViewModel>();
         [RelayCommand] private void ShowShiftsCatalog() => _navigationService.NavigateTo<ShiftsCatalogViewModel>();
         [RelayCommand] private void ShowMyBookings() => _navigationService.NavigateTo<MyBookingsViewModel>();
+        [RelayCommand] private void LeaveReview() => _navigationService.NavigateTo<LeaveReviewViewModel>();
     }
 }

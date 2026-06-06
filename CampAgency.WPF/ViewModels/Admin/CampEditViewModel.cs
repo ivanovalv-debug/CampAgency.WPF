@@ -20,7 +20,6 @@ namespace CampAgency.WPF.ViewModels.Admin
         [ObservableProperty] private string _address = string.Empty;
         [ObservableProperty] private string _contactPhone = string.Empty;
         [ObservableProperty] private string _description = string.Empty;
-        [ObservableProperty] private double? _rating;
         [ObservableProperty] private ObservableCollection<CampType> _campTypes = new();
         [ObservableProperty] private CampType? _selectedCampType;
         [ObservableProperty] private ObservableCollection<Region> _regions = new();
@@ -47,7 +46,6 @@ namespace CampAgency.WPF.ViewModels.Admin
                 Address = camp.Address ?? string.Empty;
                 ContactPhone = camp.ContactPhone ?? string.Empty;
                 Description = camp.Description ?? string.Empty;
-                Rating = (double?)camp.Rating;
                 SelectedCampType = camp.CampType;
                 SelectedRegion = camp.Region;
             }
@@ -59,7 +57,6 @@ namespace CampAgency.WPF.ViewModels.Admin
                 Address = string.Empty;
                 ContactPhone = string.Empty;
                 Description = string.Empty;
-                Rating = null;
                 SelectedCampType = null;
                 SelectedRegion = null;
             }
@@ -85,11 +82,6 @@ namespace CampAgency.WPF.ViewModels.Admin
                 _dialogService.ShowError("Выберите тип учреждения", "Ошибка");
                 return;
             }
-            if (Rating.HasValue && (Rating.Value < 0 || Rating.Value > 5))
-            {
-                _dialogService.ShowError("Рейтинг должен быть в диапазоне от 0 до 5", "Ошибка");
-                return;
-            }
 
             using var context = _contextFactory.CreateDbContext();
 
@@ -101,7 +93,6 @@ namespace CampAgency.WPF.ViewModels.Admin
                     Address = string.IsNullOrWhiteSpace(Address) ? null : Address,
                     ContactPhone = string.IsNullOrWhiteSpace(ContactPhone) ? null : ContactPhone,
                     Description = string.IsNullOrWhiteSpace(Description) ? null : Description,
-                    Rating = Rating.HasValue ? (decimal?)Rating.Value : null,
                     CampTypeId = SelectedCampType.CampTypeId,
                     RegionId = SelectedRegion?.RegionId
                 };
@@ -116,7 +107,6 @@ namespace CampAgency.WPF.ViewModels.Admin
                     campToUpdate.Address = string.IsNullOrWhiteSpace(Address) ? null : Address;
                     campToUpdate.ContactPhone = string.IsNullOrWhiteSpace(ContactPhone) ? null : ContactPhone;
                     campToUpdate.Description = string.IsNullOrWhiteSpace(Description) ? null : Description;
-                    campToUpdate.Rating = Rating.HasValue ? (decimal?)Rating.Value : null;
                     campToUpdate.CampTypeId = SelectedCampType.CampTypeId;
                     campToUpdate.RegionId = SelectedRegion?.RegionId;
                 }

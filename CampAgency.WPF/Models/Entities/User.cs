@@ -14,5 +14,6 @@ namespace CampAgency.WPF.Models.Entities
 
         public virtual UserRole UserRole { get; set; } = null!;
         public virtual ICollection<Child> Children { get; set; } = new List<Child>();
+        public virtual ICollection<Review> Reviews { get; set; } = new List<Review>();
     }
 }

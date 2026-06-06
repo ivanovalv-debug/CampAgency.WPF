@@ -11,6 +11,7 @@
    6. [MainWindow.xaml.cs](#mainwindowxaml)
 2. [CampAgency.WPF\Converters](#converters)
    1. [InverseBooleanConverter.cs](#inversebooleanconverter)
+   2. [RadioIntConverter.cs](#radiointconverter)
 3. [CampAgency.WPF\Data](#data)
    1. [AppDbContext.cs](#appdbcontext)
 4. [CampAgency.WPF\Migrations](#migrations)
@@ -20,7 +21,9 @@
    4. [20260604155052_addAvaibleSeats.Designer.cs](#20260604155052addavaibleseatsdesigner)
    5. [20260604162616_addRegionsTable.cs](#20260604162616addregionstable)
    6. [20260604162616_addRegionsTable.Designer.cs](#20260604162616addregionstabledesigner)
-   7. [AppDbContextModelSnapshot.cs](#appdbcontextmodelsnapshot)
+   7. [20260606022847_addOperatorComment.cs](#20260606022847addoperatorcomment)
+   8. [20260606022847_addOperatorComment.Designer.cs](#20260606022847addoperatorcommentdesigner)
+   9. [AppDbContextModelSnapshot.cs](#appdbcontextmodelsnapshot)
 5. [CampAgency.WPF\Models\Entities](#entities)
    1. [Booking.cs](#booking)
    2. [BookingStatus.cs](#bookingstatus)
@@ -37,34 +40,41 @@
    13. [PaymentStatus.cs](#paymentstatus)
    14. [PaymentType.cs](#paymenttype)
    15. [Region.cs](#region)
-   16. [Shift.cs](#shift)
-   17. [User.cs](#user)
-   18. [UserRole.cs](#userrole)
+   16. [Review.cs](#review)
+   17. [Shift.cs](#shift)
+   18. [User.cs](#user)
+   19. [UserRole.cs](#userrole)
 6. [CampAgency.WPF\Services\AuthServices](#authservices)
    1. [AuthService.cs](#authservice)
    2. [IAuthService.cs](#iauthservice)
    3. [IRegistrationService.cs](#iregistrationservice)
    4. [RegistrationService.cs](#registrationservice)
-7. [CampAgency.WPF\Services\ChildServices](#childservices)
+7. [CampAgency.WPF\Services\BookingServices](#bookingservices)
+   1. [BookingService.cs](#bookingservice)
+   2. [IBookingService.cs](#ibookingservice)
+8. [CampAgency.WPF\Services\ChildServices](#childservices)
    1. [ChildService.cs](#childservice)
    2. [IChildService.cs](#ichildservice)
-8. [CampAgency.WPF\Services\DialogServices](#dialogservices)
+9. [CampAgency.WPF\Services\DialogServices](#dialogservices)
    1. [DialogService.cs](#dialogservice)
    2. [IDialogService.cs](#idialogservice)
-9. [CampAgency.WPF\Services\NavigationServices](#navigationservices)
+10. [CampAgency.WPF\Services\NavigationServices](#navigationservices)
    1. [INavigationService.cs](#inavigationservice)
    2. [NavigationService.cs](#navigationservice)
-10. [CampAgency.WPF\Services\ShiftServices](#shiftservices)
+11. [CampAgency.WPF\Services\ReviewServices](#reviewservices)
+   1. [IReviewService.cs](#ireviewservice)
+   2. [ReviewService.cs](#reviewservice)
+12. [CampAgency.WPF\Services\ShiftServices](#shiftservices)
    1. [IShiftCatalogService.cs](#ishiftcatalogservice)
    2. [IShiftService.cs](#ishiftservice)
    3. [ShiftCatalogService.cs](#shiftcatalogservice)
    4. [ShiftService.cs](#shiftservice)
-11. [CampAgency.WPF\Services\UserServices](#userservices)
+13. [CampAgency.WPF\Services\UserServices](#userservices)
    1. [IUserService.cs](#iuserservice)
    2. [UserService.cs](#userservice)
-12. [CampAgency.WPF\ViewModels](#viewmodels)
+14. [CampAgency.WPF\ViewModels](#viewmodels)
    1. [MainWindowViewModel.cs](#mainwindowviewmodel)
-13. [CampAgency.WPF\ViewModels\Admin](#admin)
+15. [CampAgency.WPF\ViewModels\Admin](#admin)
    1. [AdminDashboardViewModel.cs](#admindashboardviewmodel)
    2. [CampEditViewModel.cs](#campeditviewmodel)
    3. [CampsListViewModel.cs](#campslistviewmodel)
@@ -72,20 +82,24 @@
    5. [ShiftsListViewModel.cs](#shiftslistviewmodel)
    6. [UserEditViewModel.cs](#usereditviewmodel)
    7. [UsersListViewModel.cs](#userslistviewmodel)
-14. [CampAgency.WPF\ViewModels\Auth](#auth)
+16. [CampAgency.WPF\ViewModels\Auth](#auth)
    1. [LoginViewModel.cs](#loginviewmodel)
    2. [RegisterViewModel.cs](#registerviewmodel)
-15. [CampAgency.WPF\ViewModels\Operator](#operator)
-   1. [OperatorDashboardViewModel.cs](#operatordashboardviewmodel)
-16. [CampAgency.WPF\ViewModels\Parent](#parent)
-   1. [ChildEditViewModel.cs](#childeditviewmodel)
-   2. [ChildListViewModel.cs](#childlistviewmodel)
-   3. [MedicalNoteWrapper.cs](#medicalnotewrapper)
-   4. [MyBookingsViewModel.cs](#mybookingsviewmodel)
-   5. [ParentDashboardViewModel.cs](#parentdashboardviewmodel)
-   6. [ShiftDetailsViewModel.cs](#shiftdetailsviewmodel)
-   7. [ShiftsCatalogViewModel.cs](#shiftscatalogviewmodel)
-17. [CampAgency.WPF\Views\Admin](#admin)
+17. [CampAgency.WPF\ViewModels\Operator](#operator)
+   1. [BookingDetailsViewModel.cs](#bookingdetailsviewmodel)
+   2. [BookingsListViewModel.cs](#bookingslistviewmodel)
+   3. [OperatorDashboardViewModel.cs](#operatordashboardviewmodel)
+18. [CampAgency.WPF\ViewModels\Parent](#parent)
+   1. [ChildDocumentsViewModel.cs](#childdocumentsviewmodel)
+   2. [ChildEditViewModel.cs](#childeditviewmodel)
+   3. [ChildListViewModel.cs](#childlistviewmodel)
+   4. [LeaveReviewViewModel.cs](#leavereviewviewmodel)
+   5. [MedicalNoteWrapper.cs](#medicalnotewrapper)
+   6. [MyBookingsViewModel.cs](#mybookingsviewmodel)
+   7. [ParentDashboardViewModel.cs](#parentdashboardviewmodel)
+   8. [ShiftDetailsViewModel.cs](#shiftdetailsviewmodel)
+   9. [ShiftsCatalogViewModel.cs](#shiftscatalogviewmodel)
+19. [CampAgency.WPF\Views\Admin](#admin)
    1. [AdminDashboardView.xaml](#admindashboardview)
    2. [AdminDashboardView.xaml.cs](#admindashboardviewxaml)
    3. [CampEditView.xaml](#campeditview)
@@ -100,27 +114,35 @@
    12. [UserEditView.xaml.cs](#usereditviewxaml)
    13. [UsersListView.xaml](#userslistview)
    14. [UsersListView.xaml.cs](#userslistviewxaml)
-18. [CampAgency.WPF\Views\Auth](#auth)
+20. [CampAgency.WPF\Views\Auth](#auth)
    1. [LoginView.xaml](#loginview)
    2. [LoginView.xaml.cs](#loginviewxaml)
    3. [RegisterView.xaml](#registerview)
    4. [RegisterView.xaml.cs](#registerviewxaml)
-19. [CampAgency.WPF\Views\Operator](#operator)
-   1. [OperatorDashboardView.xaml](#operatordashboardview)
-   2. [OperatorDashboardView.xaml.cs](#operatordashboardviewxaml)
-20. [CampAgency.WPF\Views\Parent](#parent)
-   1. [ChildEditView.xaml](#childeditview)
-   2. [ChildEditView.xaml.cs](#childeditviewxaml)
-   3. [ChildListView.xaml](#childlistview)
-   4. [ChildListView.xaml.cs](#childlistviewxaml)
-   5. [MyBookingsView.xaml](#mybookingsview)
-   6. [MyBookingsView.xaml.cs](#mybookingsviewxaml)
-   7. [ParentDashboardView.xaml](#parentdashboardview)
-   8. [ParentDashboardView.xaml.cs](#parentdashboardviewxaml)
-   9. [ShiftDetailsView.xaml](#shiftdetailsview)
-   10. [ShiftDetailsView.xaml.cs](#shiftdetailsviewxaml)
-   11. [ShiftsCatalogView.xaml](#shiftscatalogview)
-   12. [ShiftsCatalogView.xaml.cs](#shiftscatalogviewxaml)
+21. [CampAgency.WPF\Views\Operator](#operator)
+   1. [BookingDetailsView.xaml](#bookingdetailsview)
+   2. [BookingDetailsView.xaml.cs](#bookingdetailsviewxaml)
+   3. [BookingsListView.xaml](#bookingslistview)
+   4. [BookingsListView.xaml.cs](#bookingslistviewxaml)
+   5. [OperatorDashboardView.xaml](#operatordashboardview)
+   6. [OperatorDashboardView.xaml.cs](#operatordashboardviewxaml)
+22. [CampAgency.WPF\Views\Parent](#parent)
+   1. [ChildDocumentsView.xaml](#childdocumentsview)
+   2. [ChildDocumentsView.xaml.cs](#childdocumentsviewxaml)
+   3. [ChildEditView.xaml](#childeditview)
+   4. [ChildEditView.xaml.cs](#childeditviewxaml)
+   5. [ChildListView.xaml](#childlistview)
+   6. [ChildListView.xaml.cs](#childlistviewxaml)
+   7. [LeaveReviewView.xaml](#leavereviewview)
+   8. [LeaveReviewView.xaml.cs](#leavereviewviewxaml)
+   9. [MyBookingsView.xaml](#mybookingsview)
+   10. [MyBookingsView.xaml.cs](#mybookingsviewxaml)
+   11. [ParentDashboardView.xaml](#parentdashboardview)
+   12. [ParentDashboardView.xaml.cs](#parentdashboardviewxaml)
+   13. [ShiftDetailsView.xaml](#shiftdetailsview)
+   14. [ShiftDetailsView.xaml.cs](#shiftdetailsviewxaml)
+   15. [ShiftsCatalogView.xaml](#shiftscatalogview)
+   16. [ShiftsCatalogView.xaml.cs](#shiftscatalogviewxaml)
 
 ## FILE 1: Project Root
 
@@ -147,6 +169,7 @@
              xmlns:converters="clr-namespace:CampAgency.WPF.Converters">
     <Application.Resources>
         <converters:InverseBooleanConverter x:Key="InverseBooleanConverter"/>
+        <converters:RadioIntConverter x:Key="RadioIntConverter"/>
 
         <DataTemplate DataType="{x:Type vmAuth:LoginViewModel}">
             <vAuth:LoginView />
@@ -196,6 +219,19 @@
         <DataTemplate DataType="{x:Type vmParent:MyBookingsViewModel}">
             <vParent:MyBookingsView />
         </DataTemplate>
+        <DataTemplate DataType="{x:Type vmOperator:BookingsListViewModel}">
+            <vOperator:BookingsListView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vmOperator:BookingDetailsViewModel}">
+            <vOperator:BookingDetailsView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vmParent:ChildDocumentsViewModel}">
+            <vParent:ChildDocumentsView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vmParent:LeaveReviewViewModel}">
+            <vParent:LeaveReviewView />
+        </DataTemplate>
+
     </Application.Resources>
 </Application>
 ```
@@ -209,9 +245,11 @@
 ```csharp
 using CampAgency.WPF.Data;
 using CampAgency.WPF.Services.AuthServices;
+using CampAgency.WPF.Services.BookingServices;
 using CampAgency.WPF.Services.ChildServices;
 using CampAgency.WPF.Services.DialogServices;
 using CampAgency.WPF.Services.NavigationServices;
+using CampAgency.WPF.Services.ReviewServices;
 using CampAgency.WPF.Services.ShiftServices;
 using CampAgency.WPF.Services.UserServices;
 using CampAgency.WPF.ViewModels;
@@ -244,6 +282,8 @@ namespace CampAgency.WPF
             services.AddSingleton<IShiftService, ShiftService>();
             services.AddSingleton<IUserService, UserService>();
             services.AddSingleton<IShiftCatalogService, ShiftCatalogService>();
+            services.AddSingleton<IBookingService, BookingService>();
+            services.AddSingleton<IReviewService, ReviewService>();
 
             services.AddTransient<LoginViewModel>();
             services.AddTransient<AdminDashboardViewModel>();
@@ -263,6 +303,10 @@ namespace CampAgency.WPF
             services.AddTransient<ShiftsCatalogViewModel>();
             services.AddTransient<ShiftDetailsViewModel>();
             services.AddTransient<MyBookingsViewModel>();
+            services.AddTransient<BookingsListViewModel>();
+            services.AddTransient<BookingDetailsViewModel>();
+            services.AddTransient<ChildDocumentsViewModel>();
+            services.AddTransient<LeaveReviewViewModel>();
 
             services.AddSingleton<MainWindowViewModel>();
             services.AddSingleton<MainWindow>(sp =>
@@ -440,11 +484,49 @@ namespace CampAgency.WPF.Converters
 
 ---
 
+## FILE 8: RadioIntConverter.cs
+
+<a id='radiointconverter'></a>
+
+```csharp
+using System;
+using System.Globalization;
+using System.Windows.Data;
+
+namespace CampAgency.WPF.Converters
+{
+    public class RadioIntConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (value is int intValue && parameter is string paramString)
+            {
+                if (int.TryParse(paramString, out int paramInt))
+                    return intValue == paramInt;
+            }
+            return false;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (value is bool boolValue && boolValue && parameter is string paramString)
+            {
+                if (int.TryParse(paramString, out int paramInt))
+                    return paramInt;
+            }
+            return 0;
+        }
+    }
+}
+```
+
+---
+
 ## CampAgency.WPF\Data
 
 <a id='data'></a>
 
-## FILE 8: AppDbContext.cs
+## FILE 9: AppDbContext.cs
 
 <a id='appdbcontext'></a>
 
@@ -478,6 +560,7 @@ namespace CampAgency.WPF.Data
         public virtual DbSet<Payment> Payments { get; set; }
         public virtual DbSet<Region> Regions { get; set; }
         public virtual DbSet<Booking> Bookings { get; set; }
+        public virtual DbSet<Review> Reviews { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -507,6 +590,17 @@ namespace CampAgency.WPF.Data
             {
                 entity.HasKey(e => e.UserRoleId);
                 entity.Property(e => e.RoleName).HasMaxLength(50).IsRequired();
+            });
+
+            // Review
+            modelBuilder.Entity<Review>(entity =>
+            {
+                entity.HasKey(e => e.ReviewId);
+                entity.Property(e => e.Rating).IsRequired();
+                entity.Property(e => e.Comment).HasMaxLength(1000);
+                entity.Property(e => e.CreatedAt).HasDefaultValueSql("GETDATE()");
+                entity.HasOne(d => d.Shift).WithMany(p => p.Reviews).HasForeignKey(d => d.ShiftId).OnDelete(DeleteBehavior.Restrict);
+                entity.HasOne(d => d.User).WithMany(p => p.Reviews).HasForeignKey(d => d.UserId).OnDelete(DeleteBehavior.Restrict);
             });
 
             // Child
@@ -553,7 +647,6 @@ namespace CampAgency.WPF.Data
                 entity.HasKey(e => e.CampId);
                 entity.Property(e => e.CampName).HasMaxLength(100).IsRequired();
                 entity.Property(e => e.ContactPhone).HasMaxLength(20);
-                entity.Property(e => e.Rating).HasColumnType("decimal(3,2)");
                 entity.Property(e => e.Address).HasMaxLength(200);
                 entity.HasOne(d => d.CampType).WithMany(p => p.Camps).HasForeignKey(d => d.CampTypeId).OnDelete(DeleteBehavior.Restrict);
                 entity.HasOne(d => d.Region).WithMany(p => p.Camps).HasForeignKey(d => d.RegionId).OnDelete(DeleteBehavior.Restrict);
@@ -591,6 +684,7 @@ namespace CampAgency.WPF.Data
                 entity.HasOne(d => d.Child).WithMany(p => p.Documents).HasForeignKey(d => d.ChildId).OnDelete(DeleteBehavior.Cascade);
                 entity.HasOne(d => d.DocumentType).WithMany(p => p.Documents).HasForeignKey(d => d.DocumentTypeId).OnDelete(DeleteBehavior.Restrict);
                 entity.HasOne(d => d.DocumentStatus).WithMany(p => p.Documents).HasForeignKey(d => d.DocumentStatusId).OnDelete(DeleteBehavior.Restrict);
+                entity.Property(e => e.OperatorComment).HasMaxLength(500);
             });
 
             // BookingStatus
@@ -657,7 +751,7 @@ namespace CampAgency.WPF.Data
 
 <a id='migrations'></a>
 
-## FILE 9: 20260603135705_rebaseDatabase.cs
+## FILE 10: 20260603135705_rebaseDatabase.cs
 
 <a id='20260603135705rebasedatabase'></a>
 
@@ -1170,7 +1264,7 @@ namespace CampAgency.WPF.Migrations
 
 ---
 
-## FILE 10: 20260603135705_rebaseDatabase.Designer.cs
+## FILE 11: 20260603135705_rebaseDatabase.Designer.cs
 
 <a id='20260603135705rebasedatabasedesigner'></a>
 
@@ -1873,7 +1967,7 @@ namespace CampAgency.WPF.Migrations
 
 ---
 
-## FILE 11: 20260604155052_addAvaibleSeats.cs
+## FILE 12: 20260604155052_addAvaibleSeats.cs
 
 <a id='20260604155052addavaibleseats'></a>
 
@@ -1912,7 +2006,7 @@ namespace CampAgency.WPF.Migrations
 
 ---
 
-## FILE 12: 20260604155052_addAvaibleSeats.Designer.cs
+## FILE 13: 20260604155052_addAvaibleSeats.Designer.cs
 
 <a id='20260604155052addavaibleseatsdesigner'></a>
 
@@ -2618,7 +2712,7 @@ namespace CampAgency.WPF.Migrations
 
 ---
 
-## FILE 13: 20260604162616_addRegionsTable.cs
+## FILE 14: 20260604162616_addRegionsTable.cs
 
 <a id='20260604162616addregionstable'></a>
 
@@ -2704,7 +2798,7 @@ namespace CampAgency.WPF.Migrations
 
 ---
 
-## FILE 14: 20260604162616_addRegionsTable.Designer.cs
+## FILE 15: 20260604162616_addRegionsTable.Designer.cs
 
 <a id='20260604162616addregionstabledesigner'></a>
 
@@ -3441,7 +3535,787 @@ namespace CampAgency.WPF.Migrations
 
 ---
 
-## FILE 15: AppDbContextModelSnapshot.cs
+## FILE 16: 20260606022847_addOperatorComment.cs
+
+<a id='20260606022847addoperatorcomment'></a>
+
+```csharp
+using Microsoft.EntityFrameworkCore.Migrations;
+
+#nullable disable
+
+namespace CampAgency.WPF.Migrations
+{
+    /// <inheritdoc />
+    public partial class addOperatorComment : Migration
+    {
+        /// <inheritdoc />
+        protected override void Up(MigrationBuilder migrationBuilder)
+        {
+            migrationBuilder.AddColumn<string>(
+                name: "OperatorComment",
+                table: "Documents",
+                type: "nvarchar(500)",
+                maxLength: 500,
+                nullable: true);
+        }
+
+        /// <inheritdoc />
+        protected override void Down(MigrationBuilder migrationBuilder)
+        {
+            migrationBuilder.DropColumn(
+                name: "OperatorComment",
+                table: "Documents");
+        }
+    }
+}
+
+```
+
+---
+
+## FILE 17: 20260606022847_addOperatorComment.Designer.cs
+
+<a id='20260606022847addoperatorcommentdesigner'></a>
+
+```csharp
+// <auto-generated />
+using System;
+using CampAgency.WPF.Data;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+
+#nullable disable
+
+namespace CampAgency.WPF.Migrations
+{
+    [DbContext(typeof(AppDbContext))]
+    [Migration("20260606022847_addOperatorComment")]
+    partial class addOperatorComment
+    {
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        {
+#pragma warning disable 612, 618
+            modelBuilder
+                .HasAnnotation("ProductVersion", "8.0.0")
+                .HasAnnotation("Relational:MaxIdentifierLength", 128);
+
+            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("CampAgency.WPF.Models.Entities.Booking", b =>
+                {
+                    b.Property<int>("BookingId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("BookingId"));
+
+                    b.Property<int>("BookingStatusId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ChildId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETDATE()");
+
+                    b.Property<int>("ShiftId")
+                        .HasColumnType("int");
+
+                    b.HasKey("BookingId");
+
+                    b.HasIndex("BookingStatusId");
+
+                    b.HasIndex("ChildId");
+
+                    b.HasIndex("ShiftId");
+
+                    b.ToTable("Bookings");
+                });
+
+            modelBuilder.Entity("CampAgency.WPF.Models.Entities.BookingStatus", b =>
+                {
+                    b.Property<int>("BookingStatusId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("BookingStatusId"));
+
+                    b.Property<string>("BookingStatusName")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.HasKey("BookingStatusId");
+
+                    b.ToTable("BookingStatuses");
+                });
+
+            modelBuilder.Entity("CampAgency.WPF.Models.Entities.Camp", b =>
+                {
+                    b.Property<int>("CampId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CampId"));
+
+                    b.Property<string>("Address")
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<string>("CampName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<int>("CampTypeId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ContactPhone")
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal?>("Rating")
+                        .HasColumnType("decimal(3,2)");
+
+                    b.Property<int?>("RegionId")
+                        .HasColumnType("int");
+
+                    b.HasKey("CampId");
+
+                    b.HasIndex("CampTypeId");
+
+                    b.HasIndex("RegionId");
+
+                    b.ToTable("Camps");
+                });
+
+            modelBuilder.Entity("CampAgency.WPF.Models.Entities.CampType", b =>
+                {
+                    b.Property<int>("CampTypeId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CampTypeId"));
+
+                    b.Property<string>("CampTypeName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.HasKey("CampTypeId");
+
+                    b.ToTable("CampTypes");
+                });
+
+            modelBuilder.Entity("CampAgency.WPF.Models.Entities.Child", b =>
+                {
+                    b.Property<int>("ChildId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ChildId"));
+
+                    b.Property<DateOnly>("BirthDate")
+                        .HasColumnType("date");
+
+                    b.Property<string>("FullName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<int>("GenderId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("ChildId");
+
+                    b.HasIndex("GenderId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Children");
+                });
+
+            modelBuilder.Entity("CampAgency.WPF.Models.Entities.ChildMedicalNote", b =>
+                {
+                    b.Property<int>("ChildMedicalNoteId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ChildMedicalNoteId"));
+
+                    b.Property<int>("ChildId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("MedicalNoteId")
+                        .HasColumnType("int");
+
+                    b.HasKey("ChildMedicalNoteId");
+
+                    b.HasIndex("ChildId");
+
+                    b.HasIndex("MedicalNoteId");
+
+                    b.ToTable("ChildMedicalNotes");
+                });
+
+            modelBuilder.Entity("CampAgency.WPF.Models.Entities.Document", b =>
+                {
+                    b.Property<int>("DocumentId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("DocumentId"));
+
+                    b.Property<int>("ChildId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("DocumentStatusId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("DocumentTypeId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("FilePath")
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<string>("OperatorComment")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<DateTime>("TimeStamp")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETDATE()");
+
+                    b.HasKey("DocumentId");
+
+                    b.HasIndex("ChildId");
+
+                    b.HasIndex("DocumentStatusId");
+
+                    b.HasIndex("DocumentTypeId");
+
+                    b.ToTable("Documents");
+                });
+
+            modelBuilder.Entity("CampAgency.WPF.Models.Entities.DocumentStatus", b =>
+                {
+                    b.Property<int>("DocumentStatusId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("DocumentStatusId"));
+
+                    b.Property<string>("DocumentStatusName")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.HasKey("DocumentStatusId");
+
+                    b.ToTable("DocumentStatuses");
+                });
+
+            modelBuilder.Entity("CampAgency.WPF.Models.Entities.DocumentType", b =>
+                {
+                    b.Property<int>("DocumentTypeId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("DocumentTypeId"));
+
+                    b.Property<string>("DocumentTypeName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.HasKey("DocumentTypeId");
+
+                    b.ToTable("DocumentTypes");
+                });
+
+            modelBuilder.Entity("CampAgency.WPF.Models.Entities.Gender", b =>
+                {
+                    b.Property<int>("GenderId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("GenderId"));
+
+                    b.Property<string>("GenderName")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.HasKey("GenderId");
+
+                    b.ToTable("Genders");
+                });
+
+            modelBuilder.Entity("CampAgency.WPF.Models.Entities.MedicalNote", b =>
+                {
+                    b.Property<int>("MedicalNoteId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("MedicalNoteId"));
+
+                    b.Property<string>("MedicalNoteName")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.HasKey("MedicalNoteId");
+
+                    b.ToTable("MedicalNotes");
+                });
+
+            modelBuilder.Entity("CampAgency.WPF.Models.Entities.Payment", b =>
+                {
+                    b.Property<int>("PaymentId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PaymentId"));
+
+                    b.Property<int>("BookingId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PaymentStatusId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PaymentTypeId")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<DateTime>("TimeStamp")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETDATE()");
+
+                    b.HasKey("PaymentId");
+
+                    b.HasIndex("BookingId");
+
+                    b.HasIndex("PaymentStatusId");
+
+                    b.HasIndex("PaymentTypeId");
+
+                    b.ToTable("Payments");
+                });
+
+            modelBuilder.Entity("CampAgency.WPF.Models.Entities.PaymentStatus", b =>
+                {
+                    b.Property<int>("PaymentStatusId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PaymentStatusId"));
+
+                    b.Property<string>("PaymentStatusName")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.HasKey("PaymentStatusId");
+
+                    b.ToTable("PaymentStatuses");
+                });
+
+            modelBuilder.Entity("CampAgency.WPF.Models.Entities.PaymentType", b =>
+                {
+                    b.Property<int>("PaymentTypeId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PaymentTypeId"));
+
+                    b.Property<string>("PaymentTypeName")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.HasKey("PaymentTypeId");
+
+                    b.ToTable("PaymentTypes");
+                });
+
+            modelBuilder.Entity("CampAgency.WPF.Models.Entities.Region", b =>
+                {
+                    b.Property<int>("RegionId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("RegionId"));
+
+                    b.Property<string>("RegionName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.HasKey("RegionId");
+
+                    b.ToTable("Regions");
+                });
+
+            modelBuilder.Entity("CampAgency.WPF.Models.Entities.Shift", b =>
+                {
+                    b.Property<int>("ShiftId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ShiftId"));
+
+                    b.Property<int>("AvailableSeats")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CampId")
+                        .HasColumnType("int");
+
+                    b.Property<DateOnly>("EndDate")
+                        .HasColumnType("date");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<DateOnly>("StartDate")
+                        .HasColumnType("date");
+
+                    b.Property<int>("TotalSeats")
+                        .HasColumnType("int");
+
+                    b.HasKey("ShiftId");
+
+                    b.HasIndex("CampId");
+
+                    b.ToTable("Shifts");
+                });
+
+            modelBuilder.Entity("CampAgency.WPF.Models.Entities.User", b =>
+                {
+                    b.Property<int>("UserId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("UserId"));
+
+                    b.Property<string>("Email")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("FullName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("Login")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("PasswordHash")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<string>("Phone")
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<int>("UserRoleId")
+                        .HasColumnType("int");
+
+                    b.HasKey("UserId");
+
+                    b.HasIndex("Login")
+                        .IsUnique();
+
+                    b.HasIndex("UserRoleId");
+
+                    b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("CampAgency.WPF.Models.Entities.UserRole", b =>
+                {
+                    b.Property<int>("UserRoleId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("UserRoleId"));
+
+                    b.Property<string>("RoleName")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.HasKey("UserRoleId");
+
+                    b.ToTable("UserRoles");
+                });
+
+            modelBuilder.Entity("CampAgency.WPF.Models.Entities.Booking", b =>
+                {
+                    b.HasOne("CampAgency.WPF.Models.Entities.BookingStatus", "BookingStatus")
+                        .WithMany("Bookings")
+                        .HasForeignKey("BookingStatusId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("CampAgency.WPF.Models.Entities.Child", "Child")
+                        .WithMany("Bookings")
+                        .HasForeignKey("ChildId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("CampAgency.WPF.Models.Entities.Shift", "Shift")
+                        .WithMany("Bookings")
+                        .HasForeignKey("ShiftId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("BookingStatus");
+
+                    b.Navigation("Child");
+
+                    b.Navigation("Shift");
+                });
+
+            modelBuilder.Entity("CampAgency.WPF.Models.Entities.Camp", b =>
+                {
+                    b.HasOne("CampAgency.WPF.Models.Entities.CampType", "CampType")
+                        .WithMany("Camps")
+                        .HasForeignKey("CampTypeId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("CampAgency.WPF.Models.Entities.Region", "Region")
+                        .WithMany("Camps")
+                        .HasForeignKey("RegionId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("CampType");
+
+                    b.Navigation("Region");
+                });
+
+            modelBuilder.Entity("CampAgency.WPF.Models.Entities.Child", b =>
+                {
+                    b.HasOne("CampAgency.WPF.Models.Entities.Gender", "Gender")
+                        .WithMany("Children")
+                        .HasForeignKey("GenderId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("CampAgency.WPF.Models.Entities.User", "User")
+                        .WithMany("Children")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Gender");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("CampAgency.WPF.Models.Entities.ChildMedicalNote", b =>
+                {
+                    b.HasOne("CampAgency.WPF.Models.Entities.Child", "Child")
+                        .WithMany("ChildMedicalNotes")
+                        .HasForeignKey("ChildId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("CampAgency.WPF.Models.Entities.MedicalNote", "MedicalNote")
+                        .WithMany("ChildMedicalNotes")
+                        .HasForeignKey("MedicalNoteId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Child");
+
+                    b.Navigation("MedicalNote");
+                });
+
+            modelBuilder.Entity("CampAgency.WPF.Models.Entities.Document", b =>
+                {
+                    b.HasOne("CampAgency.WPF.Models.Entities.Child", "Child")
+                        .WithMany("Documents")
+                        .HasForeignKey("ChildId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("CampAgency.WPF.Models.Entities.DocumentStatus", "DocumentStatus")
+                        .WithMany("Documents")
+                        .HasForeignKey("DocumentStatusId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("CampAgency.WPF.Models.Entities.DocumentType", "DocumentType")
+                        .WithMany("Documents")
+                        .HasForeignKey("DocumentTypeId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Child");
+
+                    b.Navigation("DocumentStatus");
+
+                    b.Navigation("DocumentType");
+                });
+
+            modelBuilder.Entity("CampAgency.WPF.Models.Entities.Payment", b =>
+                {
+                    b.HasOne("CampAgency.WPF.Models.Entities.Booking", "Booking")
+                        .WithMany("Payments")
+                        .HasForeignKey("BookingId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("CampAgency.WPF.Models.Entities.PaymentStatus", "PaymentStatus")
+                        .WithMany("Payments")
+                        .HasForeignKey("PaymentStatusId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("CampAgency.WPF.Models.Entities.PaymentType", "PaymentType")
+                        .WithMany("Payments")
+                        .HasForeignKey("PaymentTypeId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Booking");
+
+                    b.Navigation("PaymentStatus");
+
+                    b.Navigation("PaymentType");
+                });
+
+            modelBuilder.Entity("CampAgency.WPF.Models.Entities.Shift", b =>
+                {
+                    b.HasOne("CampAgency.WPF.Models.Entities.Camp", "Camp")
+                        .WithMany("Shifts")
+                        .HasForeignKey("CampId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Camp");
+                });
+
+            modelBuilder.Entity("CampAgency.WPF.Models.Entities.User", b =>
+                {
+                    b.HasOne("CampAgency.WPF.Models.Entities.UserRole", "UserRole")
+                        .WithMany("Users")
+                        .HasForeignKey("UserRoleId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("UserRole");
+                });
+
+            modelBuilder.Entity("CampAgency.WPF.Models.Entities.Booking", b =>
+                {
+                    b.Navigation("Payments");
+                });
+
+            modelBuilder.Entity("CampAgency.WPF.Models.Entities.BookingStatus", b =>
+                {
+                    b.Navigation("Bookings");
+                });
+
+            modelBuilder.Entity("CampAgency.WPF.Models.Entities.Camp", b =>
+                {
+                    b.Navigation("Shifts");
+                });
+
+            modelBuilder.Entity("CampAgency.WPF.Models.Entities.CampType", b =>
+                {
+                    b.Navigation("Camps");
+                });
+
+            modelBuilder.Entity("CampAgency.WPF.Models.Entities.Child", b =>
+                {
+                    b.Navigation("Bookings");
+
+                    b.Navigation("ChildMedicalNotes");
+
+                    b.Navigation("Documents");
+                });
+
+            modelBuilder.Entity("CampAgency.WPF.Models.Entities.DocumentStatus", b =>
+                {
+                    b.Navigation("Documents");
+                });
+
+            modelBuilder.Entity("CampAgency.WPF.Models.Entities.DocumentType", b =>
+                {
+                    b.Navigation("Documents");
+                });
+
+            modelBuilder.Entity("CampAgency.WPF.Models.Entities.Gender", b =>
+                {
+                    b.Navigation("Children");
+                });
+
+            modelBuilder.Entity("CampAgency.WPF.Models.Entities.MedicalNote", b =>
+                {
+                    b.Navigation("ChildMedicalNotes");
+                });
+
+            modelBuilder.Entity("CampAgency.WPF.Models.Entities.PaymentStatus", b =>
+                {
+                    b.Navigation("Payments");
+                });
+
+            modelBuilder.Entity("CampAgency.WPF.Models.Entities.PaymentType", b =>
+                {
+                    b.Navigation("Payments");
+                });
+
+            modelBuilder.Entity("CampAgency.WPF.Models.Entities.Region", b =>
+                {
+                    b.Navigation("Camps");
+                });
+
+            modelBuilder.Entity("CampAgency.WPF.Models.Entities.Shift", b =>
+                {
+                    b.Navigation("Bookings");
+                });
+
+            modelBuilder.Entity("CampAgency.WPF.Models.Entities.User", b =>
+                {
+                    b.Navigation("Children");
+                });
+
+            modelBuilder.Entity("CampAgency.WPF.Models.Entities.UserRole", b =>
+                {
+                    b.Navigation("Users");
+                });
+#pragma warning restore 612, 618
+        }
+    }
+}
+
+```
+
+---
+
+## FILE 18: AppDbContextModelSnapshot.cs
 
 <a id='appdbcontextmodelsnapshot'></a>
 
@@ -3655,6 +4529,10 @@ namespace CampAgency.WPF.Migrations
                     b.Property<string>("FilePath")
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
+
+                    b.Property<string>("OperatorComment")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
 
                     b.Property<DateTime>("TimeStamp")
                         .ValueGeneratedOnAdd()
@@ -4179,7 +5057,7 @@ namespace CampAgency.WPF.Migrations
 
 <a id='entities'></a>
 
-## FILE 16: Booking.cs
+## FILE 19: Booking.cs
 
 <a id='booking'></a>
 
@@ -4207,7 +5085,7 @@ namespace CampAgency.WPF.Models.Entities
 
 ---
 
-## FILE 17: BookingStatus.cs
+## FILE 20: BookingStatus.cs
 
 <a id='bookingstatus'></a>
 
@@ -4227,7 +5105,7 @@ namespace CampAgency.WPF.Models.Entities
 
 ---
 
-## FILE 18: Camp.cs
+## FILE 21: Camp.cs
 
 <a id='camp'></a>
 
@@ -4243,7 +5121,6 @@ namespace CampAgency.WPF.Models.Entities
         public string CampName { get; set; } = null!;
         public string? Description { get; set; }
         public string? ContactPhone { get; set; }
-        public decimal? Rating { get; set; }
         public int? RegionId { get; set; }
         public string? Address { get; set; }
 
@@ -4256,7 +5133,7 @@ namespace CampAgency.WPF.Models.Entities
 
 ---
 
-## FILE 19: CampType.cs
+## FILE 22: CampType.cs
 
 <a id='camptype'></a>
 
@@ -4276,7 +5153,7 @@ namespace CampAgency.WPF.Models.Entities
 
 ---
 
-## FILE 20: Child.cs
+## FILE 23: Child.cs
 
 <a id='child'></a>
 
@@ -4305,7 +5182,7 @@ namespace CampAgency.WPF.Models.Entities
 
 ---
 
-## FILE 21: ChildMedicalNote.cs
+## FILE 24: ChildMedicalNote.cs
 
 <a id='childmedicalnote'></a>
 
@@ -4326,7 +5203,7 @@ namespace CampAgency.WPF.Models.Entities
 
 ---
 
-## FILE 22: Document.cs
+## FILE 25: Document.cs
 
 <a id='document'></a>
 
@@ -4344,6 +5221,7 @@ namespace CampAgency.WPF.Models.Entities
         public int DocumentStatusId { get; set; }
         public string? FilePath { get; set; }
         public DateTime TimeStamp { get; set; }
+        public string? OperatorComment { get; set; }
 
         public virtual Child Child { get; set; } = null!;
         public virtual DocumentType DocumentType { get; set; } = null!;
@@ -4354,7 +5232,7 @@ namespace CampAgency.WPF.Models.Entities
 
 ---
 
-## FILE 23: DocumentStatus.cs
+## FILE 26: DocumentStatus.cs
 
 <a id='documentstatus'></a>
 
@@ -4374,7 +5252,7 @@ namespace CampAgency.WPF.Models.Entities
 
 ---
 
-## FILE 24: DocumentType.cs
+## FILE 27: DocumentType.cs
 
 <a id='documenttype'></a>
 
@@ -4394,7 +5272,7 @@ namespace CampAgency.WPF.Models.Entities
 
 ---
 
-## FILE 25: Gender.cs
+## FILE 28: Gender.cs
 
 <a id='gender'></a>
 
@@ -4414,7 +5292,7 @@ namespace CampAgency.WPF.Models.Entities
 
 ---
 
-## FILE 26: MedicalNote.cs
+## FILE 29: MedicalNote.cs
 
 <a id='medicalnote'></a>
 
@@ -4434,7 +5312,7 @@ namespace CampAgency.WPF.Models.Entities
 
 ---
 
-## FILE 27: Payment.cs
+## FILE 30: Payment.cs
 
 <a id='payment'></a>
 
@@ -4461,7 +5339,7 @@ namespace CampAgency.WPF.Models.Entities
 
 ---
 
-## FILE 28: PaymentStatus.cs
+## FILE 31: PaymentStatus.cs
 
 <a id='paymentstatus'></a>
 
@@ -4481,7 +5359,7 @@ namespace CampAgency.WPF.Models.Entities
 
 ---
 
-## FILE 29: PaymentType.cs
+## FILE 32: PaymentType.cs
 
 <a id='paymenttype'></a>
 
@@ -4501,7 +5379,7 @@ namespace CampAgency.WPF.Models.Entities
 
 ---
 
-## FILE 30: Region.cs
+## FILE 33: Region.cs
 
 <a id='region'></a>
 
@@ -4522,13 +5400,40 @@ namespace CampAgency.WPF.Models.Entities
 
 ---
 
-## FILE 31: Shift.cs
+## FILE 34: Review.cs
+
+<a id='review'></a>
+
+```csharp
+using System;
+
+namespace CampAgency.WPF.Models.Entities
+{
+    public partial class Review
+    {
+        public int ReviewId { get; set; }
+        public int ShiftId { get; set; }
+        public int UserId { get; set; }
+        public int Rating { get; set; } // от 1 до 5
+        public string Comment { get; set; } = null!;
+        public DateTime CreatedAt { get; set; }
+
+        public virtual Shift Shift { get; set; } = null!;
+        public virtual User User { get; set; } = null!;
+    }
+}
+```
+
+---
+
+## FILE 35: Shift.cs
 
 <a id='shift'></a>
 
 ```csharp
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CampAgency.WPF.Models.Entities
 {
@@ -4541,16 +5446,18 @@ namespace CampAgency.WPF.Models.Entities
         public int TotalSeats { get; set; }
         public int AvailableSeats { get; set; }
         public decimal Price { get; set; }
+        [NotMapped] public double? AverageRating { get; set; }
 
         public virtual Camp Camp { get; set; } = null!;
         public virtual ICollection<Booking> Bookings { get; set; } = new List<Booking>();
+        public virtual ICollection<Review> Reviews { get; set; } = new List<Review>();
     }
 }
 ```
 
 ---
 
-## FILE 32: User.cs
+## FILE 36: User.cs
 
 <a id='user'></a>
 
@@ -4571,13 +5478,14 @@ namespace CampAgency.WPF.Models.Entities
 
         public virtual UserRole UserRole { get; set; } = null!;
         public virtual ICollection<Child> Children { get; set; } = new List<Child>();
+        public virtual ICollection<Review> Reviews { get; set; } = new List<Review>();
     }
 }
 ```
 
 ---
 
-## FILE 33: UserRole.cs
+## FILE 37: UserRole.cs
 
 <a id='userrole'></a>
 
@@ -4601,7 +5509,7 @@ namespace CampAgency.WPF.Models.Entities
 
 <a id='authservices'></a>
 
-## FILE 34: AuthService.cs
+## FILE 38: AuthService.cs
 
 <a id='authservice'></a>
 
@@ -4649,7 +5557,7 @@ namespace CampAgency.WPF.Services.AuthServices
 
 ---
 
-## FILE 35: IAuthService.cs
+## FILE 39: IAuthService.cs
 
 <a id='iauthservice'></a>
 
@@ -4669,7 +5577,7 @@ namespace CampAgency.WPF.Services.AuthServices
 
 ---
 
-## FILE 36: IRegistrationService.cs
+## FILE 40: IRegistrationService.cs
 
 <a id='iregistrationservice'></a>
 
@@ -4687,7 +5595,7 @@ namespace CampAgency.WPF.Services.AuthServices
 
 ---
 
-## FILE 37: RegistrationService.cs
+## FILE 41: RegistrationService.cs
 
 <a id='registrationservice'></a>
 
@@ -4746,11 +5654,150 @@ namespace CampAgency.WPF.Services.AuthServices
 
 ---
 
+## CampAgency.WPF\Services\BookingServices
+
+<a id='bookingservices'></a>
+
+## FILE 42: BookingService.cs
+
+<a id='bookingservice'></a>
+
+```csharp
+using CampAgency.WPF.Data;
+using CampAgency.WPF.Models.Entities;
+using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace CampAgency.WPF.Services.BookingServices
+{
+    public class BookingService : IBookingService
+    {
+        private readonly IDbContextFactory<AppDbContext> _contextFactory;
+
+        public BookingService(IDbContextFactory<AppDbContext> contextFactory)
+        {
+            _contextFactory = contextFactory;
+        }
+
+        public List<Booking> GetBookingsWithFilters(int? statusId, int? campId, string? searchText)
+        {
+            using var context = _contextFactory.CreateDbContext();
+            var query = context.Bookings
+                .Include(b => b.Child)
+                    .ThenInclude(c => c.User)
+                .Include(b => b.Shift)
+                    .ThenInclude(s => s.Camp)
+                .Include(b => b.BookingStatus)
+                .AsQueryable();
+
+            if (statusId.HasValue && statusId > 0)
+                query = query.Where(b => b.BookingStatusId == statusId);
+            if (campId.HasValue && campId > 0)
+                query = query.Where(b => b.Shift.CampId == campId);
+            if (!string.IsNullOrWhiteSpace(searchText))
+            {
+                searchText = searchText.ToLower();
+                query = query.Where(b =>
+                    b.Child.FullName.ToLower().Contains(searchText) ||
+                    b.Child.User.FullName.ToLower().Contains(searchText) ||
+                    b.Child.User.Email.ToLower().Contains(searchText)
+                );
+            }
+            return query.OrderByDescending(b => b.CreatedAt).ToList();
+        }
+
+        public Booking? GetBookingById(int bookingId)
+        {
+            using var context = _contextFactory.CreateDbContext();
+            return context.Bookings
+                .Include(b => b.Child)
+                    .ThenInclude(c => c.User)
+                .Include(b => b.Child)
+                    .ThenInclude(c => c.Documents)
+                        .ThenInclude(d => d.DocumentStatus)
+                .Include(b => b.Shift)
+                    .ThenInclude(s => s.Camp)
+                        .ThenInclude(c => c.CampType)
+                .Include(b => b.BookingStatus)
+                .FirstOrDefault(b => b.BookingId == bookingId);
+        }
+
+        public bool UpdateBookingStatus(int bookingId, int newStatusId)
+        {
+            using var context = _contextFactory.CreateDbContext();
+            var booking = context.Bookings.Find(bookingId);
+            if (booking == null) return false;
+            booking.BookingStatusId = newStatusId;
+            context.SaveChanges();
+            return true;
+        }
+
+        public bool UpdateDocumentStatus(int documentId, int newStatusId, string? operatorComment)
+        {
+            using var context = _contextFactory.CreateDbContext();
+            var doc = context.Documents.Find(documentId);
+            if (doc == null) return false;
+            doc.DocumentStatusId = newStatusId;
+            doc.OperatorComment = operatorComment;
+            context.SaveChanges();
+            return true;
+        }
+
+        public List<BookingStatus> GetAllBookingStatuses()
+        {
+            using var context = _contextFactory.CreateDbContext();
+            return context.BookingStatuses.ToList();
+        }
+
+        public List<Camp> GetAllCamps()
+        {
+            using var context = _contextFactory.CreateDbContext();
+            return context.Camps.OrderBy(c => c.CampName).ToList();
+        }
+
+        public List<DocumentStatus> GetAllDocumentStatuses()
+        {
+            using var context = _contextFactory.CreateDbContext();
+            return context.DocumentStatuses.ToList();
+        }
+    }
+}
+```
+
+---
+
+## FILE 43: IBookingService.cs
+
+<a id='ibookingservice'></a>
+
+```csharp
+using CampAgency.WPF.Models.Entities;
+using System.Collections.Generic;
+
+namespace CampAgency.WPF.Services.BookingServices
+{
+    public interface IBookingService
+    {
+        List<Booking> GetBookingsWithFilters(int? statusId, int? campId, string? searchText);
+        Booking? GetBookingById(int bookingId);
+        bool UpdateBookingStatus(int bookingId, int newStatusId);
+        bool UpdateDocumentStatus(int documentId, int newStatusId, string? operatorComment);
+        List<BookingStatus> GetAllBookingStatuses();
+        List<Camp> GetAllCamps();
+        List<DocumentStatus> GetAllDocumentStatuses();
+    }
+}
+```
+
+---
+
 ## CampAgency.WPF\Services\ChildServices
 
 <a id='childservices'></a>
 
-## FILE 38: ChildService.cs
+## FILE 44: ChildService.cs
 
 <a id='childservice'></a>
 
@@ -4860,13 +5907,50 @@ namespace CampAgency.WPF.Services.ChildServices
             using var context = _contextFactory.CreateDbContext();
             return context.MedicalNotes.ToList();
         }
+
+        public List<Document> GetDocumentsByChildId(int childId)
+        {
+            using var context = _contextFactory.CreateDbContext();
+            return context.Documents
+                .Include(d => d.DocumentType)
+                .Include(d => d.DocumentStatus)
+                .Where(d => d.ChildId == childId)
+                .ToList();
+        }
+
+        public bool AddDocument(int childId, int documentTypeId, string filePath)
+        {
+            try
+            {
+                using var context = _contextFactory.CreateDbContext();
+                var doc = new Document
+                {
+                    ChildId = childId,
+                    DocumentTypeId = documentTypeId,
+                    DocumentStatusId = 1, // "Загружен"
+                    FilePath = filePath,
+                    TimeStamp = DateTime.Now
+                };
+                context.Documents.Add(doc);
+                context.SaveChanges();
+                return true;
+            }
+            catch { return false; }
+        }
+
+        public List<DocumentType> GetDocumentTypes()
+        {
+            using var context = _contextFactory.CreateDbContext();
+            return context.DocumentTypes.ToList();
+        }
+
     }
 }
 ```
 
 ---
 
-## FILE 39: IChildService.cs
+## FILE 45: IChildService.cs
 
 <a id='ichildservice'></a>
 
@@ -4884,6 +5968,9 @@ namespace CampAgency.WPF.Services.ChildServices
         bool DeleteChild(int childId);
         List<Gender> GetGenders();
         List<MedicalNote> GetMedicalNotes();
+        List<Document> GetDocumentsByChildId(int childId);
+        bool AddDocument(int childId, int documentTypeId, string filePath);
+        List<DocumentType> GetDocumentTypes();
     }
 }
 ```
@@ -4894,7 +5981,7 @@ namespace CampAgency.WPF.Services.ChildServices
 
 <a id='dialogservices'></a>
 
-## FILE 40: DialogService.cs
+## FILE 46: DialogService.cs
 
 <a id='dialogservice'></a>
 
@@ -4926,7 +6013,7 @@ namespace CampAgency.WPF.Services.DialogServices
 
 ---
 
-## FILE 41: IDialogService.cs
+## FILE 47: IDialogService.cs
 
 <a id='idialogservice'></a>
 
@@ -4948,7 +6035,7 @@ namespace CampAgency.WPF.Services.DialogServices
 
 <a id='navigationservices'></a>
 
-## FILE 42: INavigationService.cs
+## FILE 48: INavigationService.cs
 
 <a id='inavigationservice'></a>
 
@@ -4972,7 +6059,7 @@ namespace CampAgency.WPF.Services.NavigationServices
 
 ---
 
-## FILE 43: NavigationService.cs
+## FILE 49: NavigationService.cs
 
 <a id='navigationservice'></a>
 
@@ -5026,11 +6113,122 @@ namespace CampAgency.WPF.Services.NavigationServices
 
 ---
 
+## CampAgency.WPF\Services\ReviewServices
+
+<a id='reviewservices'></a>
+
+## FILE 50: IReviewService.cs
+
+<a id='ireviewservice'></a>
+
+```csharp
+using CampAgency.WPF.Models.Entities;
+using System.Collections.Generic;
+
+namespace CampAgency.WPF.Services.ReviewServices
+{
+    public interface IReviewService
+    {
+        List<Shift> GetCompletedShiftsForUser(int userId);
+        bool HasUserReviewedShift(int userId, int shiftId);
+        bool AddReview(int shiftId, int userId, int rating, string comment);
+        double? GetAverageRatingForCamp(int campId);
+    }
+}
+```
+
+---
+
+## FILE 51: ReviewService.cs
+
+<a id='reviewservice'></a>
+
+```csharp
+using CampAgency.WPF.Data;
+using CampAgency.WPF.Models.Entities;
+using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace CampAgency.WPF.Services.ReviewServices
+{
+    public class ReviewService : IReviewService
+    {
+        private readonly IDbContextFactory<AppDbContext> _contextFactory;
+
+        public ReviewService(IDbContextFactory<AppDbContext> contextFactory)
+        {
+            _contextFactory = contextFactory;
+        }
+
+        public List<Shift> GetCompletedShiftsForUser(int userId)
+        {
+            using var context = _contextFactory.CreateDbContext();
+            // Находим все бронирования пользователя со статусом "Завершён" (BookingStatusId = 4)
+            var completedBookings = context.Bookings
+                .Include(b => b.Shift)
+                    .ThenInclude(s => s.Camp)
+                .Where(b => b.Child.UserId == userId && b.BookingStatusId == 4)
+                .ToList();
+
+            // Уникальные смены, по которым ещё нет отзыва от этого пользователя
+            var existingReviews = context.Reviews.Where(r => r.UserId == userId).Select(r => r.ShiftId).ToHashSet();
+            return completedBookings
+                .Select(b => b.Shift)
+                .Where(s => !existingReviews.Contains(s.ShiftId))
+                .Distinct()
+                .ToList();
+        }
+
+        public bool HasUserReviewedShift(int userId, int shiftId)
+        {
+            using var context = _contextFactory.CreateDbContext();
+            return context.Reviews.Any(r => r.UserId == userId && r.ShiftId == shiftId);
+        }
+
+        public bool AddReview(int shiftId, int userId, int rating, string comment)
+        {
+            try
+            {
+                using var context = _contextFactory.CreateDbContext();
+                var review = new Review
+                {
+                    ShiftId = shiftId,
+                    UserId = userId,
+                    Rating = rating,
+                    Comment = comment,
+                    CreatedAt = DateTime.Now
+                };
+                context.Reviews.Add(review);
+                context.SaveChanges();
+                return true;
+            }
+            catch { return false; }
+        }
+
+        public double? GetAverageRatingForCamp(int campId)
+        {
+            using var context = _contextFactory.CreateDbContext();
+            var ratings = context.Reviews
+                .Include(r => r.Shift)
+                .Where(r => r.Shift.CampId == campId)
+                .Select(r => r.Rating)
+                .ToList();
+            if (!ratings.Any()) return null;
+            return ratings.Average();
+        }
+    }
+}
+```
+
+---
+
 ## CampAgency.WPF\Services\ShiftServices
 
 <a id='shiftservices'></a>
 
-## FILE 44: IShiftCatalogService.cs
+## FILE 52: IShiftCatalogService.cs
 
 <a id='ishiftcatalogservice'></a>
 
@@ -5055,7 +6253,7 @@ namespace CampAgency.WPF.Services.ShiftServices
 
 ---
 
-## FILE 45: IShiftService.cs
+## FILE 53: IShiftService.cs
 
 <a id='ishiftservice'></a>
 
@@ -5078,7 +6276,7 @@ namespace CampAgency.WPF.Services.ShiftServices
 
 ---
 
-## FILE 46: ShiftCatalogService.cs
+## FILE 54: ShiftCatalogService.cs
 
 <a id='shiftcatalogservice'></a>
 
@@ -5213,7 +6411,7 @@ namespace CampAgency.WPF.Services.ShiftServices
 
 ---
 
-## FILE 47: ShiftService.cs
+## FILE 55: ShiftService.cs
 
 <a id='shiftservice'></a>
 
@@ -5306,7 +6504,7 @@ namespace CampAgency.WPF.Services.ShiftServices
 
 <a id='userservices'></a>
 
-## FILE 48: IUserService.cs
+## FILE 56: IUserService.cs
 
 <a id='iuserservice'></a>
 
@@ -5333,7 +6531,7 @@ namespace CampAgency.WPF.Services.UserServices
 
 ---
 
-## FILE 49: UserService.cs
+## FILE 57: UserService.cs
 
 <a id='userservice'></a>
 
@@ -5455,7 +6653,7 @@ namespace CampAgency.WPF.Services.UserServices
 
 <a id='viewmodels'></a>
 
-## FILE 50: MainWindowViewModel.cs
+## FILE 58: MainWindowViewModel.cs
 
 <a id='mainwindowviewmodel'></a>
 
@@ -5507,7 +6705,7 @@ namespace CampAgency.WPF.ViewModels
 
 <a id='admin'></a>
 
-## FILE 51: AdminDashboardViewModel.cs
+## FILE 59: AdminDashboardViewModel.cs
 
 <a id='admindashboardviewmodel'></a>
 
@@ -5555,7 +6753,7 @@ namespace CampAgency.WPF.ViewModels.Admin
 
 ---
 
-## FILE 52: CampEditViewModel.cs
+## FILE 60: CampEditViewModel.cs
 
 <a id='campeditviewmodel'></a>
 
@@ -5582,7 +6780,6 @@ namespace CampAgency.WPF.ViewModels.Admin
         [ObservableProperty] private string _address = string.Empty;
         [ObservableProperty] private string _contactPhone = string.Empty;
         [ObservableProperty] private string _description = string.Empty;
-        [ObservableProperty] private double? _rating;
         [ObservableProperty] private ObservableCollection<CampType> _campTypes = new();
         [ObservableProperty] private CampType? _selectedCampType;
         [ObservableProperty] private ObservableCollection<Region> _regions = new();
@@ -5609,7 +6806,6 @@ namespace CampAgency.WPF.ViewModels.Admin
                 Address = camp.Address ?? string.Empty;
                 ContactPhone = camp.ContactPhone ?? string.Empty;
                 Description = camp.Description ?? string.Empty;
-                Rating = (double?)camp.Rating;
                 SelectedCampType = camp.CampType;
                 SelectedRegion = camp.Region;
             }
@@ -5621,7 +6817,6 @@ namespace CampAgency.WPF.ViewModels.Admin
                 Address = string.Empty;
                 ContactPhone = string.Empty;
                 Description = string.Empty;
-                Rating = null;
                 SelectedCampType = null;
                 SelectedRegion = null;
             }
@@ -5647,11 +6842,6 @@ namespace CampAgency.WPF.ViewModels.Admin
                 _dialogService.ShowError("Выберите тип учреждения", "Ошибка");
                 return;
             }
-            if (Rating.HasValue && (Rating.Value < 0 || Rating.Value > 5))
-            {
-                _dialogService.ShowError("Рейтинг должен быть в диапазоне от 0 до 5", "Ошибка");
-                return;
-            }
 
             using var context = _contextFactory.CreateDbContext();
 
@@ -5663,7 +6853,6 @@ namespace CampAgency.WPF.ViewModels.Admin
                     Address = string.IsNullOrWhiteSpace(Address) ? null : Address,
                     ContactPhone = string.IsNullOrWhiteSpace(ContactPhone) ? null : ContactPhone,
                     Description = string.IsNullOrWhiteSpace(Description) ? null : Description,
-                    Rating = Rating.HasValue ? (decimal?)Rating.Value : null,
                     CampTypeId = SelectedCampType.CampTypeId,
                     RegionId = SelectedRegion?.RegionId
                 };
@@ -5678,7 +6867,6 @@ namespace CampAgency.WPF.ViewModels.Admin
                     campToUpdate.Address = string.IsNullOrWhiteSpace(Address) ? null : Address;
                     campToUpdate.ContactPhone = string.IsNullOrWhiteSpace(ContactPhone) ? null : ContactPhone;
                     campToUpdate.Description = string.IsNullOrWhiteSpace(Description) ? null : Description;
-                    campToUpdate.Rating = Rating.HasValue ? (decimal?)Rating.Value : null;
                     campToUpdate.CampTypeId = SelectedCampType.CampTypeId;
                     campToUpdate.RegionId = SelectedRegion?.RegionId;
                 }
@@ -5697,7 +6885,7 @@ namespace CampAgency.WPF.ViewModels.Admin
 
 ---
 
-## FILE 53: CampsListViewModel.cs
+## FILE 61: CampsListViewModel.cs
 
 <a id='campslistviewmodel'></a>
 
@@ -5767,7 +6955,7 @@ namespace CampAgency.WPF.ViewModels.Admin
 
 ---
 
-## FILE 54: ShiftEditViewModel.cs
+## FILE 62: ShiftEditViewModel.cs
 
 <a id='shifteditviewmodel'></a>
 
@@ -5913,7 +7101,7 @@ namespace CampAgency.WPF.ViewModels.Admin
 
 ---
 
-## FILE 55: ShiftsListViewModel.cs
+## FILE 63: ShiftsListViewModel.cs
 
 <a id='shiftslistviewmodel'></a>
 
@@ -6015,7 +7203,7 @@ namespace CampAgency.WPF.ViewModels.Admin
 
 ---
 
-## FILE 56: UserEditViewModel.cs
+## FILE 64: UserEditViewModel.cs
 
 <a id='usereditviewmodel'></a>
 
@@ -6162,7 +7350,7 @@ namespace CampAgency.WPF.ViewModels.Admin
 
 ---
 
-## FILE 57: UsersListViewModel.cs
+## FILE 65: UsersListViewModel.cs
 
 <a id='userslistviewmodel'></a>
 
@@ -6284,7 +7472,7 @@ namespace CampAgency.WPF.ViewModels.Admin
 
 <a id='auth'></a>
 
-## FILE 58: LoginViewModel.cs
+## FILE 66: LoginViewModel.cs
 
 <a id='loginviewmodel'></a>
 
@@ -6346,7 +7534,7 @@ namespace CampAgency.WPF.ViewModels.Auth
 
 ---
 
-## FILE 59: RegisterViewModel.cs
+## FILE 67: RegisterViewModel.cs
 
 <a id='registerviewmodel'></a>
 
@@ -6416,24 +7604,206 @@ namespace CampAgency.WPF.ViewModels.Auth
 
 <a id='operator'></a>
 
-## FILE 60: OperatorDashboardViewModel.cs
+## FILE 68: BookingDetailsViewModel.cs
+
+<a id='bookingdetailsviewmodel'></a>
+
+```csharp
+using CampAgency.WPF.Models.Entities;
+using CampAgency.WPF.Services.BookingServices;
+using CampAgency.WPF.Services.DialogServices;
+using CampAgency.WPF.Services.NavigationServices;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using System.Collections.ObjectModel;
+using System.Linq;
+
+namespace CampAgency.WPF.ViewModels.Operator
+{
+    public partial class BookingDetailsViewModel : ObservableObject, INavigationAware
+    {
+        private readonly IBookingService _bookingService;
+        private readonly INavigationService _navigation;
+        private readonly IDialogService _dialog;
+
+        [ObservableProperty] private Booking? _booking;
+        [ObservableProperty] private ObservableCollection<BookingStatus> _availableStatuses = new();
+        [ObservableProperty] private BookingStatus? _selectedStatus;
+        [ObservableProperty] private string _operatorComment = string.Empty;
+
+        public BookingDetailsViewModel(IBookingService bookingService, INavigationService navigation, IDialogService dialog)
+        {
+            _bookingService = bookingService;
+            _navigation = navigation;
+            _dialog = dialog;
+        }
+
+        public void OnNavigatedTo(object? parameter)
+        {
+            if (parameter is int bookingId)
+            {
+                _booking = _bookingService.GetBookingById(bookingId);
+                OnPropertyChanged(nameof(Booking));
+                LoadStatuses();
+                OperatorComment = string.Empty;
+            }
+        }
+
+        private void LoadStatuses()
+        {
+            AvailableStatuses = new ObservableCollection<BookingStatus>(_bookingService.GetAllBookingStatuses());
+            if (Booking != null)
+                SelectedStatus = AvailableStatuses.FirstOrDefault(s => s.BookingStatusId == Booking.BookingStatusId);
+        }
+
+        [RelayCommand]
+        private void UpdateBookingStatus()
+        {
+            if (SelectedStatus == null || Booking == null) return;
+            if (SelectedStatus.BookingStatusId == Booking.BookingStatusId) return;
+
+            if (_dialog.ShowConfirmation($"Изменить статус заявки на \"{SelectedStatus.BookingStatusName}\"?"))
+            {
+                if (_bookingService.UpdateBookingStatus(Booking.BookingId, SelectedStatus.BookingStatusId))
+                {
+                    _dialog.ShowMessage("Статус обновлён", "Успех");
+                    OnNavigatedTo(Booking.BookingId);
+                }
+                else
+                    _dialog.ShowError("Ошибка обновления статуса", "Ошибка");
+            }
+        }
+
+        [RelayCommand]
+        private void AcceptDocument(Document doc)
+        {
+            if (doc == null) return;
+            if (_bookingService.UpdateDocumentStatus(doc.DocumentId, 2, OperatorComment)) // 2 = Проверен
+            {
+                _dialog.ShowMessage("Документ принят", "Успех");
+                OnNavigatedTo(Booking?.BookingId);
+            }
+            else
+                _dialog.ShowError("Ошибка", "Ошибка");
+        }
+
+        [RelayCommand]
+        private void RejectDocument(Document doc)
+        {
+            if (doc == null) return;
+            if (_dialog.ShowConfirmation($"Отклонить документ \"{doc.DocumentType?.DocumentTypeName}\"? Введите комментарий:", "Отклонение документа"))
+            {
+                // В простом варианте используем поле OperatorComment
+                if (_bookingService.UpdateDocumentStatus(doc.DocumentId, 3, OperatorComment)) // 3 = Отклонён
+                {
+                    _dialog.ShowMessage("Документ отклонён", "Успех");
+                    OnNavigatedTo(Booking?.BookingId);
+                }
+                else
+                    _dialog.ShowError("Ошибка", "Ошибка");
+            }
+        }
+
+        [RelayCommand]
+        private void BackToList() => _navigation.NavigateTo<BookingsListViewModel>();
+    }
+}
+```
+
+---
+
+## FILE 69: BookingsListViewModel.cs
+
+<a id='bookingslistviewmodel'></a>
+
+```csharp
+using CampAgency.WPF.Models.Entities;
+using CampAgency.WPF.Services.BookingServices;
+using CampAgency.WPF.Services.NavigationServices;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using System.Collections.ObjectModel;
+using System.Linq;
+
+namespace CampAgency.WPF.ViewModels.Operator
+{
+    public partial class BookingsListViewModel : ObservableObject
+    {
+        private readonly IBookingService _bookingService;
+        private readonly INavigationService _navigation;
+
+        [ObservableProperty] private ObservableCollection<Booking> _bookings = new();
+        [ObservableProperty] private ObservableCollection<BookingStatus> _statuses = new();
+        [ObservableProperty] private ObservableCollection<Camp> _camps = new();
+
+        [ObservableProperty] private BookingStatus? _selectedStatusFilter;
+        [ObservableProperty] private Camp? _selectedCampFilter;
+        [ObservableProperty] private string _searchText = string.Empty;
+
+        public BookingsListViewModel(IBookingService bookingService, INavigationService navigation)
+        {
+            _bookingService = bookingService;
+            _navigation = navigation;
+            LoadFilters();
+            LoadBookings();
+        }
+
+        private void LoadFilters()
+        {
+            var statusList = _bookingService.GetAllBookingStatuses();
+            statusList.Insert(0, new BookingStatus { BookingStatusId = 0, BookingStatusName = "Все" });
+            Statuses = new ObservableCollection<BookingStatus>(statusList);
+            SelectedStatusFilter = Statuses.First();
+
+            var campList = _bookingService.GetAllCamps();
+            campList.Insert(0, new Camp { CampId = 0, CampName = "Все" });
+            Camps = new ObservableCollection<Camp>(campList);
+            SelectedCampFilter = Camps.First();
+        }
+
+        private void LoadBookings()
+        {
+            int? statusId = SelectedStatusFilter?.BookingStatusId == 0 ? null : SelectedStatusFilter?.BookingStatusId;
+            int? campId = SelectedCampFilter?.CampId == 0 ? null : SelectedCampFilter?.CampId;
+            var list = _bookingService.GetBookingsWithFilters(statusId, campId, SearchText);
+            Bookings = new ObservableCollection<Booking>(list);
+        }
+
+        partial void OnSelectedStatusFilterChanged(BookingStatus? value) => LoadBookings();
+        partial void OnSelectedCampFilterChanged(Camp? value) => LoadBookings();
+        partial void OnSearchTextChanged(string value) => LoadBookings();
+
+        [RelayCommand]
+        private void ViewBooking(Booking booking) => _navigation.NavigateTo<BookingDetailsViewModel>(booking.BookingId);
+    }
+}
+```
+
+---
+
+## FILE 70: OperatorDashboardViewModel.cs
 
 <a id='operatordashboardviewmodel'></a>
 
 ```csharp
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using CampAgency.WPF.Services.NavigationServices;
+using CommunityToolkit.Mvvm.Input;
 
 namespace CampAgency.WPF.ViewModels.Operator
 {
-    class OperatorDashboardViewModel
+    public partial class OperatorDashboardViewModel
     {
+        private readonly INavigationService _navigation;
+        public OperatorDashboardViewModel(INavigationService navigation)
+        {
+            _navigation = navigation;
+            _navigation.NavigateTo<BookingsListViewModel>();
+        }
+
+        [RelayCommand]
+        private void ShowBookings() => _navigation.NavigateTo<BookingsListViewModel>();
     }
 }
-
 ```
 
 ---
@@ -6442,7 +7812,101 @@ namespace CampAgency.WPF.ViewModels.Operator
 
 <a id='parent'></a>
 
-## FILE 61: ChildEditViewModel.cs
+## FILE 71: ChildDocumentsViewModel.cs
+
+<a id='childdocumentsviewmodel'></a>
+
+```csharp
+using CampAgency.WPF.Models.Entities;
+using CampAgency.WPF.Services.ChildServices;
+using CampAgency.WPF.Services.DialogServices;
+using CampAgency.WPF.Services.NavigationServices;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using System.Collections.ObjectModel;
+using System.Linq;
+
+namespace CampAgency.WPF.ViewModels.Parent
+{
+    public partial class ChildDocumentsViewModel : ObservableObject, INavigationAware
+    {
+        private readonly IChildService _childService;
+        private readonly INavigationService _navigation;
+        private readonly IDialogService _dialog;
+
+        [ObservableProperty] private Child? _child;
+        [ObservableProperty] private ObservableCollection<Document> _documents = new();
+        [ObservableProperty] private ObservableCollection<DocumentType> _documentTypes = new();
+        [ObservableProperty] private DocumentType? _selectedDocumentType;
+        [ObservableProperty] private string _filePath = string.Empty;
+
+        public ChildDocumentsViewModel(IChildService childService, INavigationService navigation, IDialogService dialog)
+        {
+            _childService = childService;
+            _navigation = navigation;
+            _dialog = dialog;
+        }
+
+        public void OnNavigatedTo(object? parameter)
+        {
+            if (parameter is Child child)
+            {
+                _child = child;
+                LoadDocumentTypes();
+                LoadDocuments();
+            }
+        }
+
+        private void LoadDocumentTypes()
+        {
+            // Используем реальный метод IChildService
+            var types = _childService.GetDocumentTypes();
+            DocumentTypes = new ObservableCollection<DocumentType>(types);
+        }
+
+        private void LoadDocuments()
+        {
+            if (_child != null)
+            {
+                var list = _childService.GetDocumentsByChildId(_child.ChildId);
+                Documents = new ObservableCollection<Document>(list);
+            }
+        }
+
+        [RelayCommand]
+        private void AddDocument()
+        {
+            if (SelectedDocumentType == null)
+            {
+                _dialog.ShowError("Выберите тип документа", "Ошибка");
+                return;
+            }
+            if (string.IsNullOrWhiteSpace(FilePath))
+            {
+                _dialog.ShowError("Укажите путь или ссылку на файл", "Ошибка");
+                return;
+            }
+
+            if (_childService.AddDocument(_child!.ChildId, SelectedDocumentType.DocumentTypeId, FilePath))
+            {
+                _dialog.ShowMessage("Документ добавлен", "Успех");
+                LoadDocuments();
+                FilePath = string.Empty;
+                SelectedDocumentType = null;
+            }
+            else
+                _dialog.ShowError("Ошибка добавления документа", "Ошибка");
+        }
+
+        [RelayCommand]
+        private void BackToChildren() => _navigation.NavigateTo<ChildListViewModel>();
+    }
+}
+```
+
+---
+
+## FILE 72: ChildEditViewModel.cs
 
 <a id='childeditviewmodel'></a>
 
@@ -6564,7 +8028,7 @@ namespace CampAgency.WPF.ViewModels.Parent
 
 ---
 
-## FILE 62: ChildListViewModel.cs
+## FILE 73: ChildListViewModel.cs
 
 <a id='childlistviewmodel'></a>
 
@@ -6633,13 +8097,109 @@ namespace CampAgency.WPF.ViewModels.Parent
                 _dialogService.ShowError("Не удалось удалить ребёнка", "Ошибка");
             }
         }
+
+        [RelayCommand]
+        private void ManageDocuments(Child child) => _navigationService.NavigateTo<ChildDocumentsViewModel>(child);
     }
 }
 ```
 
 ---
 
-## FILE 63: MedicalNoteWrapper.cs
+## FILE 74: LeaveReviewViewModel.cs
+
+<a id='leavereviewviewmodel'></a>
+
+```csharp
+using CampAgency.WPF.Models.Entities;
+using CampAgency.WPF.Services.AuthServices;
+using CampAgency.WPF.Services.DialogServices;
+using CampAgency.WPF.Services.NavigationServices;
+using CampAgency.WPF.Services.ReviewServices;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using System.Collections.ObjectModel;
+using System.Linq;
+using System.Windows.Media;
+
+namespace CampAgency.WPF.ViewModels.Parent
+{
+    public partial class LeaveReviewViewModel : ObservableObject, INavigationAware
+    {
+        private readonly IReviewService _reviewService;
+        private readonly IAuthService _authService;
+        private readonly INavigationService _navigation;
+        private readonly IDialogService _dialog;
+
+        [ObservableProperty] private ObservableCollection<Shift> _completedShifts = new();
+        [ObservableProperty] private Shift? _selectedShift;
+        [ObservableProperty] private int _rating = 5;
+        [ObservableProperty] private string _comment = string.Empty;
+
+        public LeaveReviewViewModel(IReviewService reviewService, IAuthService authService, INavigationService navigation, IDialogService dialog)
+        {
+            _reviewService = reviewService;
+            _authService = authService;
+            _navigation = navigation;
+            _dialog = dialog;
+        }
+
+        public void OnNavigatedTo(object? parameter)
+        {
+            if (_authService.CurrentUser != null)
+            {
+                var shifts = _reviewService.GetCompletedShiftsForUser(_authService.CurrentUser.UserId);
+                CompletedShifts = new ObservableCollection<Shift>(shifts);
+                SelectedShift = CompletedShifts.FirstOrDefault();
+            }
+        }
+
+        [RelayCommand]
+        private void SubmitReview()
+        {
+            if (SelectedShift == null)
+            {
+                _dialog.ShowError("Выберите смену для отзыва", "Ошибка");
+                return;
+            }
+            if (Rating < 1 || Rating > 5)
+            {
+                _dialog.ShowError("Оценка должна быть от 1 до 5", "Ошибка");
+                return;
+            }
+            if (string.IsNullOrWhiteSpace(Comment))
+            {
+                _dialog.ShowError("Введите текст отзыва", "Ошибка");
+                return;
+            }
+
+            var userId = _authService.CurrentUser!.UserId;
+            if (_reviewService.HasUserReviewedShift(userId, SelectedShift.ShiftId))
+            {
+                _dialog.ShowError("Вы уже оставляли отзыв на эту смену", "Ошибка");
+                return;
+            }
+
+            if (_reviewService.AddReview(SelectedShift.ShiftId, userId, Rating, Comment))
+            {
+                _dialog.ShowMessage("Спасибо за отзыв!", "Успех");
+                _navigation.NavigateTo<ParentDashboardViewModel>();
+            }
+            else
+            {
+                _dialog.ShowError("Не удалось сохранить отзыв", "Ошибка");
+            }
+        }
+
+        [RelayCommand]
+        private void Cancel() => _navigation.NavigateTo<ParentDashboardViewModel>();
+    }
+}
+```
+
+---
+
+## FILE 75: MedicalNoteWrapper.cs
 
 <a id='medicalnotewrapper'></a>
 
@@ -6665,7 +8225,7 @@ namespace CampAgency.WPF.ViewModels.Parent
 
 ---
 
-## FILE 64: MyBookingsViewModel.cs
+## FILE 76: MyBookingsViewModel.cs
 
 <a id='mybookingsviewmodel'></a>
 
@@ -6718,7 +8278,7 @@ namespace CampAgency.WPF.ViewModels.Parent
 
 ---
 
-## FILE 65: ParentDashboardViewModel.cs
+## FILE 77: ParentDashboardViewModel.cs
 
 <a id='parentdashboardviewmodel'></a>
 
@@ -6742,13 +8302,14 @@ namespace CampAgency.WPF.ViewModels.Parent
         [RelayCommand] private void ShowChildren() => _navigationService.NavigateTo<ChildListViewModel>();
         [RelayCommand] private void ShowShiftsCatalog() => _navigationService.NavigateTo<ShiftsCatalogViewModel>();
         [RelayCommand] private void ShowMyBookings() => _navigationService.NavigateTo<MyBookingsViewModel>();
+        [RelayCommand] private void LeaveReview() => _navigationService.NavigateTo<LeaveReviewViewModel>();
     }
 }
 ```
 
 ---
 
-## FILE 66: ShiftDetailsViewModel.cs
+## FILE 78: ShiftDetailsViewModel.cs
 
 <a id='shiftdetailsviewmodel'></a>
 
@@ -6758,6 +8319,7 @@ using CampAgency.WPF.Services.AuthServices;
 using CampAgency.WPF.Services.ChildServices;
 using CampAgency.WPF.Services.DialogServices;
 using CampAgency.WPF.Services.NavigationServices;
+using CampAgency.WPF.Services.ReviewServices;
 using CampAgency.WPF.Services.ShiftServices;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -6773,19 +8335,22 @@ namespace CampAgency.WPF.ViewModels.Parent
         private readonly INavigationService _navigation;
         private readonly IDialogService _dialogService;
         private readonly IAuthService _authService;
+        private readonly IReviewService _reviewService;
 
         [ObservableProperty] private Shift? _shift;
         [ObservableProperty] private ObservableCollection<Child> _myChildren = new();
         [ObservableProperty] private Child? _selectedChild;
         [ObservableProperty] private bool _isBookingInProgress;
+        [ObservableProperty] private double? _averageRating;
 
-        public ShiftDetailsViewModel(IShiftCatalogService shiftService, IChildService childService, INavigationService navigation, IDialogService dialogService, IAuthService authService)
+        public ShiftDetailsViewModel(IShiftCatalogService shiftService, IChildService childService, INavigationService navigation, IDialogService dialogService, IAuthService authService, IReviewService reviewService)
         {
             _shiftService = shiftService;
             _childService = childService;
             _navigation = navigation;
             _dialogService = dialogService;
             _authService = authService;
+            _reviewService = reviewService;
         }
 
         public void OnNavigatedTo(object? parameter)
@@ -6795,6 +8360,7 @@ namespace CampAgency.WPF.ViewModels.Parent
                 _shift = _shiftService.GetShiftById(shiftId);
                 OnPropertyChanged(nameof(Shift));
                 LoadChildren();
+                LoadAverageRating();
             }
         }
 
@@ -6805,6 +8371,11 @@ namespace CampAgency.WPF.ViewModels.Parent
             var currentUserId = _authService.CurrentUser?.UserId;
             if (currentUserId.HasValue)
                 MyChildren = new ObservableCollection<Child>(_childService.GetChildrenByUserId(currentUserId.Value));
+        }
+        private void LoadAverageRating()
+        {
+            if (Shift?.Camp != null)
+                AverageRating = _reviewService.GetAverageRatingForCamp(Shift.Camp.CampId);
         }
 
         [RelayCommand]
@@ -6847,7 +8418,7 @@ namespace CampAgency.WPF.ViewModels.Parent
 
 ---
 
-## FILE 67: ShiftsCatalogViewModel.cs
+## FILE 79: ShiftsCatalogViewModel.cs
 
 <a id='shiftscatalogviewmodel'></a>
 
@@ -6855,12 +8426,11 @@ namespace CampAgency.WPF.ViewModels.Parent
 using CampAgency.WPF.Models.Entities;
 using CampAgency.WPF.Services.DialogServices;
 using CampAgency.WPF.Services.NavigationServices;
+using CampAgency.WPF.Services.ReviewServices;
 using CampAgency.WPF.Services.ShiftServices;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using System;
 using System.Collections.ObjectModel;
-using System.Linq;
 
 namespace CampAgency.WPF.ViewModels.Parent
 {
@@ -6869,11 +8439,11 @@ namespace CampAgency.WPF.ViewModels.Parent
         private readonly IShiftCatalogService _shiftService;
         private readonly INavigationService _navigation;
         private readonly IDialogService _dialogService;
+        private readonly IReviewService _reviewService;
 
         [ObservableProperty] private ObservableCollection<Shift> _shifts = new();
         [ObservableProperty] private ObservableCollection<CampType> _campTypes = new();
         [ObservableProperty] private ObservableCollection<Region> _regions = new();
-
 
         // Фильтры
         [ObservableProperty] private Region? _selectedRegion;
@@ -6883,11 +8453,12 @@ namespace CampAgency.WPF.ViewModels.Parent
         [ObservableProperty] private string? _minPriceStr;
         [ObservableProperty] private string? _maxPriceStr;
 
-        public ShiftsCatalogViewModel(IShiftCatalogService shiftService, INavigationService navigation, IDialogService dialogService)
+        public ShiftsCatalogViewModel(IShiftCatalogService shiftService, INavigationService navigation, IDialogService dialogService, IReviewService reviewService)
         {
             _shiftService = shiftService;
             _navigation = navigation;
             _dialogService = dialogService;
+            _reviewService = reviewService;
             LoadFilters();
             LoadShifts();
         }
@@ -6898,6 +8469,7 @@ namespace CampAgency.WPF.ViewModels.Parent
             var regionList = _shiftService.GetAllRegions();
             Regions = new ObservableCollection<Region>(regionList);
         }
+
 
         private void LoadShifts()
         {
@@ -6918,6 +8490,10 @@ namespace CampAgency.WPF.ViewModels.Parent
                 minPrice,
                 maxPrice
             );
+            foreach (var shift in list)
+            {
+                shift.AverageRating = _reviewService.GetAverageRatingForCamp(shift.Camp.CampId);
+            }
             Shifts = new ObservableCollection<Shift>(list);
         }
 
@@ -6955,7 +8531,7 @@ namespace CampAgency.WPF.ViewModels.Parent
 
 <a id='admin'></a>
 
-## FILE 68: AdminDashboardView.xaml
+## FILE 80: AdminDashboardView.xaml
 
 <a id='admindashboardview'></a>
 
@@ -6990,7 +8566,7 @@ namespace CampAgency.WPF.ViewModels.Parent
 
 ---
 
-## FILE 69: AdminDashboardView.xaml.cs
+## FILE 81: AdminDashboardView.xaml.cs
 
 <a id='admindashboardviewxaml'></a>
 
@@ -7011,7 +8587,7 @@ namespace CampAgency.WPF.Views.Admin
 
 ---
 
-## FILE 70: CampEditView.xaml
+## FILE 82: CampEditView.xaml
 
 <a id='campeditview'></a>
 
@@ -7058,7 +8634,7 @@ namespace CampAgency.WPF.Views.Admin
 
 ---
 
-## FILE 71: CampEditView.xaml.cs
+## FILE 83: CampEditView.xaml.cs
 
 <a id='campeditviewxaml'></a>
 
@@ -7079,7 +8655,7 @@ namespace CampAgency.WPF.Views.Admin
 
 ---
 
-## FILE 72: CampsListView.xaml
+## FILE 84: CampsListView.xaml
 
 <a id='campslistview'></a>
 
@@ -7112,7 +8688,6 @@ namespace CampAgency.WPF.Views.Admin
                 <DataGridTextColumn Header="Тип" Binding="{Binding CampType.CampTypeName}" Width="120"/>
                 <DataGridTextColumn Header="Регион" Binding="{Binding Region.RegionName}" Width="100"/>
                 <DataGridTextColumn Header="Телефон" Binding="{Binding ContactPhone}" Width="120"/>
-                <DataGridTextColumn Header="Рейтинг" Binding="{Binding Rating}" Width="70"/>
                 <DataGridTemplateColumn Header="Действия" Width="120">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
@@ -7139,7 +8714,7 @@ namespace CampAgency.WPF.Views.Admin
 
 ---
 
-## FILE 73: CampsListView.xaml.cs
+## FILE 85: CampsListView.xaml.cs
 
 <a id='campslistviewxaml'></a>
 
@@ -7160,7 +8735,7 @@ namespace CampAgency.WPF.Views.Admin
 
 ---
 
-## FILE 74: ShiftEditView.xaml
+## FILE 86: ShiftEditView.xaml
 
 <a id='shifteditview'></a>
 
@@ -7197,7 +8772,7 @@ namespace CampAgency.WPF.Views.Admin
 
 ---
 
-## FILE 75: ShiftEditView.xaml.cs
+## FILE 87: ShiftEditView.xaml.cs
 
 <a id='shifteditviewxaml'></a>
 
@@ -7235,7 +8810,7 @@ namespace CampAgency.WPF.Views.Admin
 
 ---
 
-## FILE 76: ShiftsListView.xaml
+## FILE 88: ShiftsListView.xaml
 
 <a id='shiftslistview'></a>
 
@@ -7292,7 +8867,7 @@ namespace CampAgency.WPF.Views.Admin
 
 ---
 
-## FILE 77: ShiftsListView.xaml.cs
+## FILE 89: ShiftsListView.xaml.cs
 
 <a id='shiftslistviewxaml'></a>
 
@@ -7330,7 +8905,7 @@ namespace CampAgency.WPF.Views.Admin
 
 ---
 
-## FILE 78: UserEditView.xaml
+## FILE 90: UserEditView.xaml
 
 <a id='usereditview'></a>
 
@@ -7377,7 +8952,7 @@ namespace CampAgency.WPF.Views.Admin
 
 ---
 
-## FILE 79: UserEditView.xaml.cs
+## FILE 91: UserEditView.xaml.cs
 
 <a id='usereditviewxaml'></a>
 
@@ -7409,7 +8984,7 @@ namespace CampAgency.WPF.Views.Admin
 
 ---
 
-## FILE 80: UsersListView.xaml
+## FILE 92: UsersListView.xaml
 
 <a id='userslistview'></a>
 
@@ -7475,7 +9050,7 @@ namespace CampAgency.WPF.Views.Admin
 
 ---
 
-## FILE 81: UsersListView.xaml.cs
+## FILE 93: UsersListView.xaml.cs
 
 <a id='userslistviewxaml'></a>
 
@@ -7517,7 +9092,7 @@ namespace CampAgency.WPF.Views.Admin
 
 <a id='auth'></a>
 
-## FILE 82: LoginView.xaml
+## FILE 94: LoginView.xaml
 
 <a id='loginview'></a>
 
@@ -7543,7 +9118,7 @@ namespace CampAgency.WPF.Views.Admin
 
 ---
 
-## FILE 83: LoginView.xaml.cs
+## FILE 95: LoginView.xaml.cs
 
 <a id='loginviewxaml'></a>
 
@@ -7564,7 +9139,7 @@ namespace CampAgency.WPF.Views.Auth
 
 ---
 
-## FILE 84: RegisterView.xaml
+## FILE 96: RegisterView.xaml
 
 <a id='registerview'></a>
 
@@ -7606,7 +9181,7 @@ namespace CampAgency.WPF.Views.Auth
 
 ---
 
-## FILE 85: RegisterView.xaml.cs
+## FILE 97: RegisterView.xaml.cs
 
 <a id='registerviewxaml'></a>
 
@@ -7643,7 +9218,219 @@ namespace CampAgency.WPF.Views.Auth
 
 <a id='operator'></a>
 
-## FILE 86: OperatorDashboardView.xaml
+## FILE 98: BookingDetailsView.xaml
+
+<a id='bookingdetailsview'></a>
+
+```xml
+<UserControl x:Class="CampAgency.WPF.Views.Operator.BookingDetailsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <StackPanel Margin="10" Width="800">
+            <TextBlock Text="Детали заявки" FontSize="20" FontWeight="Bold" Margin="0,0,0,15"/>
+
+            <!-- Информация о ребёнке -->
+            <GroupBox Header="Ребёнок" Margin="0,5">
+                <StackPanel Margin="10">
+                    <TextBlock><Run Text="ФИО:" FontWeight="Bold"/> <Run Text="{Binding Booking.Child.FullName}"/></TextBlock>
+                    <TextBlock><Run Text="Дата рождения:" FontWeight="Bold"/> <Run Text="{Binding Booking.Child.BirthDate, StringFormat=dd.MM.yyyy}"/></TextBlock>
+                    <TextBlock><Run Text="Пол:" FontWeight="Bold"/> <Run Text="{Binding Booking.Child.Gender.GenderName}"/></TextBlock>
+                </StackPanel>
+            </GroupBox>
+
+            <!-- Информация о родителе -->
+            <GroupBox Header="Родитель" Margin="0,5">
+                <StackPanel Margin="10">
+                    <TextBlock><Run Text="ФИО:" FontWeight="Bold"/> <Run Text="{Binding Booking.Child.User.FullName}"/></TextBlock>
+                    <TextBlock><Run Text="Телефон:" FontWeight="Bold"/> <Run Text="{Binding Booking.Child.User.Phone}"/></TextBlock>
+                    <TextBlock><Run Text="Email:" FontWeight="Bold"/> <Run Text="{Binding Booking.Child.User.Email}"/></TextBlock>
+                </StackPanel>
+            </GroupBox>
+
+            <!-- Информация о смене -->
+            <GroupBox Header="Смена" Margin="0,5">
+                <StackPanel Margin="10">
+                    <TextBlock><Run Text="Лагерь:" FontWeight="Bold"/> <Run Text="{Binding Booking.Shift.Camp.CampName}"/></TextBlock>
+                    <TextBlock><Run Text="Тип:" FontWeight="Bold"/> <Run Text="{Binding Booking.Shift.Camp.CampType.CampTypeName}"/></TextBlock>
+                    <TextBlock><Run Text="Даты:" FontWeight="Bold"/> <Run Text="{Binding Booking.Shift.StartDate, StringFormat=dd.MM.yyyy}"/> - <Run Text="{Binding Booking.Shift.EndDate, StringFormat=dd.MM.yyyy}"/></TextBlock>
+                    <TextBlock><Run Text="Стоимость:" FontWeight="Bold"/> <Run Text="{Binding Booking.Shift.Price, StringFormat=C}"/></TextBlock>
+                </StackPanel>
+            </GroupBox>
+
+            <!-- Изменение статуса бронирования -->
+            <GroupBox Header="Статус заявки" Margin="0,5">
+                <StackPanel Margin="10" Orientation="Horizontal">
+                    <ComboBox ItemsSource="{Binding AvailableStatuses}" SelectedItem="{Binding SelectedStatus}" 
+                              DisplayMemberPath="BookingStatusName" Width="200" Height="30" Margin="0,0,10,0"/>
+                    <Button Content="Изменить статус" Command="{Binding UpdateBookingStatusCommand}" Width="150" Height="30"/>
+                </StackPanel>
+            </GroupBox>
+
+            <!-- Список документов -->
+            <GroupBox Header="Документы" Margin="0,5">
+                <ItemsControl ItemsSource="{Binding Booking.Child.Documents}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Border BorderBrush="LightGray" BorderThickness="0,0,0,1" Margin="0,5">
+                                <StackPanel Margin="5">
+                                    <TextBlock FontWeight="Bold" Text="{Binding DocumentType.DocumentTypeName}"/>
+                                    <TextBlock Text="{Binding FilePath}" FontSize="11" Foreground="Gray"/>
+                                    <TextBlock Text="{Binding OperatorComment}" FontStyle="Italic" Foreground="Blue"/>
+                                    <StackPanel Orientation="Horizontal" Margin="0,5">
+                                        <Button Content="Принять" Command="{Binding DataContext.AcceptDocumentCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" 
+                                                CommandParameter="{Binding}" Width="80" Margin="0,0,10,0"/>
+                                        <Button Content="Отклонить" Command="{Binding DataContext.RejectDocumentCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" 
+                                                CommandParameter="{Binding}" Width="80"/>
+                                        <TextBlock Text="Текущий статус:" Margin="20,0,5,0"/>
+                                        <TextBlock Text="{Binding DocumentStatus.DocumentStatusName}" FontWeight="Bold"/>
+                                    </StackPanel>
+                                </StackPanel>
+                            </Border>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </GroupBox>
+
+            <Button Content="← Назад к списку" Command="{Binding BackToListCommand}" Width="150" Height="35" Margin="0,20,0,0" HorizontalAlignment="Left"/>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>
+```
+
+---
+
+## FILE 99: BookingDetailsView.xaml.cs
+
+<a id='bookingdetailsviewxaml'></a>
+
+```csharp
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
+using System.Windows.Shapes;
+
+namespace CampAgency.WPF.Views.Operator
+{
+    /// <summary>
+    /// Логика взаимодействия для BookingDetailsView.xaml
+    /// </summary>
+    public partial class BookingDetailsView : UserControl
+    {
+        public BookingDetailsView()
+        {
+            InitializeComponent();
+        }
+    }
+}
+
+```
+
+---
+
+## FILE 100: BookingsListView.xaml
+
+<a id='bookingslistview'></a>
+
+```xml
+<UserControl x:Class="CampAgency.WPF.Views.Operator.BookingsListView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock Text="Список заявок" FontSize="20" FontWeight="Bold" Margin="0,0,0,10"/>
+
+        <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,0,0,10">
+            <TextBlock Text="Статус:" VerticalAlignment="Center" Margin="0,0,10,0"/>
+            <ComboBox ItemsSource="{Binding Statuses}" SelectedItem="{Binding SelectedStatusFilter}" 
+                      DisplayMemberPath="BookingStatusName" Width="150" Height="30" Margin="0,0,20,0"/>
+            <TextBlock Text="Лагерь:" VerticalAlignment="Center" Margin="0,0,10,0"/>
+            <ComboBox ItemsSource="{Binding Camps}" SelectedItem="{Binding SelectedCampFilter}" 
+                      DisplayMemberPath="CampName" Width="200" Height="30" Margin="0,0,20,0"/>
+            <TextBlock Text="Поиск:" VerticalAlignment="Center" Margin="0,0,10,0"/>
+            <TextBox Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" Width="200" Height="30"/>
+        </StackPanel>
+
+        <DataGrid Grid.Row="2" ItemsSource="{Binding Bookings}" AutoGenerateColumns="False" 
+                  CanUserAddRows="False" IsReadOnly="True">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="ID" Binding="{Binding BookingId}" Width="50"/>
+                <DataGridTextColumn Header="Ребёнок" Binding="{Binding Child.FullName}" Width="150"/>
+                <DataGridTextColumn Header="Родитель" Binding="{Binding Child.User.FullName}" Width="150"/>
+                <DataGridTextColumn Header="Лагерь" Binding="{Binding Shift.Camp.CampName}" Width="*"/>
+                <DataGridTextColumn Header="Смена" Binding="{Binding Shift.StartDate, StringFormat=dd.MM.yyyy}" Width="100"/>
+                <DataGridTextColumn Header="Статус" Binding="{Binding BookingStatus.BookingStatusName}" Width="120"/>
+                <DataGridTextColumn Header="Создана" Binding="{Binding CreatedAt, StringFormat=dd.MM.yyyy}" Width="100"/>
+                <DataGridTemplateColumn Header="Действие" Width="100">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button Content="Открыть" Command="{Binding DataContext.ViewBookingCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" 
+                                    CommandParameter="{Binding}"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+    </Grid>
+</UserControl>
+```
+
+---
+
+## FILE 101: BookingsListView.xaml.cs
+
+<a id='bookingslistviewxaml'></a>
+
+```csharp
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
+using System.Windows.Shapes;
+
+namespace CampAgency.WPF.Views.Operator
+{
+    /// <summary>
+    /// Логика взаимодействия для BookingsListView.xaml
+    /// </summary>
+    public partial class BookingsListView : UserControl
+    {
+        public BookingsListView()
+        {
+            InitializeComponent();
+        }
+    }
+}
+
+```
+
+---
+
+## FILE 102: OperatorDashboardView.xaml
 
 <a id='operatordashboardview'></a>
 
@@ -7652,16 +9439,25 @@ namespace CampAgency.WPF.Views.Auth
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <Grid Margin="20">
-        <TextBlock Text="Панель оператора" 
-                   FontSize="24" FontWeight="Bold" 
-                   HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock Text="Панель оператора" FontSize="24" FontWeight="Bold" Margin="0,0,0,20"/>
+
+        <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Right">
+            <Button Content="Заявки" Command="{Binding ShowBookingsCommand}" Width="120" Margin="5" Height="35"/>
+        </StackPanel>
+
+        <ContentControl Grid.Row="1" Content="{Binding NavigationService.CurrentViewModel}" Margin="0,10,0,0"/>
     </Grid>
 </UserControl>
 ```
 
 ---
 
-## FILE 87: OperatorDashboardView.xaml.cs
+## FILE 103: OperatorDashboardView.xaml.cs
 
 <a id='operatordashboardviewxaml'></a>
 
@@ -7686,7 +9482,89 @@ namespace CampAgency.WPF.Views.Operator
 
 <a id='parent'></a>
 
-## FILE 88: ChildEditView.xaml
+## FILE 104: ChildDocumentsView.xaml
+
+<a id='childdocumentsview'></a>
+
+```xml
+<UserControl x:Class="CampAgency.WPF.Views.Parent.ChildDocumentsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock Text="Документы ребёнка" FontSize="20" FontWeight="Bold" Margin="0,0,0,10"/>
+
+        <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,0,0,10">
+            <TextBlock Text="Тип документа:" VerticalAlignment="Center" Margin="0,0,10,0"/>
+            <ComboBox ItemsSource="{Binding DocumentTypes}" SelectedItem="{Binding SelectedDocumentType}" 
+                      DisplayMemberPath="DocumentTypeName" Width="150" Height="30" Margin="0,0,20,0"/>
+            <TextBlock Text="Путь/ссылка:" VerticalAlignment="Center" Margin="0,0,10,0"/>
+            <TextBox Text="{Binding FilePath}" Width="300" Height="30" Margin="0,0,10,0"/>
+            <Button Content="Добавить" Command="{Binding AddDocumentCommand}" Width="100" Height="30"/>
+        </StackPanel>
+
+        <DataGrid Grid.Row="2" ItemsSource="{Binding Documents}" AutoGenerateColumns="False" 
+                  CanUserAddRows="False" IsReadOnly="True">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Тип" Binding="{Binding DocumentType.DocumentTypeName}" Width="150"/>
+                <DataGridTextColumn Header="Файл" Binding="{Binding FilePath}" Width="*"/>
+                <DataGridTextColumn Header="Статус" Binding="{Binding DocumentStatus.DocumentStatusName}" Width="100"/>
+                <DataGridTextColumn Header="Дата загрузки" Binding="{Binding TimeStamp, StringFormat=dd.MM.yyyy HH:mm}" Width="130"/>
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <Button Grid.Row="3" Content="← Назад" Command="{Binding BackToChildrenCommand}" Width="120" Height="30" HorizontalAlignment="Left" Margin="0,10,0,0"/>
+    </Grid>
+</UserControl>
+```
+
+---
+
+## FILE 105: ChildDocumentsView.xaml.cs
+
+<a id='childdocumentsviewxaml'></a>
+
+```csharp
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
+using System.Windows.Shapes;
+
+namespace CampAgency.WPF.Views.Parent
+{
+    /// <summary>
+    /// Логика взаимодействия для ChildDocumentsView.xaml
+    /// </summary>
+    public partial class ChildDocumentsView : UserControl
+    {
+        public ChildDocumentsView()
+        {
+            InitializeComponent();
+        }
+    }
+}
+
+```
+
+---
+
+## FILE 106: ChildEditView.xaml
 
 <a id='childeditview'></a>
 
@@ -7725,7 +9603,7 @@ namespace CampAgency.WPF.Views.Operator
 
 ---
 
-## FILE 89: ChildEditView.xaml.cs
+## FILE 107: ChildEditView.xaml.cs
 
 <a id='childeditviewxaml'></a>
 
@@ -7763,7 +9641,7 @@ namespace CampAgency.WPF.Views.Parent
 
 ---
 
-## FILE 90: ChildListView.xaml
+## FILE 108: ChildListView.xaml
 
 <a id='childlistview'></a>
 
@@ -7799,6 +9677,14 @@ namespace CampAgency.WPF.Views.Parent
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
+                <DataGridTemplateColumn Header="Документы" Width="100">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button Content="Управление" Command="{Binding DataContext.ManageDocumentsCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" 
+                                    CommandParameter="{Binding}"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
             </DataGrid.Columns>
         </DataGrid>
         <Button Grid.Row="2" Content="Назад" Width="150" Height="30" HorizontalAlignment="Right" Margin="20,0,0,0" Command="{Binding BackToDashboardCommand}"/>
@@ -7808,7 +9694,7 @@ namespace CampAgency.WPF.Views.Parent
 
 ---
 
-## FILE 91: ChildListView.xaml.cs
+## FILE 109: ChildListView.xaml.cs
 
 <a id='childlistviewxaml'></a>
 
@@ -7846,7 +9732,94 @@ namespace CampAgency.WPF.Views.Parent
 
 ---
 
-## FILE 92: MyBookingsView.xaml
+## FILE 110: LeaveReviewView.xaml
+
+<a id='leavereviewview'></a>
+
+```xml
+<UserControl x:Class="CampAgency.WPF.Views.Parent.LeaveReviewView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:converters="clr-namespace:CampAgency.WPF.Converters">
+    <UserControl.Resources>
+        <converters:RadioIntConverter x:Key="RadioIntConverter"/>
+    </UserControl.Resources>
+    <StackPanel Margin="20" Width="500">
+        <TextBlock Text="Оставить отзыв о смене" FontSize="20" FontWeight="Bold" Margin="0,0,0,20"/>
+
+        <TextBlock Text="Выберите завершённую смену:" Margin="0,5"/>
+        <ComboBox ItemsSource="{Binding CompletedShifts}" SelectedItem="{Binding SelectedShift}" Margin="0,5" Height="30">
+            <ComboBox.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel>
+                        <TextBlock Text="{Binding Camp.CampName}"/>
+                        <TextBlock Text="{Binding StartDate, StringFormat=dd.MM.yyyy}" FontSize="10"/>
+                    </StackPanel>
+                </DataTemplate>
+            </ComboBox.ItemTemplate>
+        </ComboBox>
+
+        <TextBlock Text="Оценка (1-5):" Margin="0,10,0,5"/>
+        <StackPanel Orientation="Horizontal">
+            <RadioButton GroupName="Rating" Content="1" IsChecked="{Binding Rating, Converter={StaticResource RadioIntConverter}, ConverterParameter=1}" Margin="5"/>
+            <RadioButton GroupName="Rating" Content="2" IsChecked="{Binding Rating, Converter={StaticResource RadioIntConverter}, ConverterParameter=2}" Margin="5"/>
+            <RadioButton GroupName="Rating" Content="3" IsChecked="{Binding Rating, Converter={StaticResource RadioIntConverter}, ConverterParameter=3}" Margin="5"/>
+            <RadioButton GroupName="Rating" Content="4" IsChecked="{Binding Rating, Converter={StaticResource RadioIntConverter}, ConverterParameter=4}" Margin="5"/>
+            <RadioButton GroupName="Rating" Content="5" IsChecked="{Binding Rating, Converter={StaticResource RadioIntConverter}, ConverterParameter=5}" Margin="5"/>
+        </StackPanel>
+
+        <TextBlock Text="Текст отзыва:" Margin="0,10,0,5"/>
+        <TextBox Text="{Binding Comment}" TextWrapping="Wrap" Height="100" AcceptsReturn="True"/>
+
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,20">
+            <Button Content="Отправить" Command="{Binding SubmitReviewCommand}" Width="100" Height="35" Margin="5"/>
+            <Button Content="Отмена" Command="{Binding CancelCommand}" Width="100" Height="35" Margin="5"/>
+        </StackPanel>
+    </StackPanel>
+</UserControl>
+```
+
+---
+
+## FILE 111: LeaveReviewView.xaml.cs
+
+<a id='leavereviewviewxaml'></a>
+
+```csharp
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
+using System.Windows.Shapes;
+
+namespace CampAgency.WPF.Views.Parent
+{
+    /// <summary>
+    /// Логика взаимодействия для LeaveReviewView.xaml
+    /// </summary>
+    public partial class LeaveReviewView : UserControl
+    {
+        public LeaveReviewView()
+        {
+            InitializeComponent();
+        }
+    }
+}
+
+```
+
+---
+
+## FILE 112: MyBookingsView.xaml
 
 <a id='mybookingsview'></a>
 
@@ -7880,7 +9853,7 @@ namespace CampAgency.WPF.Views.Parent
 
 ---
 
-## FILE 93: MyBookingsView.xaml.cs
+## FILE 113: MyBookingsView.xaml.cs
 
 <a id='mybookingsviewxaml'></a>
 
@@ -7918,7 +9891,7 @@ namespace CampAgency.WPF.Views.Parent
 
 ---
 
-## FILE 94: ParentDashboardView.xaml
+## FILE 114: ParentDashboardView.xaml
 
 <a id='parentdashboardview'></a>
 
@@ -7938,6 +9911,7 @@ namespace CampAgency.WPF.Views.Parent
             <Button Content="Мои дети" Command="{Binding ShowChildrenCommand}" Width="120" Margin="5" Height="30"/>
             <Button Content="Поиск смен" Command="{Binding ShowShiftsCatalogCommand}" Width="120" Margin="5" Height="30"/>
             <Button Content="Мои бронирования" Command="{Binding ShowMyBookingsCommand}" Width="150" Margin="5" Height="30"/>
+            <Button Content="Оставить отзыв" Command="{Binding LeaveReviewCommand}" Width="150" Margin="5" Height="30"/>
         </StackPanel>
 
         <ContentControl Grid.Row="1" Content="{Binding NavigationService.CurrentViewModel}" Margin="0,10,0,0"/>
@@ -7947,7 +9921,7 @@ namespace CampAgency.WPF.Views.Parent
 
 ---
 
-## FILE 95: ParentDashboardView.xaml.cs
+## FILE 115: ParentDashboardView.xaml.cs
 
 <a id='parentdashboardviewxaml'></a>
 
@@ -7968,7 +9942,7 @@ namespace CampAgency.WPF.Views.Parent
 
 ---
 
-## FILE 96: ShiftDetailsView.xaml
+## FILE 116: ShiftDetailsView.xaml
 
 <a id='shiftdetailsview'></a>
 
@@ -8012,7 +9986,7 @@ namespace CampAgency.WPF.Views.Parent
 
 ---
 
-## FILE 97: ShiftDetailsView.xaml.cs
+## FILE 117: ShiftDetailsView.xaml.cs
 
 <a id='shiftdetailsviewxaml'></a>
 
@@ -8050,7 +10024,7 @@ namespace CampAgency.WPF.Views.Parent
 
 ---
 
-## FILE 98: ShiftsCatalogView.xaml
+## FILE 118: ShiftsCatalogView.xaml
 
 <a id='shiftscatalogview'></a>
 
@@ -8124,6 +10098,7 @@ namespace CampAgency.WPF.Views.Parent
                 <DataGridTextColumn Header="Регион" Binding="{Binding Camp.Region}" Width="120"/>
                 <DataGridTextColumn Header="Дата начала" Binding="{Binding StartDate, StringFormat=dd.MM.yyyy}" Width="100"/>
                 <DataGridTextColumn Header="Дата окончания" Binding="{Binding EndDate, StringFormat=dd.MM.yyyy}" Width="100"/>
+                <DataGridTextColumn Header="Рейтинг" Binding="{Binding AverageRating, StringFormat=N1}" Width="80"/>
                 <DataGridTextColumn Header="Свободно мест" Binding="{Binding AvailableSeats}" Width="100"/>
                 <DataGridTextColumn Header="Цена" Binding="{Binding Price, StringFormat=C}" Width="100"/>
                 <DataGridTemplateColumn Header="Действие" Width="100">
@@ -8143,7 +10118,7 @@ namespace CampAgency.WPF.Views.Parent
 
 ---
 
-## FILE 99: ShiftsCatalogView.xaml.cs
+## FILE 119: ShiftsCatalogView.xaml.cs
 
 <a id='shiftscatalogviewxaml'></a>
 

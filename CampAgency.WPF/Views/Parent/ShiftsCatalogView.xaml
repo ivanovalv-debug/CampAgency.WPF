@@ -67,6 +67,7 @@
                 <DataGridTextColumn Header="Регион" Binding="{Binding Camp.Region}" Width="120"/>
                 <DataGridTextColumn Header="Дата начала" Binding="{Binding StartDate, StringFormat=dd.MM.yyyy}" Width="100"/>
                 <DataGridTextColumn Header="Дата окончания" Binding="{Binding EndDate, StringFormat=dd.MM.yyyy}" Width="100"/>
+                <DataGridTextColumn Header="Рейтинг" Binding="{Binding AverageRating, StringFormat=N1}" Width="80"/>
                 <DataGridTextColumn Header="Свободно мест" Binding="{Binding AvailableSeats}" Width="100"/>
                 <DataGridTextColumn Header="Цена" Binding="{Binding Price, StringFormat=C}" Width="100"/>
                 <DataGridTemplateColumn Header="Действие" Width="100">

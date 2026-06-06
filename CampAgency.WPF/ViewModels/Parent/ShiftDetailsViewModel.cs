@@ -3,6 +3,7 @@ using CampAgency.WPF.Services.AuthServices;
 using CampAgency.WPF.Services.ChildServices;
 using CampAgency.WPF.Services.DialogServices;
 using CampAgency.WPF.Services.NavigationServices;
+using CampAgency.WPF.Services.ReviewServices;
 using CampAgency.WPF.Services.ShiftServices;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -18,19 +19,22 @@ namespace CampAgency.WPF.ViewModels.Parent
         private readonly INavigationService _navigation;
         private readonly IDialogService _dialogService;
         private readonly IAuthService _authService;
+        private readonly IReviewService _reviewService;
 
         [ObservableProperty] private Shift? _shift;
         [ObservableProperty] private ObservableCollection<Child> _myChildren = new();
         [ObservableProperty] private Child? _selectedChild;
         [ObservableProperty] private bool _isBookingInProgress;
+        [ObservableProperty] private double? _averageRating;
 
-        public ShiftDetailsViewModel(IShiftCatalogService shiftService, IChildService childService, INavigationService navigation, IDialogService dialogService, IAuthService authService)
+        public ShiftDetailsViewModel(IShiftCatalogService shiftService, IChildService childService, INavigationService navigation, IDialogService dialogService, IAuthService authService, IReviewService reviewService)
         {
             _shiftService = shiftService;
             _childService = childService;
             _navigation = navigation;
             _dialogService = dialogService;
             _authService = authService;
+            _reviewService = reviewService;
         }
 
         public void OnNavigatedTo(object? parameter)
@@ -40,6 +44,7 @@ namespace CampAgency.WPF.ViewModels.Parent
                 _shift = _shiftService.GetShiftById(shiftId);
                 OnPropertyChanged(nameof(Shift));
                 LoadChildren();
+                LoadAverageRating();
             }
         }
 
@@ -50,6 +55,11 @@ namespace CampAgency.WPF.ViewModels.Parent
             var currentUserId = _authService.CurrentUser?.UserId;
             if (currentUserId.HasValue)
                 MyChildren = new ObservableCollection<Child>(_childService.GetChildrenByUserId(currentUserId.Value));
+        }
+        private void LoadAverageRating()
+        {
+            if (Shift?.Camp != null)
+                AverageRating = _reviewService.GetAverageRatingForCamp(Shift.Camp.CampId);
         }
 
         [RelayCommand]

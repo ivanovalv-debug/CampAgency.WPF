@@ -27,6 +27,9 @@ namespace CampAgency.WPF.Data
         public virtual DbSet<Payment> Payments { get; set; }
         public virtual DbSet<Region> Regions { get; set; }
         public virtual DbSet<Booking> Bookings { get; set; }
+        public virtual DbSet<Review> Reviews { get; set; }
+        public virtual DbSet<CampEvent> CampEvents { get; set; }
+        public virtual DbSet<ShiftJournal> ShiftJournals { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -56,6 +59,17 @@ namespace CampAgency.WPF.Data
             {
                 entity.HasKey(e => e.UserRoleId);
                 entity.Property(e => e.RoleName).HasMaxLength(50).IsRequired();
+            });
+
+            // Review
+            modelBuilder.Entity<Review>(entity =>
+            {
+                entity.HasKey(e => e.ReviewId);
+                entity.Property(e => e.Rating).IsRequired();
+                entity.Property(e => e.Comment).HasMaxLength(1000);
+                entity.Property(e => e.CreatedAt).HasDefaultValueSql("GETDATE()");
+                entity.HasOne(d => d.Shift).WithMany(p => p.Reviews).HasForeignKey(d => d.ShiftId).OnDelete(DeleteBehavior.Restrict);
+                entity.HasOne(d => d.User).WithMany(p => p.Reviews).HasForeignKey(d => d.UserId).OnDelete(DeleteBehavior.Restrict);
             });
 
             // Child
@@ -102,7 +116,6 @@ namespace CampAgency.WPF.Data
                 entity.HasKey(e => e.CampId);
                 entity.Property(e => e.CampName).HasMaxLength(100).IsRequired();
                 entity.Property(e => e.ContactPhone).HasMaxLength(20);
-                entity.Property(e => e.Rating).HasColumnType("decimal(3,2)");
                 entity.Property(e => e.Address).HasMaxLength(200);
                 entity.HasOne(d => d.CampType).WithMany(p => p.Camps).HasForeignKey(d => d.CampTypeId).OnDelete(DeleteBehavior.Restrict);
                 entity.HasOne(d => d.Region).WithMany(p => p.Camps).HasForeignKey(d => d.RegionId).OnDelete(DeleteBehavior.Restrict);

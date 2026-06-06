@@ -1,0 +1,40 @@
+﻿<UserControl x:Class="CampAgency.WPF.Views.Parent.LeaveReviewView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:converters="clr-namespace:CampAgency.WPF.Converters">
+    <UserControl.Resources>
+        <converters:RadioIntConverter x:Key="RadioIntConverter"/>
+    </UserControl.Resources>
+    <StackPanel Margin="20" Width="500">
+        <TextBlock Text="Оставить отзыв о смене" FontSize="20" FontWeight="Bold" Margin="0,0,0,20"/>
+
+        <TextBlock Text="Выберите завершённую смену:" Margin="0,5"/>
+        <ComboBox ItemsSource="{Binding CompletedShifts}" SelectedItem="{Binding SelectedShift}" Margin="0,5" Height="30">
+            <ComboBox.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel>
+                        <TextBlock Text="{Binding Camp.CampName}"/>
+                        <TextBlock Text="{Binding StartDate, StringFormat=dd.MM.yyyy}" FontSize="10"/>
+                    </StackPanel>
+                </DataTemplate>
+            </ComboBox.ItemTemplate>
+        </ComboBox>
+
+        <TextBlock Text="Оценка (1-5):" Margin="0,10,0,5"/>
+        <StackPanel Orientation="Horizontal">
+            <RadioButton GroupName="Rating" Content="1" IsChecked="{Binding Rating, Converter={StaticResource RadioIntConverter}, ConverterParameter=1}" Margin="5"/>
+            <RadioButton GroupName="Rating" Content="2" IsChecked="{Binding Rating, Converter={StaticResource RadioIntConverter}, ConverterParameter=2}" Margin="5"/>
+            <RadioButton GroupName="Rating" Content="3" IsChecked="{Binding Rating, Converter={StaticResource RadioIntConverter}, ConverterParameter=3}" Margin="5"/>
+            <RadioButton GroupName="Rating" Content="4" IsChecked="{Binding Rating, Converter={StaticResource RadioIntConverter}, ConverterParameter=4}" Margin="5"/>
+            <RadioButton GroupName="Rating" Content="5" IsChecked="{Binding Rating, Converter={StaticResource RadioIntConverter}, ConverterParameter=5}" Margin="5"/>
+        </StackPanel>
+
+        <TextBlock Text="Текст отзыва:" Margin="0,10,0,5"/>
+        <TextBox Text="{Binding Comment}" TextWrapping="Wrap" Height="100" AcceptsReturn="True"/>
+
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,20">
+            <Button Content="Отправить" Command="{Binding SubmitReviewCommand}" Width="100" Height="35" Margin="5"/>
+            <Button Content="Отмена" Command="{Binding CancelCommand}" Width="100" Height="35" Margin="5"/>
+        </StackPanel>
+    </StackPanel>
+</UserControl>

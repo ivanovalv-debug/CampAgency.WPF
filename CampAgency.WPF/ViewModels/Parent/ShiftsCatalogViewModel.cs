@@ -1,12 +1,11 @@
 ﻿using CampAgency.WPF.Models.Entities;
 using CampAgency.WPF.Services.DialogServices;
 using CampAgency.WPF.Services.NavigationServices;
+using CampAgency.WPF.Services.ReviewServices;
 using CampAgency.WPF.Services.ShiftServices;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using System;
 using System.Collections.ObjectModel;
-using System.Linq;
 
 namespace CampAgency.WPF.ViewModels.Parent
 {
@@ -15,11 +14,11 @@ namespace CampAgency.WPF.ViewModels.Parent
         private readonly IShiftCatalogService _shiftService;
         private readonly INavigationService _navigation;
         private readonly IDialogService _dialogService;
+        private readonly IReviewService _reviewService;
 
         [ObservableProperty] private ObservableCollection<Shift> _shifts = new();
         [ObservableProperty] private ObservableCollection<CampType> _campTypes = new();
         [ObservableProperty] private ObservableCollection<Region> _regions = new();
-
 
         // Фильтры
         [ObservableProperty] private Region? _selectedRegion;
@@ -29,11 +28,12 @@ namespace CampAgency.WPF.ViewModels.Parent
         [ObservableProperty] private string? _minPriceStr;
         [ObservableProperty] private string? _maxPriceStr;
 
-        public ShiftsCatalogViewModel(IShiftCatalogService shiftService, INavigationService navigation, IDialogService dialogService)
+        public ShiftsCatalogViewModel(IShiftCatalogService shiftService, INavigationService navigation, IDialogService dialogService, IReviewService reviewService)
         {
             _shiftService = shiftService;
             _navigation = navigation;
             _dialogService = dialogService;
+            _reviewService = reviewService;
             LoadFilters();
             LoadShifts();
         }
@@ -44,6 +44,7 @@ namespace CampAgency.WPF.ViewModels.Parent
             var regionList = _shiftService.GetAllRegions();
             Regions = new ObservableCollection<Region>(regionList);
         }
+
 
         private void LoadShifts()
         {
@@ -64,6 +65,10 @@ namespace CampAgency.WPF.ViewModels.Parent
                 minPrice,
                 maxPrice
             );
+            foreach (var shift in list)
+            {
+                shift.AverageRating = _reviewService.GetAverageRatingForCamp(shift.Camp.CampId);
+            }
             Shifts = new ObservableCollection<Shift>(list);
         }
 

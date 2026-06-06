@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CampAgency.WPF.Models.Entities
 {
@@ -12,8 +13,10 @@ namespace CampAgency.WPF.Models.Entities
         public int TotalSeats { get; set; }
         public int AvailableSeats { get; set; }
         public decimal Price { get; set; }
+        [NotMapped] public double? AverageRating { get; set; }
 
         public virtual Camp Camp { get; set; } = null!;
         public virtual ICollection<Booking> Bookings { get; set; } = new List<Booking>();
+        public virtual ICollection<Review> Reviews { get; set; } = new List<Review>();
     }
 }

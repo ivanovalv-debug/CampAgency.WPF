@@ -1,0 +1,17 @@
+﻿using System;
+
+namespace CampAgency.WPF.Models.Entities
+{
+    public partial class Review
+    {
+        public int ReviewId { get; set; }
+        public int ShiftId { get; set; }
+        public int UserId { get; set; }
+        public int Rating { get; set; } // от 1 до 5
+        public string Comment { get; set; } = null!;
+        public DateTime CreatedAt { get; set; }
+
+        public virtual Shift Shift { get; set; } = null!;
+        public virtual User User { get; set; } = null!;
+    }
+}

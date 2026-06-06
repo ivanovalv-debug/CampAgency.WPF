@@ -12,6 +12,7 @@
              xmlns:converters="clr-namespace:CampAgency.WPF.Converters">
     <Application.Resources>
         <converters:InverseBooleanConverter x:Key="InverseBooleanConverter"/>
+        <converters:RadioIntConverter x:Key="RadioIntConverter"/>
 
         <DataTemplate DataType="{x:Type vmAuth:LoginViewModel}">
             <vAuth:LoginView />
@@ -69,6 +70,9 @@
         </DataTemplate>
         <DataTemplate DataType="{x:Type vmParent:ChildDocumentsViewModel}">
             <vParent:ChildDocumentsView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vmParent:LeaveReviewViewModel}">
+            <vParent:LeaveReviewView />
         </DataTemplate>
 
     </Application.Resources>

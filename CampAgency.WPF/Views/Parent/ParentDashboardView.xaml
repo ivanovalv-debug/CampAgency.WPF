@@ -13,6 +13,7 @@
             <Button Content="Мои дети" Command="{Binding ShowChildrenCommand}" Width="120" Margin="5" Height="30"/>
             <Button Content="Поиск смен" Command="{Binding ShowShiftsCatalogCommand}" Width="120" Margin="5" Height="30"/>
             <Button Content="Мои бронирования" Command="{Binding ShowMyBookingsCommand}" Width="150" Margin="5" Height="30"/>
+            <Button Content="Оставить отзыв" Command="{Binding LeaveReviewCommand}" Width="150" Margin="5" Height="30"/>
         </StackPanel>
 
         <ContentControl Grid.Row="1" Content="{Binding NavigationService.CurrentViewModel}" Margin="0,10,0,0"/>
