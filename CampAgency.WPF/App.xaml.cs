@@ -3,6 +3,7 @@ using CampAgency.WPF.Services.AuthServices;
 using CampAgency.WPF.Services.BookingServices;
 using CampAgency.WPF.Services.ChildServices;
 using CampAgency.WPF.Services.DialogServices;
+using CampAgency.WPF.Services.JournalServices;
 using CampAgency.WPF.Services.NavigationServices;
 using CampAgency.WPF.Services.ReviewServices;
 using CampAgency.WPF.Services.ShiftServices;
@@ -39,6 +40,7 @@ namespace CampAgency.WPF
             services.AddSingleton<IShiftCatalogService, ShiftCatalogService>();
             services.AddSingleton<IBookingService, BookingService>();
             services.AddSingleton<IReviewService, ReviewService>();
+            services.AddSingleton<IJournalService, JournalService>();
 
             services.AddTransient<LoginViewModel>();
             services.AddTransient<AdminDashboardViewModel>();
@@ -62,6 +64,8 @@ namespace CampAgency.WPF
             services.AddTransient<BookingDetailsViewModel>();
             services.AddTransient<ChildDocumentsViewModel>();
             services.AddTransient<LeaveReviewViewModel>();
+            services.AddTransient<ShiftJournalViewModel>();
+            services.AddTransient<ChildShiftJournalViewModel>();
 
             services.AddSingleton<MainWindowViewModel>();
             services.AddSingleton<MainWindow>(sp =>

@@ -56,5 +56,8 @@ namespace CampAgency.WPF.ViewModels.Operator
 
         [RelayCommand]
         private void ViewBooking(Booking booking) => _navigation.NavigateTo<BookingDetailsViewModel>(booking.BookingId);
+
+        [RelayCommand]
+        private void BackToDashboard() => _navigation.NavigateTo<OperatorDashboardViewModel>();
     }
 }

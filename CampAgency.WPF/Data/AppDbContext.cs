@@ -156,6 +156,25 @@ namespace CampAgency.WPF.Data
                 entity.Property(e => e.OperatorComment).HasMaxLength(500);
             });
 
+            // CampEvent
+            modelBuilder.Entity<CampEvent>(entity =>
+            {
+                entity.HasKey(e => e.CampEventId);
+                entity.Property(e => e.EventName).HasMaxLength(100).IsRequired();
+                entity.Property(e => e.Description).HasMaxLength(500);
+            });
+
+            // ShiftJournal
+            modelBuilder.Entity<ShiftJournal>(entity =>
+            {
+                entity.HasKey(e => e.ShiftJournalId);
+                entity.Property(e => e.Note).HasMaxLength(1000).IsRequired();
+                entity.Property(e => e.TimeStamp).HasDefaultValueSql("GETDATE()");
+                entity.HasOne(d => d.Child).WithMany(p => p.ShiftJournals).HasForeignKey(d => d.ChildId).OnDelete(DeleteBehavior.Restrict);
+                entity.HasOne(d => d.CampEvent).WithMany(p => p.ShiftJournals).HasForeignKey(d => d.CampEventId).OnDelete(DeleteBehavior.Restrict);
+                entity.HasOne(d => d.Operator).WithMany(p => p.ShiftJournals).HasForeignKey(d => d.OperatorId).OnDelete(DeleteBehavior.Restrict);
+            });
+
             // BookingStatus
             modelBuilder.Entity<BookingStatus>(entity =>
             {

@@ -65,5 +65,8 @@ namespace CampAgency.WPF.ViewModels.Parent
 
         [RelayCommand]
         private void ManageDocuments(Child child) => _navigationService.NavigateTo<ChildDocumentsViewModel>(child);
+
+        [RelayCommand]
+        private void ViewShiftJournal(Child child) => _navigationService.NavigateTo<ChildShiftJournalViewModel>(child);
     }
 }

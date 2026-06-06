@@ -74,6 +74,11 @@
         <DataTemplate DataType="{x:Type vmParent:LeaveReviewViewModel}">
             <vParent:LeaveReviewView />
         </DataTemplate>
-
+        <DataTemplate DataType="{x:Type vmOperator:ShiftJournalViewModel}">
+            <vOperator:ShiftJournalView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vmParent:ChildShiftJournalViewModel}">
+            <vParent:ChildShiftJournalView />
+        </DataTemplate>
     </Application.Resources>
 </Application>

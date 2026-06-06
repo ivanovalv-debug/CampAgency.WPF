@@ -12,7 +12,7 @@ namespace CampAgency.WPF.ViewModels.Operator
             _navigation.NavigateTo<BookingsListViewModel>();
         }
 
-        [RelayCommand]
-        private void ShowBookings() => _navigation.NavigateTo<BookingsListViewModel>();
+        [RelayCommand] private void ShowBookings() => _navigation.NavigateTo<BookingsListViewModel>();
+        [RelayCommand] private void ShowShiftJournal() => _navigation.NavigateTo<ShiftJournalViewModel>();
     }
 }
