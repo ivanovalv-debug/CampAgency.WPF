@@ -62,5 +62,8 @@ namespace CampAgency.WPF.ViewModels.Parent
                 _dialogService.ShowError("Не удалось удалить ребёнка", "Ошибка");
             }
         }
+
+        [RelayCommand]
+        private void ManageDocuments(Child child) => _navigationService.NavigateTo<ChildDocumentsViewModel>(child);
     }
 }

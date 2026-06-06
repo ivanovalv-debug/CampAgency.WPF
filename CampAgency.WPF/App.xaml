@@ -61,5 +61,15 @@
         <DataTemplate DataType="{x:Type vmParent:MyBookingsViewModel}">
             <vParent:MyBookingsView />
         </DataTemplate>
+        <DataTemplate DataType="{x:Type vmOperator:BookingsListViewModel}">
+            <vOperator:BookingsListView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vmOperator:BookingDetailsViewModel}">
+            <vOperator:BookingDetailsView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vmParent:ChildDocumentsViewModel}">
+            <vParent:ChildDocumentsView />
+        </DataTemplate>
+
     </Application.Resources>
 </Application>

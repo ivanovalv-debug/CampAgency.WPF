@@ -11,6 +11,7 @@ namespace CampAgency.WPF.Models.Entities
         public int DocumentStatusId { get; set; }
         public string? FilePath { get; set; }
         public DateTime TimeStamp { get; set; }
+        public string? OperatorComment { get; set; }
 
         public virtual Child Child { get; set; } = null!;
         public virtual DocumentType DocumentType { get; set; } = null!;

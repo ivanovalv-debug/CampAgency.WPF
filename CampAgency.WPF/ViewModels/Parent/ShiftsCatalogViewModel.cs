@@ -57,7 +57,7 @@ namespace CampAgency.WPF.ViewModels.Parent
             DateOnly? toDate = StartDateTo.HasValue ? DateOnly.FromDateTime(StartDateTo.Value) : null;
 
             var list = _shiftService.GetShiftsWithFilters(
-                SelectedRegion?.RegionId,   // ← передаём int? вместо Region?
+                SelectedRegion?.RegionId,
                 SelectedCampType?.CampTypeId,
                 fromDate,
                 toDate,

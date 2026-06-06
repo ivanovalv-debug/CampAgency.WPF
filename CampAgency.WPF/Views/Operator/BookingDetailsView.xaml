@@ -1,0 +1,73 @@
+﻿<UserControl x:Class="CampAgency.WPF.Views.Operator.BookingDetailsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <StackPanel Margin="10" Width="800">
+            <TextBlock Text="Детали заявки" FontSize="20" FontWeight="Bold" Margin="0,0,0,15"/>
+
+            <!-- Информация о ребёнке -->
+            <GroupBox Header="Ребёнок" Margin="0,5">
+                <StackPanel Margin="10">
+                    <TextBlock><Run Text="ФИО:" FontWeight="Bold"/> <Run Text="{Binding Booking.Child.FullName}"/></TextBlock>
+                    <TextBlock><Run Text="Дата рождения:" FontWeight="Bold"/> <Run Text="{Binding Booking.Child.BirthDate, StringFormat=dd.MM.yyyy}"/></TextBlock>
+                    <TextBlock><Run Text="Пол:" FontWeight="Bold"/> <Run Text="{Binding Booking.Child.Gender.GenderName}"/></TextBlock>
+                </StackPanel>
+            </GroupBox>
+
+            <!-- Информация о родителе -->
+            <GroupBox Header="Родитель" Margin="0,5">
+                <StackPanel Margin="10">
+                    <TextBlock><Run Text="ФИО:" FontWeight="Bold"/> <Run Text="{Binding Booking.Child.User.FullName}"/></TextBlock>
+                    <TextBlock><Run Text="Телефон:" FontWeight="Bold"/> <Run Text="{Binding Booking.Child.User.Phone}"/></TextBlock>
+                    <TextBlock><Run Text="Email:" FontWeight="Bold"/> <Run Text="{Binding Booking.Child.User.Email}"/></TextBlock>
+                </StackPanel>
+            </GroupBox>
+
+            <!-- Информация о смене -->
+            <GroupBox Header="Смена" Margin="0,5">
+                <StackPanel Margin="10">
+                    <TextBlock><Run Text="Лагерь:" FontWeight="Bold"/> <Run Text="{Binding Booking.Shift.Camp.CampName}"/></TextBlock>
+                    <TextBlock><Run Text="Тип:" FontWeight="Bold"/> <Run Text="{Binding Booking.Shift.Camp.CampType.CampTypeName}"/></TextBlock>
+                    <TextBlock><Run Text="Даты:" FontWeight="Bold"/> <Run Text="{Binding Booking.Shift.StartDate, StringFormat=dd.MM.yyyy}"/> - <Run Text="{Binding Booking.Shift.EndDate, StringFormat=dd.MM.yyyy}"/></TextBlock>
+                    <TextBlock><Run Text="Стоимость:" FontWeight="Bold"/> <Run Text="{Binding Booking.Shift.Price, StringFormat=C}"/></TextBlock>
+                </StackPanel>
+            </GroupBox>
+
+            <!-- Изменение статуса бронирования -->
+            <GroupBox Header="Статус заявки" Margin="0,5">
+                <StackPanel Margin="10" Orientation="Horizontal">
+                    <ComboBox ItemsSource="{Binding AvailableStatuses}" SelectedItem="{Binding SelectedStatus}" 
+                              DisplayMemberPath="BookingStatusName" Width="200" Height="30" Margin="0,0,10,0"/>
+                    <Button Content="Изменить статус" Command="{Binding UpdateBookingStatusCommand}" Width="150" Height="30"/>
+                </StackPanel>
+            </GroupBox>
+
+            <!-- Список документов -->
+            <GroupBox Header="Документы" Margin="0,5">
+                <ItemsControl ItemsSource="{Binding Booking.Child.Documents}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Border BorderBrush="LightGray" BorderThickness="0,0,0,1" Margin="0,5">
+                                <StackPanel Margin="5">
+                                    <TextBlock FontWeight="Bold" Text="{Binding DocumentType.DocumentTypeName}"/>
+                                    <TextBlock Text="{Binding FilePath}" FontSize="11" Foreground="Gray"/>
+                                    <TextBlock Text="{Binding OperatorComment}" FontStyle="Italic" Foreground="Blue"/>
+                                    <StackPanel Orientation="Horizontal" Margin="0,5">
+                                        <Button Content="Принять" Command="{Binding DataContext.AcceptDocumentCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" 
+                                                CommandParameter="{Binding}" Width="80" Margin="0,0,10,0"/>
+                                        <Button Content="Отклонить" Command="{Binding DataContext.RejectDocumentCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" 
+                                                CommandParameter="{Binding}" Width="80"/>
+                                        <TextBlock Text="Текущий статус:" Margin="20,0,5,0"/>
+                                        <TextBlock Text="{Binding DocumentStatus.DocumentStatusName}" FontWeight="Bold"/>
+                                    </StackPanel>
+                                </StackPanel>
+                            </Border>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </GroupBox>
+
+            <Button Content="← Назад к списку" Command="{Binding BackToListCommand}" Width="150" Height="35" Margin="0,20,0,0" HorizontalAlignment="Left"/>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

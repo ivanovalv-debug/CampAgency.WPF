@@ -11,5 +11,8 @@ namespace CampAgency.WPF.Services.ChildServices
         bool DeleteChild(int childId);
         List<Gender> GetGenders();
         List<MedicalNote> GetMedicalNotes();
+        List<Document> GetDocumentsByChildId(int childId);
+        bool AddDocument(int childId, int documentTypeId, string filePath);
+        List<DocumentType> GetDocumentTypes();
     }
 }

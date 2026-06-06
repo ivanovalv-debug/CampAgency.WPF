@@ -1,12 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using CampAgency.WPF.Services.NavigationServices;
+using CommunityToolkit.Mvvm.Input;
 
 namespace CampAgency.WPF.ViewModels.Operator
 {
-    class OperatorDashboardViewModel
+    public partial class OperatorDashboardViewModel
     {
+        private readonly INavigationService _navigation;
+        public OperatorDashboardViewModel(INavigationService navigation)
+        {
+            _navigation = navigation;
+            _navigation.NavigateTo<BookingsListViewModel>();
+        }
+
+        [RelayCommand]
+        private void ShowBookings() => _navigation.NavigateTo<BookingsListViewModel>();
     }
 }

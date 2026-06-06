@@ -103,5 +103,42 @@ namespace CampAgency.WPF.Services.ChildServices
             using var context = _contextFactory.CreateDbContext();
             return context.MedicalNotes.ToList();
         }
+
+        public List<Document> GetDocumentsByChildId(int childId)
+        {
+            using var context = _contextFactory.CreateDbContext();
+            return context.Documents
+                .Include(d => d.DocumentType)
+                .Include(d => d.DocumentStatus)
+                .Where(d => d.ChildId == childId)
+                .ToList();
+        }
+
+        public bool AddDocument(int childId, int documentTypeId, string filePath)
+        {
+            try
+            {
+                using var context = _contextFactory.CreateDbContext();
+                var doc = new Document
+                {
+                    ChildId = childId,
+                    DocumentTypeId = documentTypeId,
+                    DocumentStatusId = 1, // "Загружен"
+                    FilePath = filePath,
+                    TimeStamp = DateTime.Now
+                };
+                context.Documents.Add(doc);
+                context.SaveChanges();
+                return true;
+            }
+            catch { return false; }
+        }
+
+        public List<DocumentType> GetDocumentTypes()
+        {
+            using var context = _contextFactory.CreateDbContext();
+            return context.DocumentTypes.ToList();
+        }
+
     }
 }
