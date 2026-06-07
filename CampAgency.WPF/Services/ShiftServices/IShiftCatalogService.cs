@@ -9,8 +9,8 @@ namespace CampAgency.WPF.Services.ShiftServices
         List<Region> GetAllRegions();
         Shift? GetShiftById(int shiftId);
         List<CampType> GetCampTypes();
-        //List<string> GetRegions();
-        bool CreateBooking(int childId, int shiftId);
+        //bool CreateBooking(int childId, int shiftId);
+        bool CreateBookings(List<int> childIds, int shiftId);
         List<Booking> GetBookingsByUserId(int userId);
     }
 }

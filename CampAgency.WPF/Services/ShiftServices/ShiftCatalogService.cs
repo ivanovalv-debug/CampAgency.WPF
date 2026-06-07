@@ -63,42 +63,42 @@ namespace CampAgency.WPF.Services.ShiftServices
             return context.CampTypes.ToList();
         }
 
-        //public List<string> GetRegions()
-        //{
-        //    using var context = _contextFactory.CreateDbContext();
-        //    return context.Camps
-        //        .Where(c => c.Region != null)
-        //        .Select(c => c.Region!)
-        //        .Distinct()
-        //        .OrderBy(r => r)
-        //        .ToList();
-        //}
 
-        public bool CreateBooking(int childId, int shiftId)
+        public bool CreateBookings(List<int> childIds, int shiftId)
         {
+            if (childIds == null || !childIds.Any()) return false;
+
             using var context = _contextFactory.CreateDbContext();
             using var transaction = context.Database.BeginTransaction();
             try
             {
                 var shift = context.Shifts.Find(shiftId);
-                if (shift == null || shift.AvailableSeats <= 0) return false;
+                if (shift == null || shift.AvailableSeats < childIds.Count) return false;
 
-                // Проверяем, не забронировано ли уже на этого ребёнка эту смену
-                var existing = context.Bookings.FirstOrDefault(b => b.ChildId == childId && b.ShiftId == shiftId);
-                if (existing != null) return false;
+                var existingBookings = context.Bookings
+                    .Where(b => b.ShiftId == shiftId && childIds.Contains(b.ChildId))
+                    .Select(b => b.ChildId)
+                    .ToHashSet();
+
+                var newChildIds = childIds.Where(id => !existingBookings.Contains(id)).ToList();
+                if (!newChildIds.Any()) return false;
 
                 var bookingStatus = context.BookingStatuses.FirstOrDefault(bs => bs.BookingStatusName == "Ожидает подтверждения");
                 if (bookingStatus == null) return false;
 
-                var booking = new Booking
+                foreach (var childId in newChildIds)
                 {
-                    ChildId = childId,
-                    ShiftId = shiftId,
-                    BookingStatusId = bookingStatus.BookingStatusId,
-                    CreatedAt = DateTime.Now
-                };
-                context.Bookings.Add(booking);
-                shift.AvailableSeats--;
+                    var booking = new Booking
+                    {
+                        ChildId = childId,
+                        ShiftId = shiftId,
+                        BookingStatusId = bookingStatus.BookingStatusId,
+                        CreatedAt = DateTime.Now
+                    };
+                    context.Bookings.Add(booking);
+                }
+
+                shift.AvailableSeats -= newChildIds.Count;
                 context.SaveChanges();
                 transaction.Commit();
                 return true;

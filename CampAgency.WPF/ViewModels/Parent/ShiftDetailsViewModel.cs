@@ -22,10 +22,10 @@ namespace CampAgency.WPF.ViewModels.Parent
         private readonly IReviewService _reviewService;
 
         [ObservableProperty] private Shift? _shift;
-        [ObservableProperty] private ObservableCollection<Child> _myChildren = new();
-        [ObservableProperty] private Child? _selectedChild;
+        [ObservableProperty] private ObservableCollection<ChildSelectionWrapper> _children = new();
         [ObservableProperty] private bool _isBookingInProgress;
         [ObservableProperty] private double? _averageRating;
+        [ObservableProperty] private decimal _totalPrice;
 
         public ShiftDetailsViewModel(IShiftCatalogService shiftService, IChildService childService, INavigationService navigation, IDialogService dialogService, IAuthService authService, IReviewService reviewService)
         {
@@ -45,17 +45,38 @@ namespace CampAgency.WPF.ViewModels.Parent
                 OnPropertyChanged(nameof(Shift));
                 LoadChildren();
                 LoadAverageRating();
+                CalculateTotalPrice();
             }
+        }
+
+        partial void OnChildrenChanged(ObservableCollection<ChildSelectionWrapper> value)
+        {
+            CalculateTotalPrice();
+        }
+
+        private void CalculateTotalPrice()
+        {
+            if (_shift == null) return;
+            var selectedCount = Children.Count(c => c.IsSelected);
+            TotalPrice = selectedCount * _shift.Price;
         }
 
         private void LoadChildren()
         {
-            if (_shift == null) return;
-            // Предполагаем, что в AuthService есть CurrentUser
             var currentUserId = _authService.CurrentUser?.UserId;
             if (currentUserId.HasValue)
-                MyChildren = new ObservableCollection<Child>(_childService.GetChildrenByUserId(currentUserId.Value));
+            {
+                var childrenList = _childService.GetChildrenByUserId(currentUserId.Value);
+                var wrappers = childrenList.Select(c =>
+                {
+                    var wrapper = new ChildSelectionWrapper { Child = c, IsSelected = false };
+                    wrapper.OnSelectionChanged += (s, e) => CalculateTotalPrice();
+                    return wrapper;
+                }).ToList();
+                Children = new ObservableCollection<ChildSelectionWrapper>(wrappers);
+            }
         }
+
         private void LoadAverageRating()
         {
             if (Shift?.Camp != null)
@@ -63,29 +84,43 @@ namespace CampAgency.WPF.ViewModels.Parent
         }
 
         [RelayCommand]
-        private async Task BookShift()
+        private void BookShift()
         {
             if (_shift == null) return;
-            if (SelectedChild == null)
+
+            var selectedChildren = Children.Where(c => c.IsSelected).Select(c => c.Child).ToList();
+            if (!selectedChildren.Any())
             {
-                _dialogService.ShowError("Выберите ребёнка для бронирования", "Ошибка");
+                _dialogService.ShowError("Выберите хотя бы одного ребёнка для бронирования", "Ошибка");
                 return;
             }
-            if (!_dialogService.ShowConfirmation($"Забронировать смену в {_shift.Camp.CampName} для {SelectedChild.FullName}? Стоимость: {_shift.Price:C}", "Подтверждение бронирования"))
+
+            if (selectedChildren.Count > _shift.AvailableSeats)
+            {
+                _dialogService.ShowError($"Выбрано {selectedChildren.Count} детей, но свободно только {_shift.AvailableSeats} мест", "Ошибка");
+                return;
+            }
+
+            var confirmationMessage = $"Забронировать смену в {_shift.Camp.CampName} для следующих детей:\n" +
+                string.Join("\n", selectedChildren.Select(c => $"• {c.FullName}")) +
+                $"\n\nИтоговая стоимость: {TotalPrice:C}";
+
+            if (!_dialogService.ShowConfirmation(confirmationMessage, "Подтверждение бронирования"))
                 return;
 
             IsBookingInProgress = true;
             try
             {
-                var success = _shiftService.CreateBooking(SelectedChild.ChildId, _shift.ShiftId);
+                var childIds = selectedChildren.Select(c => c.ChildId).ToList();
+                var success = _shiftService.CreateBookings(childIds, _shift.ShiftId);
                 if (success)
                 {
-                    _dialogService.ShowMessage("Бронирование создано. Статус: Ожидает подтверждения", "Успех");
+                    _dialogService.ShowMessage("Бронирования созданы. Статус: Ожидает подтверждения", "Успех");
                     _navigation.NavigateTo<ShiftsCatalogViewModel>();
                 }
                 else
                 {
-                    _dialogService.ShowError("Не удалось забронировать. Возможно, места уже закончились или ребёнок уже забронирован на эту смену.", "Ошибка");
+                    _dialogService.ShowError("Не удалось забронировать. Возможно, места уже закончились или некоторые дети уже забронированы на эту смену.", "Ошибка");
                 }
             }
             finally
