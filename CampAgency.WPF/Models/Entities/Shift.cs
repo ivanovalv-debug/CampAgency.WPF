@@ -18,5 +18,6 @@ namespace CampAgency.WPF.Models.Entities
         public virtual Camp Camp { get; set; } = null!;
         public virtual ICollection<Booking> Bookings { get; set; } = new List<Booking>();
         public virtual ICollection<Review> Reviews { get; set; } = new List<Review>();
+        public virtual ICollection<ShiftJournal> ShiftJournals { get; set; } = new List<ShiftJournal>();
     }
 }

@@ -29,7 +29,7 @@ namespace CampAgency.WPF.Services.JournalServices
                 .Include(j => j.Child)
                 .Include(j => j.CampEvent)
                 .Include(j => j.Operator)
-                .Where(j => j.Child.Bookings.Any(b => b.ShiftId == shiftId))
+                .Where(j => j.ShiftId == shiftId)
                 .OrderByDescending(j => j.TimeStamp)
                 .ToList();
         }
@@ -43,13 +43,14 @@ namespace CampAgency.WPF.Services.JournalServices
                 .ToList();
         }
 
-        public bool AddJournalEntry(int childId, int campEventId, int operatorId, string note)
+        public bool AddJournalEntry(int shiftId, int childId, int campEventId, int operatorId, string note)
         {
             try
             {
                 using var context = _contextFactory.CreateDbContext();
                 var entry = new ShiftJournal
                 {
+                    ShiftId = shiftId,
                     ChildId = childId,
                     CampEventId = campEventId,
                     OperatorId = operatorId,
@@ -67,6 +68,8 @@ namespace CampAgency.WPF.Services.JournalServices
         {
             using var context = _contextFactory.CreateDbContext();
             return context.ShiftJournals
+                .Include(j => j.Shift)
+                    .ThenInclude(s => s.Camp)
                 .Include(j => j.CampEvent)
                 .Include(j => j.Operator)
                 .Where(j => j.ChildId == childId)

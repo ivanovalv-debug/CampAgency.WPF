@@ -109,7 +109,13 @@ namespace CampAgency.WPF.ViewModels.Operator
                 return;
             }
 
-            var success = _journalService.AddJournalEntry(SelectedChild.ChildId, SelectedEvent.CampEventId, operatorId.Value, Note);
+            //var success = _journalService.AddJournalEntry(SelectedChild.ChildId, SelectedEvent.CampEventId, operatorId.Value, Note);
+            var success = _journalService.AddJournalEntry(
+                            SelectedShift.ShiftId,
+                            SelectedChild.ChildId,
+                            SelectedEvent.CampEventId,
+                            operatorId.Value,
+                            Note);
             if (success)
             {
                 _dialog.ShowMessage("Запись добавлена", "Успех");

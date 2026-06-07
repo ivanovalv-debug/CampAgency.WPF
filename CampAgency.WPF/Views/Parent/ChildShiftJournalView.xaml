@@ -16,6 +16,14 @@
         <DataGrid Grid.Row="1" ItemsSource="{Binding JournalEntries}" AutoGenerateColumns="False" 
                   CanUserAddRows="False" IsReadOnly="True">
             <DataGrid.Columns>
+                <DataGridTextColumn Header="Лагерь / Смена" Width="200">
+                    <DataGridTextColumn.Binding>
+                        <MultiBinding StringFormat="{}{0} ({1:dd.MM.yyyy})">
+                            <Binding Path="Shift.Camp.CampName"/>
+                            <Binding Path="Shift.StartDate"/>
+                        </MultiBinding>
+                    </DataGridTextColumn.Binding>
+                </DataGridTextColumn>
                 <DataGridTextColumn Header="Дата и время" Binding="{Binding TimeStamp, StringFormat=dd.MM.yyyy HH:mm}" Width="140"/>
                 <DataGridTextColumn Header="Событие" Binding="{Binding CampEvent.EventName}" Width="150"/>
                 <DataGridTextColumn Header="Запись" Binding="{Binding Note}" Width="*"/>

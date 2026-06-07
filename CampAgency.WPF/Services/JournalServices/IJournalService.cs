@@ -7,7 +7,7 @@ namespace CampAgency.WPF.Services.JournalServices
     {
         List<CampEvent> GetAllEvents();
         List<ShiftJournal> GetJournalByShiftId(int shiftId);
-        bool AddJournalEntry(int childId, int campEventId, int operatorId, string note);
+        bool AddJournalEntry(int shiftId, int childId, int campEventId, int operatorId, string note);
         List<Child> GetChildrenByShiftId(int shiftId);
         List<ShiftJournal> GetJournalByChildId(int childId);
     }

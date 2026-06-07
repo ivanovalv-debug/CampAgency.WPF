@@ -170,6 +170,7 @@ namespace CampAgency.WPF.Data
                 entity.HasKey(e => e.ShiftJournalId);
                 entity.Property(e => e.Note).HasMaxLength(1000).IsRequired();
                 entity.Property(e => e.TimeStamp).HasDefaultValueSql("GETDATE()");
+                entity.HasOne(d => d.Shift).WithMany(p => p.ShiftJournals).HasForeignKey(d => d.ShiftId).OnDelete(DeleteBehavior.Restrict);
                 entity.HasOne(d => d.Child).WithMany(p => p.ShiftJournals).HasForeignKey(d => d.ChildId).OnDelete(DeleteBehavior.Restrict);
                 entity.HasOne(d => d.CampEvent).WithMany(p => p.ShiftJournals).HasForeignKey(d => d.CampEventId).OnDelete(DeleteBehavior.Restrict);
                 entity.HasOne(d => d.Operator).WithMany(p => p.ShiftJournals).HasForeignKey(d => d.OperatorId).OnDelete(DeleteBehavior.Restrict);
