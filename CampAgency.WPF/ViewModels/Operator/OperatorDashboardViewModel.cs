@@ -14,5 +14,6 @@ namespace CampAgency.WPF.ViewModels.Operator
 
         [RelayCommand] private void ShowBookings() => _navigation.NavigateTo<BookingsListViewModel>();
         [RelayCommand] private void ShowShiftJournal() => _navigation.NavigateTo<ShiftJournalViewModel>();
+        [RelayCommand] private void ShowAttendanceLists() => _navigation.NavigateTo<ShiftAttendanceListViewModel>();
     }
 }

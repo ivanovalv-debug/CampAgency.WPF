@@ -66,6 +66,7 @@ namespace CampAgency.WPF
             services.AddTransient<LeaveReviewViewModel>();
             services.AddTransient<ShiftJournalViewModel>();
             services.AddTransient<ChildShiftJournalViewModel>();
+            services.AddTransient<ShiftAttendanceListViewModel>();
 
             services.AddSingleton<MainWindowViewModel>();
             services.AddSingleton<MainWindow>(sp =>

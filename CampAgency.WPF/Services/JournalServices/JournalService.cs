@@ -64,6 +64,18 @@ namespace CampAgency.WPF.Services.JournalServices
             catch { return false; }
         }
 
+        public List<Child> GetChildrenByShiftAndEvent(int shiftId, string eventName)
+        {
+            using var context = _contextFactory.CreateDbContext();
+            return context.ShiftJournals
+                .Include(j => j.Child)
+                    .ThenInclude(c => c.User)
+                .Where(j => j.ShiftId == shiftId && j.CampEvent.EventName == eventName)
+                .Select(j => j.Child)
+                .Distinct()
+                .ToList();
+        }
+
         public List<ShiftJournal> GetJournalByChildId(int childId)
         {
             using var context = _contextFactory.CreateDbContext();

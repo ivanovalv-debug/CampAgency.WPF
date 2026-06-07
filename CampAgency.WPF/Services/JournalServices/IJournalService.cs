@@ -10,5 +10,6 @@ namespace CampAgency.WPF.Services.JournalServices
         bool AddJournalEntry(int shiftId, int childId, int campEventId, int operatorId, string note);
         List<Child> GetChildrenByShiftId(int shiftId);
         List<ShiftJournal> GetJournalByChildId(int childId);
+        List<Child> GetChildrenByShiftAndEvent(int shiftId, string eventName);
     }
 }

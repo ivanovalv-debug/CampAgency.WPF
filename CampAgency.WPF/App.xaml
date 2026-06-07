@@ -80,5 +80,8 @@
         <DataTemplate DataType="{x:Type vmParent:ChildShiftJournalViewModel}">
             <vParent:ChildShiftJournalView />
         </DataTemplate>
+        <DataTemplate DataType="{x:Type vmOperator:ShiftAttendanceListViewModel}">
+            <vOperator:ShiftAttendanceListView />
+        </DataTemplate>
     </Application.Resources>
 </Application>
